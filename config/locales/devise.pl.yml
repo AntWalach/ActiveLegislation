@@ -1,0 +1,65 @@
+# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
+
+pl:
+  devise:
+    confirmations:
+      confirmed: "Twój email został potwierdzony"
+      send_instructions: "Za kilka minut otrzymasz email z instrukcjami jak potwierdzić swój adres email."
+      send_paranoid_instructions: "Jeśli twój email istnieje w naszej bazie, otrzymasz od nas wiadomość z instrukcją jak go potwierdzić"
+    failure:
+      already_authenticated: "Jesteś już zalogowany"
+      inactive: "Twoje konto nie jest aktywowane."
+      invalid: "Zły %{authentication_keys} lub hasło."
+      locked: "Twoje konto jest zablokowane"
+      last_attempt: "Masz jeszcze jedną próbę, zanim Twoje konto zostanie zablokowane."
+      not_found_in_database: "Zły %{authentication_keys} lub hasło."
+      timeout: "Twoja sesja wygasła. Zaloguj się ponownie, aby kontynuować."
+      unauthenticated: "Musisz się zalogować lub zarejestrować, aby móc kontynuować."
+      unconfirmed: "Musisz potwierdzić swoje hasło zanim będziesz kontynuować."
+    mailer:
+      confirmation_instructions:
+        subject: "Instrukcje potwierdzenia emaila"
+      reset_password_instructions:
+        subject: "Instrukcje odzyskiwania hasła"
+      unlock_instructions:
+        subject: "Instrukcje odblokowywania konta"
+      email_changed:
+        subject: "Email został zmieniony"
+      password_change:
+        subject: "Hasło zostało zmienione"
+    omniauth_callbacks:
+      failure: "Nie udało się zalogować cię przez %{kind} ponieważ \"%{reason}\"."
+      success: "Pomyślnie zalogowano przez %{kind} konto."
+    passwords:
+      no_token: "Nie możesz odwiedzić tej strony bez linka to resetu hasła. Jeżeli przeszedłeś tu z maila z resetem hasła, proszę upewnij się, że dobrze skopiowałeś link."
+      send_instructions: "Za krótką chwilę otrzymasz maila z instrukcjami odzyskiwania hasła."
+      send_paranoid_instructions: "Jeśli twój email istnieje w naszej bazie, to za krótką chwilę otrzymasz maila z instrukcjami odzyskiwania hasła."
+      updated: "Twoje hasło zostało pomyślnie zmienione. Zostałeś zalogowany."
+      updated_not_active: "Twoje hasło zostało pomyślnie zmienione."
+    registrations:
+      destroyed: "Twoje konto zostało pomyślnie usunięte."
+      signed_up: "Witaj! Twoje konto zostało założone pomyślnie."
+      signed_up_but_inactive: "Zarejestrowano pomyślnie. Niestety, twoje konto nie jest aktualnie aktywowane."
+      signed_up_but_locked: "You have signed up successfully. Niestety, twoje konto jest aktualnie zablokowane."
+      signed_up_but_unconfirmed: "Wiadomość z linkiem aktywacyjnym została wysłana na twój adres email. Kliknij w link, aby aktywować konto."
+      update_needs_confirmation: "Pomyślnie zaktualizowano konto, ale musisz ponownie aktywować swój nowy adres email. Sprawdź swoją skrzynkę pocztową i kliknij w link do aktywacji."
+      updated: "Pomyślnie zaktualizowano konto."
+      updated_but_not_signed_in: "Pomyślnie zaktualizowano konto, ale ponieważ zmieniło się twoje hasło, musisz się zalogować jeszcze raz."
+    sessions:
+      signed_in: "Zalogowano pomyślnie."
+      signed_out: "Wylogowano pomyślnie."
+      already_signed_out: "Wylogowano pomyślnie."
+    unlocks:
+      send_instructions: "Za kilka chwil otrzymasz email z instrukcją jak je odblokować."
+      send_paranoid_instructions: "Jeśli twoje konto istnieje, to za kilka chwil otrzymasz email z instrukcją jak je odblokować."
+      unlocked: "Twoje konto zostało odblokowane pomyślnine. Zaloguj się, aby kontynuować."
+  errors:
+    messages:
+      already_confirmed: "już został potwierdzony, spróbuj się zalogować"
+      confirmation_period_expired: "musis być potwierdzony w czasie %{period}, wyślij nowy"
+      expired: "minął termin ważności, wyślij nowy"
+      not_found: "nie znaleziono"
+      not_locked: "nie był zablokowany"
+      not_saved:
+        one: "1 błąd uniemożliwił zapisanie %{resource}"
+        other: "%{count} błędów uniemożliwiło zapisanie %{resource}"
