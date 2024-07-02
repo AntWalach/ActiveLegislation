@@ -12,4 +12,9 @@
  *
  *= require_tree .
  *= require_self
+ *= require flatpickr
  */
+
+ @import "bootstrap";
+ @import "font_awesome5_webfont";
+ @import 'chosen';

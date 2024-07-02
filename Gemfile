@@ -9,7 +9,7 @@ gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 gem "sprockets-rails"
 
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
+gem "mysql2"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -36,13 +36,14 @@ gem "redis", ">= 4.0.1"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
+gem "tzinfo-data"
+#, platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -60,6 +61,7 @@ group :development do
   # gem "spring"
 
   gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
+  gem 'letter_opener', '~> 1.8', '>= 1.8.1'
 end
 
 group :test do
@@ -67,3 +69,22 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem 'slim', '~> 5.2', '>= 5.2.1'
+gem 'slim-rails', '~> 3.6', '>= 3.6.3'
+gem 'simple_form', '~> 5.3'
+gem 'bootstrap', '~> 5.3', '>= 5.3.2'
+
+gem 'jquery-rails', '~> 4.6'
+gem 'chosen-rails', '~> 1.10'
+gem 'font_awesome5_rails', '~> 1.5'
+gem 'kaminari', '~> 1.2', '>= 1.2.2'
+gem 'cancancan', '~> 3.5'
+gem 'ransack', '~> 4.0'
+gem 'active_storage_validations', '~> 1.0', '>= 1.0.3'
+gem 'exception_notification', '~> 4.5'
+
+gem "devise", "~> 4.9"
+gem 'browser'
+gem 'flatpickr', '~> 4.6', '>= 4.6.11.0'
+gem "sassc-rails"
