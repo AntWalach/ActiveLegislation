@@ -1,0 +1,10 @@
+h1 Editing petition
+
+== render "form", petition: @petition
+
+br
+
+div
+  => link_to "Show this petition", @petition
+  '|
+  =< link_to "Back to petitions", petitions_path

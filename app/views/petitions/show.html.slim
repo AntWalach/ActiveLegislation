@@ -1,0 +1,10 @@
+p style="color: green" = notice
+
+== render @petition
+
+div
+  => link_to "Edit this petition", edit_petition_path(@petition)
+  '|
+  =< link_to "Back to petitions", petitions_path
+
+  = button_to "Destroy this petition", @petition, method: :delete

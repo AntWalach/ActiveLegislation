@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :bills
+  resources :petitions
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get "/landing", to: 'main#landing', as: 'landing'

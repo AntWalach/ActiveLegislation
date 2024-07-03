@@ -1,0 +1,11 @@
+p style="color: green" = notice
+
+h1 Petitions
+
+#petitions
+  - @petitions.each do |petition|
+    == render petition
+    p
+      = link_to "Show this petition", petition
+
+= link_to "New petition", new_petition_path
