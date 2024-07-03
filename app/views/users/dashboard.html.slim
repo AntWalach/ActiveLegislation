@@ -1,0 +1,6 @@
+h1 = "DASHBOARD"
+.row
+    .col-md-6
+        = current_user.email
+    .col-md-6
+        = link_to "Wyloguj", logout_path, data:{ turbo: false }
