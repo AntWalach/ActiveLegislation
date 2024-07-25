@@ -5,7 +5,15 @@ class Ability
 
   def initialize(user)
       if user
-        can :manage, :all
+        if user.is? :standard
+          can [:index, :show, :create, :new, :edit, :destroy], Petition
+          can [:index, :show, :create, :new, :edit, :destroy], Bill
+        end
+
+
+        if user.is? :admin
+          can :manage, :all
+        end
       end
     # Define abilities for the user here. For example:
     #

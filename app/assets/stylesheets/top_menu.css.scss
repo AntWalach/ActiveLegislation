@@ -1,0 +1,17 @@
+@import "config/colors";
+
+.top-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    position: sticky;
+    padding: 10px;
+    box-shadow: 0 5px 10px #1152a51a;
+    background-color: white;
+    z-index: 1001;
+    height: 80px;
+    min-height: 80px;
+    width: 100%;
+}

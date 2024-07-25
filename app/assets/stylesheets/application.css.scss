@@ -18,3 +18,42 @@
  @import "bootstrap";
  @import "font_awesome5_webfont";
  @import 'chosen';
+ @import "config/colors";
+ 
+ .bottom-cont {
+     display: flex;
+     flex-direction: row;
+     flex-wrap: nowrap;
+     justify-content: flex-start;
+     background-color: $white_hover_bg;
+ }
+ 
+ .right-cont {
+     width: calc(100% - 180px); 
+     min-height: calc(100vh - 76px); 
+     background: #F0F5FA !important;
+ }
+ 
+ main {
+     background-color: #F0F5FA;
+     display: flex;
+     flex-direction: column;
+     flex: 1;
+     justify-content: space-between;
+     padding: 2rem 4rem;
+ }
+ 
+ @media screen and (max-width: 800px) {
+     .bottom-cont {
+         display: flex;
+         flex-direction: column;
+         min-height: calc(100vh - 76px);
+         justify-content: space-between;
+     }
+ 
+     .right-cont {
+         width: calc(100%);
+         min-height: unset;
+     }
+ }
+ 

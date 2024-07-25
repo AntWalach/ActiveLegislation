@@ -1,0 +1,58 @@
+@import "config/colors";
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: .125rem solid #f1f1f1;
+    transition-duration: .3s;
+    transition-timing-function: ease;
+}
+
+nav#site-menu-nav {
+    display: block;
+}
+
+button.site-header__menu-opener {
+    cursor: pointer;
+    height: 4.375rem;
+    width: 4.375rem;
+    float: left;
+    background-color: #f1f1f1;
+    border: 0;
+    padding: 0;
+}
+
+.site-header__menu-opener__hamburger {
+    display: block;
+    width: 66.6666%;
+    height: 66.6666%;
+    margin: 17%;
+    border-radius: 50%;
+    transition: background-color .2s ease-out;
+    padding-top: .8rem;
+}
+
+.site-header__menu-opener__hamburger span {
+    width: 50%;
+    height: .13rem;
+    background-color: #717171;
+    margin: .25rem auto;
+    display: block;
+}
+
+.site-header__top-bar {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    padding-right: 1.1em;
+}
+
+.site-header-spacer {
+    height: 4.375rem;
+}

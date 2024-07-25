@@ -1,0 +1,6 @@
+li
+    .menu-item
+        - use_turbo = local_assigns[:use_turbo]
+        = link_to url, class: "left-menu-link #{'active' if active} #{defined?(klass) ? klass : ''}", data: (use_turbo ? { turbo: false } : { turbo: true }) do
+            = fa_icon(icon)
+            span.menu-text ="#{text}"

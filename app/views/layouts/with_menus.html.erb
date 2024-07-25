@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ActiveLegislation</title>
+    <%= favicon_link_tag '/favicon.ico' %>
+    <%= favicon_link_tag '/favicon.ico' %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <div class="content" data-controller="dropdown" data-action="click->dropdown#hideDropdownContent">
+      <%= render "top_menu" %>
+
+      <div class="bottom-cont">
+        <%= render "left_menu" %>
+        <div class="right-cont main-container">
+          <main>
+            <%= render "application/flash"%>
+            <div class="content-padding">
+              <%= yield %>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+
+    <%= yield :scripts%>
+</body>
+</html>

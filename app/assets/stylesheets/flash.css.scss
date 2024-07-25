@@ -1,0 +1,50 @@
+@import "config/colors";
+@import "config/keyframes";
+
+body#sessions{
+    div.notice, div.alert{
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+}
+
+div.notice, div.alert{
+    padding: 20px 30px;
+    color: white;
+    font-size: 17px;
+    border-radius: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .close-cont{
+        padding-left: 20px;
+
+        a{
+            color: white;
+
+            &:hover{
+                color: darken(white, 10%);
+            }
+        }
+    }
+
+    &.notifications {
+        background-color: yellow;
+        .avatar-form {
+            border-radius: 50%;
+            margin: 0
+        }
+        .notification-row {
+            width: 100%;
+        }
+        .date {
+            padding-top: 10px;
+        }
+    }
+
+}
+
+div.notice{ background-color: green; }
+div.alert{ background-color: red; }
