@@ -57,3 +57,21 @@
      }
  }
  
+ :root {
+    --gov-scrollbar-width: 12px;
+    --gov-color-icon-default: #4A90E2;
+}
+
+
+::-webkit-scrollbar {
+    width: var(--gov-scrollbar-width);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gov-color-icon-default);
+    border-radius: var(--gov-scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+    background: #d6e1ec;
+}

@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
     protect_from_forgery with: :exception
     before_action :https_redirect
     before_action :set_notification_exception
-    before_action :touch_current_user
     layout :layout_by_resource
 
 
@@ -27,14 +26,6 @@ class ApplicationController < ActionController::Base
 
     protected
 
-    def touch_current_user
-        current_user.touch if current_user
-    end
-
-    # def after_sign_in_path_for(resource)
-    #     # stored_location_for(resource) || profile_user_path(current_user)
-    #     stored_location_for(resource)
-    # end
 
     def set_locale
       if params[:locale]
