@@ -1,10 +1,30 @@
-p style="color: green" = notice
+div data-controller="petition" data-petition-id="#{@petition.id}"
+  p style="color: green" = notice
+  == render @petition
+  p Liczba podpisów: #{@petition.signatures.count}
 
-== render @petition
+  - if user_signed_in?
+    - if @petition.signatures.exists?(user: current_user)
+      p Już podpisałeś tę petycję.
+    - else
+      button data-petition-target="generateKey" Kliknij, aby wygenerować parę kluczy
+      button data-petition-target="signPetition" data-petition-id="#{@petition.id}" Podpisz petycję
+  - else
+    p Musisz się 
+      = link_to 'zalogować', new_user_session_path
+      | , aby podpisać petycję.
 
-div
-  => link_to "Edit this petition", edit_petition_path(@petition)
-  '|
-  =< link_to "Back to petitions", petitions_path
+  h2 Podpisy
 
-  = button_to "Destroy this petition", @petition, method: :delete
+  - if @petition.signatures.any?
+    ul
+      - @petition.signatures.each do |signature|
+        li = signature.user.email
+  - else
+    p Nie ma jeszcze żadnych podpisów pod tą petycją.
+
+  div
+    = link_to "Edit this petition", edit_petition_path(@petition)
+    | |
+    = link_to "Back to petitions", petitions_path
+    = button_to "Destroy this petition", @petition, method: :delete

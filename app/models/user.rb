@@ -1,3 +1,4 @@
+require 'openssl'
 class User < ApplicationRecord
   has_many :petitions, dependent: :destroy
   has_many :bills, dependent: :destroy
@@ -35,6 +36,13 @@ class User < ApplicationRecord
 
   def is?(role)
     roles.include?(role.to_s)
+  end
+  
+  def generate_keys!
+    rsa_key = OpenSSL::PKey::RSA.new(2048)
+    self.public_key = rsa_key.public_key.to_pem
+    save!
+    rsa_key.to_pem # Zwracamy klucz prywatny, który może być zapisany lokalnie
   end
 
 end
