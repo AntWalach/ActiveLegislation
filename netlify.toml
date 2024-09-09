@@ -2,5 +2,5 @@
   command = "sudo apt-get update && sudo apt-get install -y libmysqlclient-dev && bundle install && bundle exec rails db:migrate"
   publish = "public"
 
-[context.production.environment]
+[build.environment]
   RUBY_VERSION = "3.1.2"
