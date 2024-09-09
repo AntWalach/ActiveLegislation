@@ -1,0 +1,175 @@
+  .login-wrapper {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #e7eaf6;
+    flex-wrap: wrap; 
+}
+
+.login-left {
+    flex: 1;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px !important;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+}
+
+.login-left h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.login-left p {
+    font-size: 18px;
+    max-width: 400px;
+}
+
+.login-left a {
+    display: inline-block; 
+    text-align: center;    
+}
+
+.login-left img {
+    display: block;
+    margin: 0 auto; 
+    max-width: 70%;
+    transition: transform 0.2s ease;
+}
+
+.login-left img:hover {
+    transform: scale(1.1); 
+}
+
+.login-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 30px;
+    
+    border-radius: 12px; 
+}
+
+.login-container {
+    max-width: 400px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.login-container h2 {
+    color: #2b3990;
+    margin-bottom: 20px;
+}
+
+.form-inputs input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.login-container .login-button {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #2b3990;
+    border: none;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.login-container .login-button:hover {
+    background-color: #3a4aa6;
+    transform: scale(1.05);
+}
+
+.social-login {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.social-login p {
+    margin-bottom: 10px;
+    color: #666666;
+}
+
+.social-icons a {
+    margin: 0 10px;
+}
+
+.social-icons img {
+    width: 30px;
+    transition: transform 0.2s ease; 
+}
+
+.social-icons img:hover {
+    transform: scale(1.1); 
+}
+
+.extra-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.extra-links a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.extra-links a:hover {
+    text-decoration: underline;
+}
+
+.new-login-page {
+    background: asset_url("legislatio_image1.png") no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .new-login-page .login-left {
+    color: white;
+    padding: 50px;
+  }
+  
+  .new-login-page .login-right {
+    padding: 40px;
+    border-radius: 8px;
+  }
+
+
+
+@media (max-width: 768px) {
+    .login-left, .login-right {
+        flex: 1 1 100%;
+    }
+    .login-left img {
+        max-width: 60%; 
+    }
+    .login-left {
+        padding: 30px; 
+      }
+
+      .login-left h1 {
+        font-size: 24px; 
+      }
+
+      .login-right {
+        padding: 30px 20px; 
+    }
+}

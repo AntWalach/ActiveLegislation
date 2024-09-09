@@ -26,7 +26,8 @@ class PetitionsController < ApplicationController
   def create
     # @petition = @user.petitions.new(petition_params)
     @petition = current_user.petitions.new(petition_params)
-
+    @petition.status = "pending"
+    
     respond_to do |format|
       if @petition.save
         format.html { redirect_to petition_url(@petition), notice: "Petition was successfully created." }

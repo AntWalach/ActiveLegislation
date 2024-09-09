@@ -11,7 +11,8 @@ class User < ApplicationRecord
 
   ROLES = {
   "A" => "admin",
-  "S" => "standard"
+  "S" => "standard",
+  "U" => "urzednik"
   }
 
   def roles
@@ -42,7 +43,7 @@ class User < ApplicationRecord
     rsa_key = OpenSSL::PKey::RSA.new(2048)
     self.public_key = rsa_key.public_key.to_pem
     save!
-    rsa_key.to_pem # Zwracamy klucz prywatny, który może być zapisany lokalnie
+    rsa_key.to_pem 
   end
 
 end

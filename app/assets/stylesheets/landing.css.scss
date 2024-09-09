@@ -51,8 +51,14 @@ button.site-header__menu-opener {
     flex: 1 1 auto;
     align-items: center;
     padding-right: 1.1em;
+    justify-content: center;
 }
 
 .site-header-spacer {
-    height: 4.375rem;
+    height: 12rem;
+}
+
+.site-header__logo {
+    height: 12rem; 
+    width: auto; 
 }

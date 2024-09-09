@@ -1,20 +1,29 @@
-.content-section
-  = simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: {turbo: true}) do |f|
-    .sessions-header = t(:loginin).upcase
-    = f.input :email, required: false, autofocus: true, input_html: { autocomplete: "email", placeholder: t(:email_placeholder) }
-    = f.input :password, required: false, input_html: { autocomplete: "current-password", placeholder: t("activerecord.attributes.user.password") }
+.login-wrapper.new-login-page
+  .login-left
+    = link_to landing_path do
+      = image_tag(asset_url("legislatio_logo2_transparent4.png"))
+    /= image_tag(asset_url("legislatio_logo2_transparent4.png"))
+  .login-right
+    .login-container
+      h2 Log in
+      = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+        .form-inputs
+          = f.input :email, required: false, autofocus: true, input_html: { autocomplete: "email" }
+          = f.input :password, required: false, input_html: { autocomplete: "current-password" }
 
-    = link_to t(:recall_password), new_password_path(resource_name), class: "recall-link"
+        .form-actions
+          = f.button :submit, "Log in", class: "login-button"
 
-    br
-    br
-    
+      .social-login
+        p or log in with
+        .social-icons
+          a href="#" 
+            img src="facebook-icon.png" alt="Facebook"
+          a href="#" 
+            img src="google-icon.png" alt="Google"
+          a href="#" 
+            img src="twitter-icon.png" alt="Twitter"
+          a href="#" 
+            img src="apple-icon.png" alt="Apple"
 
-    = f.button :submit, t(:log_in), class: "big-blue-submit"
-
-    br
-
-    .register-cont
-      span = t(:dont_have_account)
-      = link_to t(:sign_up), new_user_registration_path
-
+      = render "devise/shared/links"

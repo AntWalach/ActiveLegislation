@@ -28,4 +28,13 @@ Rails.application.routes.draw do
   end
 
   post 'users/upload_public_key', to: 'users#upload_public_key'
+
+  namespace :clerk do
+    resources :petitions, only: [:index, :show] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
+  end
 end
