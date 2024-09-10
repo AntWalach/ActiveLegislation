@@ -63,6 +63,7 @@
     }
 }
 
+
 .collapsed .left-menu {
     width: 50px;  
 }
@@ -97,6 +98,7 @@
 
 .menu-toggle-button button {
     background-color: transparent;
+    background: linear-gradient(145deg, #005cd6, $left_menu_blue);
     border: none;
     outline: 0;
     width: 100%;

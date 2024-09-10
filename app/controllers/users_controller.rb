@@ -2,7 +2,14 @@ class UsersController < ApplicationController
     load_and_authorize_resource
 
     def index
-      @users = User.all
+      @search_url = users_path
+      @search = User.all.ransack(params[:q])
+      @list = @users = @search.result(distinct: true).page(params[:page])
+  
+      respond_to do |f|
+        f.html
+        f.js {render "application/index"}
+      end
     end
 
 

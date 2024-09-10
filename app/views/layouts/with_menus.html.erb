@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
@@ -29,7 +28,26 @@
       </div>
     </div>
 
+    <!-- Skrypt, aby natychmiast dodać klasę collapsed, jeśli menu jest zwinięte -->
+    <script>
+      // Wykonujemy skrypt zanim reszta strony się załaduje
+      (function() {
+        const isCollapsed = localStorage.getItem('menu-collapsed') === 'true';
+        if (isCollapsed) {
+          // Dodajemy klasę collapsed natychmiast, zanim strona się załaduje w pełni
+          const navigation = document.querySelector('.navigation');
+          if (navigation) {
+            navigation.classList.add('collapsed');
+          }
+          const icon = document.querySelector('[data-menu-target="icon"]');
+          if (icon) {
+            icon.classList.remove('fa-chevron-left');
+            icon.classList.add('fa-chevron-right');
+          }
+        }
+      })();
+    </script>
 
-    <%= yield :scripts%>
-</body>
+    <%= yield :scripts %>
+  </body>
 </html>

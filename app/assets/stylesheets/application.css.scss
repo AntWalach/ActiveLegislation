@@ -12,6 +12,7 @@
  *
  *= require_tree .
  *= require_self
+ *= require material_icons
  *= require flatpickr
  */
 
@@ -19,7 +20,7 @@
  @import "font_awesome5_webfont";
  @import 'chosen';
  @import "config/colors";
- 
+
  .bottom-cont {
      display: flex;
      flex-direction: row;
@@ -75,3 +76,14 @@
 ::-webkit-scrollbar-track {
     background: #d6e1ec;
 }
+
+
+i.material-icons {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: auto;
+    display: inline-block;
+    line-height: 1;
+  }
+  

@@ -1,0 +1,13 @@
+.index-table.white-cont
+    - unless defined?(no_pages) && no_pages
+
+        .page-entries-info = page_entries_info(list)
+
+    - if browser.safari? || browser.platform.ios?
+        .table-cont.table-responsive.custom-scrollbar
+            = render "table", list: list, custom_dir: defined?(custom_dir) ? custom_dir : '', no_pages: defined?(no_pages) ? no_pages : false
+    - else
+        .table-cont.table-responsive.custom-scrollbar style="overflow: auto; transform: rotateX(180deg);"
+            .inner-rotate style="transform: rotateX(180deg);"
+                = render "table", list: list, custom_dir: defined?(custom_dir) ? custom_dir : '', no_pages: defined?(no_pages) ? no_pages : false
+

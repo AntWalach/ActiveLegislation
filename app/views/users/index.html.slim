@@ -1,7 +1,8 @@
-p style="color: green" = notice
+/ p style="color: green" = notice
 
-h1 Users
+/ h1 Users
 
-#users
-  - @users.each do |user|
-    = user.email
+/ #users
+/   - @users.each do |user|
+/     = user.email
+= render "index_table", list: @users

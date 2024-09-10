@@ -1,0 +1,103 @@
+.pagination {
+    --bs-pagination-padding-x: 0.75rem;
+    --bs-pagination-padding-y: 0.375rem;
+    --bs-pagination-font-size: 1rem;
+    --bs-pagination-color: var(--bs-link-color);
+    --bs-pagination-bg: var(--bs-body-bg);
+    --bs-pagination-border-width: var(--bs-border-width);
+    --bs-pagination-border-color: var(--bs-border-color);
+    --bs-pagination-border-radius: var(--bs-border-radius);
+    --bs-pagination-hover-color: var(--bs-link-hover-color);
+    --bs-pagination-hover-bg: var(--bs-tertiary-bg);
+    --bs-pagination-hover-border-color: var(--bs-border-color);
+    --bs-pagination-focus-color: var(--bs-link-hover-color);
+    --bs-pagination-focus-bg: var(--bs-secondary-bg);
+    --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    --bs-pagination-active-color: #fff;
+    --bs-pagination-active-bg: #0d6efd;
+    --bs-pagination-active-border-color: #0d6efd;
+    --bs-pagination-disabled-color: var(--bs-secondary-color);
+    --bs-pagination-disabled-bg: var(--bs-secondary-bg);
+    --bs-pagination-disabled-border-color: var(--bs-border-color);
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+}
+
+@media only screen and (max-width: 992px) {
+    .pagination {
+        width: 100%;
+    }
+}
+
+
+i.material-icons {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: auto;
+    display: inline-block;
+    line-height: 1;
+}
+
+.pagination li i {
+    font-size: 2rem;
+}
+
+.material-icons, .mi {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+
+}
+
+.material-icons {
+    font-feature-settings: 'liga';
+}
+
+
+.pagination li.disabled a {
+    cursor: default;
+    color: #999;
+}
+
+.pagination li.active a {
+    color: #fff;
+}
+
+a:not([href]):not([class]), a:not([href]):not([class]):hover {
+    color: inherit;
+    text-decoration: none;
+}
+.pagination li a {
+    color: #444;
+    display: inline-block;
+    font-size: 1.2rem;
+    padding: 0 10px;
+    line-height: 30px;
+}
+
+
+.pagination li.active {
+    background-color: #ee6e73;
+}
+
+ul:not(.browser-default) > li {
+    list-style-type: none;
+}
+
+.pagination li {
+    display: inline-block;
+    border-radius: 2px;
+    text-align: center;
+    vertical-align: top;
+    height: 30px;
+}

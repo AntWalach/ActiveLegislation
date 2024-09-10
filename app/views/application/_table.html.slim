@@ -1,0 +1,9 @@
+table.table
+    theader
+        = render "#{defined?(custom_dir) ? custom_dir : ''}table_header"
+
+    tbody#list
+        = render "table_content", list: list, custom_dir: defined?(custom_dir) ? custom_dir : ''
+
+- unless defined?(no_pages) && no_pages
+    = render 'pagination', list: list

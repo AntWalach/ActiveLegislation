@@ -9,7 +9,7 @@ gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 gem "sprockets-rails"
 
 # Use sqlite3 as the database for Active Record
-# gem 'mysql2', '0.5.3'
+gem 'mysql2'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -88,11 +88,12 @@ gem "devise", "~> 4.9"
 gem 'browser'
 gem 'flatpickr', '~> 4.6', '>= 4.6.11.0'
 gem "sassc-rails"
+gem 'materialize-sass'
+gem 'material_icons' 
+# group :production do
+#   gem 'sqlite3', '~> 1.4'
+# end
 
-group :production do
-  gem 'sqlite3', '~> 1.4'
-end
-
-group :development, :test do
-  gem 'mysql2', '~> 0.5.3'
-end
+# group :development, :test do
+#   gem 'mysql2', '~> 0.5.3'
+# end

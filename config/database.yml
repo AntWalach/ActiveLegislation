@@ -21,7 +21,12 @@ test:
   socket: /var/run/mysqld/mysqld.sock
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: sample_active_legislation_mysql_production
   pool: 5
-  timeout: 5000
+  username: root
+  password: ""
+  host: localhost
+  socket: /var/run/mysqld/mysqld.sock
