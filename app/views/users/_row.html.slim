@@ -1,7 +1,11 @@
 tr
     td
+        = el.first_name
+    td  
         = el.email
+    td
+        = el.type
     td 
         = link_to fa_icon("edit", type: :regular), edit_user_path(el), class: "light-text edit-user-btn" if can?(:edit, el)
     td 
-        = link_to fa_icon("arrow-right"), el, class: "show-icon-link" if can?(:read, el)
+        = link_to fa_icon("arrow-right"), user_path(el), class: "show-icon-link" if can?(:read, el)

@@ -1,1 +1,6 @@
-= render @user
+- if @user.is_a?(Admin)
+  = render partial: "admins/admin", locals: { user: @user }
+- elsif @user.is_a?(Official)
+  = render partial: "officials/official", locals: { user: @user }
+- elsif @user.is_a?(StandardUser)
+  = render partial: "standard_users/standard_user", locals: { user: @user }

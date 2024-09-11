@@ -1,4 +1,4 @@
-= simple_form_for(@user) do |f|
+= simple_form_for(@user, url: @user.persisted? ? user_path(@user) : users_path, html: { method: @user.persisted? ? :patch : :post }) do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
     .row  
@@ -15,9 +15,13 @@
 
         = f.input :password, wrapper: false
         = f.input :password_confirmation, wrapper: false
+
         - if can? :assign_roles, User
+            -if @user.is_a?(Official)
+                = f.input :department, wrapper: false
+                = f.input :office_location, wrapper: false
             = f.input :verified, wrapper: false
-            = f.input :role_mask, collection: User::ROLES.map{|key,val| [val,key]}
+            = f.input :type, as: :select, collection: [['Admin', 'Admin'], ['Official', 'Official'], ['User', 'StandardUser']], label: "Select Role"
     br
 
     = f.button :submit, class: "blue-btn inline"

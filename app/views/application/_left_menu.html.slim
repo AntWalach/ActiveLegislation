@@ -4,7 +4,7 @@
             = button_tag class: "btn" do
                 i.fas.fa-chevron-left(data-menu-target="icon") 
         .left-menu(data-menu-target="container")
-            - if current_user.is? :admin
+            - if current_user.is_a?(Admin)
                 = render "admin_left_menu_links"
             - else
                 = render "left_menu_links"

@@ -3,21 +3,18 @@ class Ability
 
   def initialize(user)
     if user
-      if user.is? :standard
+      case user
+      when Admin
+        can :manage, :all
+      when Official
+        can [:index, :show, :approve, :reject], Petition
+        can [:index, :show, :create, :new, :edit, :destroy], Bill
+        can [:dashboard], User
+      when StandardUser
         can [:dashboard, :upload_public_key], User
         can [:index, :show, :create, :new, :edit, :destroy], Petition
         can [:index, :show, :create, :new, :edit, :destroy], Bill
         can [:create], Signature
-      end
-
-      if user.is? :admin
-        can :manage, :all
-      end
-
-      if user.is? :official
-        can [:index, :show, :approve, :reject], Petition
-        can [:index, :show, :create, :new, :edit, :destroy], Bill
-        can [:dashboard], User
       end
     end
   end
