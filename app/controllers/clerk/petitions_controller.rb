@@ -26,7 +26,7 @@ module Clerk
       private
   
       def authorize_clerk!
-        redirect_to root_path, alert: "Nie masz dostępu do tej strony" unless current_user.is?(:urzednik)
+        redirect_to root_path, alert: "Nie masz dostępu do tej strony" unless current_user.is?(:official)
       end
     end
   end

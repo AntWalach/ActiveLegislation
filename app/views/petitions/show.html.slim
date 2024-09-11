@@ -29,6 +29,6 @@ div data-controller="petition" data-petition-id="#{@petition.id}"
     = link_to "Back to petitions", petitions_path
     = button_to "Destroy this petition", @petition, method: :delete
 
-  - if current_user.is?(:urzednik) 
+  - if current_user.is?(:official) 
     = link_to 'Zatwierdź', approve_clerk_petition_path(@petition), method: :patch 
     = link_to 'Odrzuć', reject_clerk_petition_path(@petition), method: :patch 

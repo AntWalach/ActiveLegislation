@@ -12,7 +12,7 @@ class User < ApplicationRecord
   ROLES = {
   "A" => "admin",
   "S" => "standard",
-  "U" => "urzednik"
+  "O" => "official"
   }
 
   def roles

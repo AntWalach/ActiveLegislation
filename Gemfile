@@ -90,6 +90,7 @@ gem 'flatpickr', '~> 4.6', '>= 4.6.11.0'
 gem "sassc-rails"
 gem 'materialize-sass'
 gem 'material_icons' 
+gem 'country_select'
 # group :production do
 #   gem 'sqlite3', '~> 1.4'
 # end

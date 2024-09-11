@@ -14,7 +14,7 @@ class Ability
         can :manage, :all
       end
 
-      if user.is? :urzednik
+      if user.is? :official
         can [:index, :show, :approve, :reject], Petition
         can [:index, :show, :create, :new, :edit, :destroy], Bill
         can [:dashboard], User

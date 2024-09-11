@@ -1,3 +1,7 @@
 tr
     td
         = el.email
+    td 
+        = link_to fa_icon("edit", type: :regular), edit_user_path(el), class: "light-text edit-user-btn" if can?(:edit, el)
+    td 
+        = link_to fa_icon("arrow-right"), el, class: "show-icon-link" if can?(:read, el)
