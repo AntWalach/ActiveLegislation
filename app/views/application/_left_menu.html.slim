@@ -6,5 +6,7 @@
         .left-menu(data-menu-target="container")
             - if current_user.is_a?(Admin)
                 = render "admin_left_menu_links"
+            - elsif current_user.is_a?(Official)
+                = render "official_left_menu_links"
             - else
                 = render "left_menu_links"

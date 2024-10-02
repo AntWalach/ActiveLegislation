@@ -1,0 +1,46 @@
+.form-cont{
+    width: 100%;
+    padding: 40px 30px;
+
+    &.white{
+        background-color: white;
+        border-radius: 20px;
+    }
+
+    &.grey{
+        background-color: grey;
+        border-radius: 20px; 
+    }
+
+    .header{
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+
+        &.left{ text-align: left; }
+    }
+
+    .subheader{
+        font-size: 14px;
+        text-align: center;
+        color: grey;
+        margin-bottom: 40px;
+    }
+
+    input, textarea{
+        border: 1px solid grey;
+        border-radius: 10px;
+        padding: 10px 15px;
+        font-size: 15px;
+        color: grey;
+        margin: 10px 0;
+    }
+
+    label{
+        display: block;
+        color: grey;
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+}

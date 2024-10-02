@@ -1,27 +1,28 @@
 = simple_form_for(@user, url: @user.persisted? ? user_path(@user) : users_path, html: { method: @user.persisted? ? :patch : :post }) do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
-    .row  
-        = f.input :first_name, wrapper: false
-        = f.input :last_name, wrapper: false
-        = f.input :email, wrapper: false
-        = f.input :address, wrapper: false
-        = f.input :postal_code, wrapper: false
-        = f.input :city, wrapper: false
-        = f.country_select :country, { include_blank: 'Select a country' }, wrapper: false
-        = f.input :pesel, wrapper: false
-        = f.input :phone_number, wrapper: false
-        = f.input :date_of_birth, as: :string, wrapper: false, input_html: { class: "datepicker", data: { controller: "flatpickr" } }
+    .row
+        .col-lg-6.form-cont 
+            = f.input :first_name, wrapper: false
+            = f.input :last_name, wrapper: false
+            = f.input :email, wrapper: false
+            = f.input :address, wrapper: false
+            = f.input :postal_code, wrapper: false
+            = f.input :city, wrapper: false
+            = f.country_select :country, { include_blank: 'Select a country' }, wrapper: false
+            = f.input :pesel, wrapper: false
+            = f.input :phone_number, wrapper: false
+            = f.input :date_of_birth, as: :string, wrapper: false, input_html: { class: "datepicker", data: { controller: "flatpickr" } }
 
-        = f.input :password, wrapper: false
-        = f.input :password_confirmation, wrapper: false
-
-        - if can? :assign_roles, User
-            -if @user.is_a?(Official)
-                = f.input :department, wrapper: false
-                = f.input :office_location, wrapper: false
-            = f.input :verified, wrapper: false
-            = f.input :type, as: :select, collection: [['Admin', 'Admin'], ['Official', 'Official'], ['User', 'StandardUser']], label: "Select Role"
+            = f.input :password, wrapper: false
+            = f.input :password_confirmation, wrapper: false
+        .col-lg-6.form-cont 
+            - if can? :assign_roles, User
+                -if @user.is_a?(Official)
+                    = f.input :department, wrapper: false
+                    = f.input :office_location, wrapper: false
+                = f.input :verified, wrapper: false
+                = f.input :type, as: :select, collection: [['Admin', 'Admin'], ['Official', 'Official'], ['User', 'StandardUser']], label: "Select Role"
     br
 
     = f.button :submit, class: "blue-btn inline"

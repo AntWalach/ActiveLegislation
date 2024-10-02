@@ -12,6 +12,9 @@ class Petition < ApplicationRecord
   def ready_for_review?
     signatures.count >= MIN_SIGNATURES_FOR_REVIEW
   end
-
+  
+  def self.ransackable_attributes(auth_object = nil)
+    ["title", "category", "status", "created_at", "updated_at", "user_id", "description"]
+  end
 
 end

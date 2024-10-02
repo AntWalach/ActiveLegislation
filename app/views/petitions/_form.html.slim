@@ -5,6 +5,7 @@
   .form-inputs
     = f.input :title
     = f.input :description
-
+    = f.input :category, as: :select, collection: ["Edukacja", "Zdrowie", "Środowisko", "Prawa człowieka"], class: "form-control"
+  
   .form-actions
     = f.button :submit

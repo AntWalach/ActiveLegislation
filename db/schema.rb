@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_11_141232) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_12_100945) do
   create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -55,6 +55,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_11_141232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status"
+    t.text "comments"
+    t.string "category"
     t.index ["user_id"], name: "index_petitions_on_user_id"
   end
 

@@ -5,7 +5,10 @@ class PetitionsController < ApplicationController
   
   # GET /petitions or /petitions.json
   def index
-    @petitions = Petition.all
+    @search = Petition.where(status: :approved).ransack(params[:q]) # Obywatele widzą tylko zatwierdzone petycje
+    @petitions = @search.result(distinct: true).page(params[:page])
+    #@popular_petitions = Petition.where(status: :approved).order(signatures_count: :desc).limit(5) # Najczęściej podpisywane petycje
+    @my_petitions = current_user.petitions.page(params[:my_page]) # Petycje użytkownika
   end
 
   # GET /petitions/1 or /petitions/1.json
