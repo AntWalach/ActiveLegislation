@@ -77,6 +77,7 @@ class PetitionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def petition_params
-      params.require(:petition).permit(:title, :description)
+      params.require(:petition).permit(:title, :description, :category, :subcategory, :address, :recipient, :justification, :signature_goal, :end_date, :public_comment, :attachment, :external_links, :priority, :comments, :gdpr_consent)
     end
+    
 end

@@ -7,3 +7,5 @@ import "jquery_ujs"
 import 'bootstrap'
 import 'chosen-jquery'
 import 'flatpickr'
+import "trix"
+import "@rails/actiontext"

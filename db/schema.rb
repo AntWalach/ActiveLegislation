@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_12_100945) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_02_213302) do
+  create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body", size: :long
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
+
   create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -45,6 +55,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_12_100945) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "content"
+    t.text "justification"
+    t.string "category"
+    t.integer "required_signatures", default: 100000
+    t.datetime "signatures_deadline"
+    t.string "status"
+    t.index ["category"], name: "index_bills_on_category"
+    t.index ["status"], name: "index_bills_on_status"
     t.index ["user_id"], name: "index_bills_on_user_id"
   end
 
@@ -57,6 +75,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_12_100945) do
     t.integer "status"
     t.text "comments"
     t.string "category"
+    t.string "address"
+    t.string "recipient"
+    t.text "justification"
+    t.integer "signature_goal"
+    t.date "end_date"
+    t.string "creator_name"
+    t.text "public_comment"
+    t.string "attachment"
+    t.text "external_links"
+    t.string "priority"
+    t.boolean "gdpr_consent", default: false
+    t.boolean "privacy_policy", default: false
+    t.string "subcategory"
     t.index ["user_id"], name: "index_petitions_on_user_id"
   end
 

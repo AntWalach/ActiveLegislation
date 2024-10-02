@@ -1,11 +1,17 @@
 = simple_form_for(@bill) do |f|
   = f.error_notification
-  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  - if f.object.errors[:base].present?
+    = f.error_notification message: f.object.errors[:base].to_sentence
 
   .form-inputs
-    = f.input :title
-    = f.input :description
-    / = f.association :user
+    = f.input :title, label: "Tytuł ustawy"
+    = f.rich_text_area :content, label: "Treść ustawy"
+    = f.rich_text_area :justification, label: "Uzasadnienie"
+    = f.input :category, label: "Kategoria", collection: ['Gospodarka', 'Edukacja', 'Zdrowie', 'Prawo', 'Inne'], prompt: "Wybierz kategorię"
+    = f.input :required_signatures, label: "Wymagana liczba podpisów"
+    = f.input :signatures_deadline, as: :date, label: "Termin zakończenia zbiórki podpisów"
+    = f.input :status, label: "Status", collection: ['W trakcie zbierania podpisów', 'Złożona do Sejmu', 'Przyjęta', 'Odrzucona'], prompt: "Wybierz status"
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, "Zapisz projekt ustawy"
