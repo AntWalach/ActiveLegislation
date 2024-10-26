@@ -13,8 +13,11 @@ class Officials::PetitionsController < ApplicationController
 
   def approve
     petition = Petition.find(params[:id])
-    petition.update(status: :approved, comments: params[:comments])
-    redirect_to officials_petitions_path, notice: "Petycja została zatwierdzona."
+    if petition.update(status: :approved, comments: params[:comments])
+      redirect_to officials_petitions_path, notice: "Petycja została zatwierdzona."
+    else
+      redirect_to officials_petitions_path, alert: "Nie udało się zatwierdzić petycji."
+    end
   end
 
   def reject

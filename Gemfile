@@ -84,7 +84,7 @@ gem 'ransack', '~> 4.0'
 gem 'active_storage_validations', '~> 1.0', '>= 1.0.3'
 gem 'exception_notification', '~> 4.5'
 
-gem "devise", "~> 4.9"
+gem "devise"
 gem 'browser'
 gem 'flatpickr', '~> 4.6', '>= 4.6.11.0'
 gem "sassc-rails"

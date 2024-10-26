@@ -1,0 +1,117 @@
+/* Główne style formularza */
+.form-horizontal {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style dla etykiet */
+  .form-horizontal .col-form-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Style dla pól tekstowych, wyborów i dat */
+  .form-horizontal .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  
+  /* Specjalne style dla pól załączników */
+  .form-horizontal .form-control-file {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  /* Style dla checkboxów i przycisków radiowych */
+  .form-horizontal .form-check-input {
+    margin-right: 10px;
+  }
+  
+  /* Stylizacja przycisków formularza */
+  .form-horizontal .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .form-horizontal .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Dodatkowe style dla grup formularza */
+  .form-horizontal .form-group {
+    margin-bottom: 20px;
+  }
+  
+  /* Stylowanie pól podpisów */
+  .signature_goal_field {
+    display: none; /* Ukryte na początku, zarządzane przez JS */
+  }
+  
+  /* Stylowanie powiadomień o błędach */
+  .error-notification {
+    color: red;
+    background-color: #ffebeb;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid red;
+    margin-bottom: 20px;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  
+    .form-check {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+  
+      .form-check-input {
+        width: auto;
+        height: auto;
+        margin-right: 0.5rem; // Odstęp między checkboxem a tekstem
+        transform: scale(1.2); // Powiększenie checkboxa
+      }
+  
+      label {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: normal;
+      }
+    }
+  }
+  
+  /* Dodatkowe style dla formularza na urządzeniach mobilnych */
+  @media (max-width: 768px) {
+    .form-horizontal {
+      padding: 15px;
+      box-shadow: none;
+      border-radius: 0;
+    }
+  
+    .form-horizontal .btn {
+      width: 100%;
+    }
+  
+    .form-horizontal .form-control {
+      font-size: 16px;
+    }
+  }
+  

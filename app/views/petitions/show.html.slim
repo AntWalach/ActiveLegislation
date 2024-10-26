@@ -1,34 +1,117 @@
 div data-controller="petition" data-petition-id="#{@petition.id}"
-  p style="color: green" = notice
-  == render @petition
-  p Liczba podpisów: #{@petition.signatures.count}
 
-  - if user_signed_in?
-    - if @petition.signatures.exists?(user: current_user)
-      p Już podpisałeś tę petycję.
-    - else
-      button data-petition-target="generateKey" Kliknij, aby wygenerować parę kluczy
-      button data-petition-target="signPetition" data-petition-id="#{@petition.id}" Podpisz petycję
-  - else
-    p Musisz się 
-      = link_to 'zalogować', new_user_session_path
-      | , aby podpisać petycję.
+  h1 = @petition.title
 
-  h2 Podpisy
+  .row
+    .col-md-8
+      p
+        strong Kategoria: 
+        = @petition.category.presence || "Brak kategorii"
 
-  - if @petition.signatures.any?
-    ul
-      - @petition.signatures.each do |signature|
-        li = signature.user.email
-  - else
-    p Nie ma jeszcze żadnych podpisów pod tą petycją.
+      p
+        strong Podkategoria:
+        = @petition.subcategory.presence || "Brak podkategorii"
 
-  div
-    = link_to "Edit this petition", edit_petition_path(@petition)
-    | |
-    = link_to "Back to petitions", petitions_path
-    = button_to "Destroy this petition", @petition, method: :delete
+      p
+        strong Adres zamieszkania lub siedziby:
+        = @petition.address.presence || "Brak adresu"
 
-  - if current_user.is?(:official) 
-    = link_to 'Zatwierdź', approve_clerk_petition_path(@petition), method: :patch 
-    = link_to 'Odrzuć', reject_clerk_petition_path(@petition), method: :patch 
+      p
+        strong Adresat petycji:
+        = @petition.recipient.presence || "Brak odbiorcy"
+
+      hr
+
+      h3 Opis
+      .petition-description
+        = @petition.description.to_s.html_safe.presence || "Brak opisu"
+
+      h3 Uzasadnienie
+      .petition-justification
+        = @petition.justification.to_s.html_safe.presence || "Brak uzasadnienia"
+
+      hr
+
+      p
+        strong Typ petycji:
+        = @petition.petition_type ? @petition.petition_type.humanize : "Brak rodzaju petycji"
+
+
+      - if @petition.requires_signatures?
+        p
+          strong Liczba wymaganych podpisów:
+          = @petition.signature_goal.presence || "Brak informacji"
+        p
+          strong Liczba zebranych podpisów:
+          = @petition.signatures.count
+
+      p
+        strong Termin zakończenia zbierania podpisów:
+        = @petition.end_date.present? ? @petition.end_date.strftime("%d-%m-%Y") : "Brak terminu"
+
+      p
+        strong Priorytet:
+        = @petition.priority.presence || "Brak priorytetu"
+
+      p
+        strong Komentarz publiczny:
+        = @petition.public_comment.presence || "Brak komentarza publicznego"
+
+      hr
+
+      - if @petition.attachment.attached?
+        p
+          strong Załączniki:
+          = link_to "Pobierz załącznik", rails_blob_path(@petition.attachment, disposition: "attachment")
+      - else
+        p Brak załączników.
+
+      - if @petition.external_links.present?
+        p
+          strong Linki do zewnętrznych źródeł:
+        ul
+          - @petition.external_links.split(',').each do |link|
+            li
+              = link_to link.strip, link.strip, target: "_blank"
+      - else
+        p Brak linków do zewnętrznych źródeł.
+
+      hr
+
+      p
+        strong Status petycji:
+        = @petition.status.humanize.presence || "Brak statusu"
+
+      hr
+
+      - if user_signed_in?
+        - if current_user.id == @petition.user_id || current_user.is?(:admin)
+          = link_to 'Edytuj', edit_petition_path(@petition), class: "btn btn-warning"
+          = link_to 'Usuń', petition_path(@petition), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę petycję?" }, class: "btn btn-danger"
+
+        - if current_user != @petition.user && !@petition.signatures.exists?(user: current_user)
+          button data-petition-target="generateKey" Kliknij, aby wygenerować parę kluczy
+          button data-petition-target="signPetition" data-petition-id="#{@petition.id}" Podpisz petycję
+
+        - if @petition.signatures.exists?(user: current_user)
+          p.alert.alert-info Już podpisałeś tę petycję.
+
+    .col-md-4
+      h2 Informacje dodatkowe
+      p
+        strong Data utworzenia:
+        = @petition.created_at.strftime("%d-%m-%Y")
+
+      p
+        strong Twórca petycji:
+        = @petition.user&.first_name.presence || "Brak informacji o twórcy"
+
+      hr
+
+      h3 Komentarze urzędnika
+      - if @petition.comments.present?
+        p = @petition.comments
+      - else
+        p Brak komentarzy.
+
+  = link_to "Powrót do listy petycji", petitions_path, class: "btn btn-secondary"

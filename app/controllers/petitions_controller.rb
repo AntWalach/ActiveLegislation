@@ -5,7 +5,7 @@ class PetitionsController < ApplicationController
   
   # GET /petitions or /petitions.json
   def index
-    @search = Petition.where(status: :approved).ransack(params[:q]) # Obywatele widzą tylko zatwierdzone petycje
+    @search = Petition.includes(:user).where(status: :approved).ransack(params[:q]) # Obywatele widzą tylko zatwierdzone petycje
     @petitions = @search.result(distinct: true).page(params[:page])
     #@popular_petitions = Petition.where(status: :approved).order(signatures_count: :desc).limit(5) # Najczęściej podpisywane petycje
     @my_petitions = current_user.petitions.page(params[:my_page]) # Petycje użytkownika
@@ -30,12 +30,14 @@ class PetitionsController < ApplicationController
     # @petition = @user.petitions.new(petition_params)
     @petition = current_user.petitions.new(petition_params)
     @petition.status = "pending"
-    
+    @petition.signature_goal ||= Petition::MIN_SIGNATURES_FOR_REVIEW if @petition.requires_signatures?
+
     respond_to do |format|
       if @petition.save
         format.html { redirect_to petition_url(@petition), notice: "Petition was successfully created." }
         format.json { render :show, status: :created, location: @petition }
       else
+        Rails.logger.debug "Validation errors: #{@petition.errors.full_messages.join(', ')}"
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @petition.errors, status: :unprocessable_entity }
       end
@@ -67,9 +69,6 @@ class PetitionsController < ApplicationController
 
   private
 
-    # def set_user
-    #   @user = current_user
-    # end
     # Use callbacks to share common setup or constraints between actions.
     def set_petition
       @petition = Petition.find(params[:id])
@@ -77,7 +76,7 @@ class PetitionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def petition_params
-      params.require(:petition).permit(:title, :description, :category, :subcategory, :address, :recipient, :justification, :signature_goal, :end_date, :public_comment, :attachment, :external_links, :priority, :comments, :gdpr_consent)
+      params.require(:petition).permit(:title, :description, :category, :subcategory, :address, :recipient, :justification, :signature_goal, :privacy_policy, :end_date, :public_comment, :attachment, :external_links, :priority, :comments, :gdpr_consent, :petition_type)
     end
     
 end
