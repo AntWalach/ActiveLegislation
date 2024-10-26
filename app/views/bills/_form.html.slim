@@ -1,17 +1,52 @@
-= simple_form_for(@bill) do |f|
+= simple_form_for(@bill, html: { class: 'form-horizontal' }) do |f|
   = f.error_notification
 
   - if f.object.errors[:base].present?
     = f.error_notification message: f.object.errors[:base].to_sentence
 
   .form-inputs
-    = f.input :title, label: "Tytuł ustawy"
-    = f.rich_text_area :content, label: "Treść ustawy"
-    = f.rich_text_area :justification, label: "Uzasadnienie"
-    = f.input :category, label: "Kategoria", collection: ['Gospodarka', 'Edukacja', 'Zdrowie', 'Prawo', 'Inne'], prompt: "Wybierz kategorię"
-    = f.input :required_signatures, label: "Wymagana liczba podpisów"
-    = f.input :signatures_deadline, as: :date, label: "Termin zakończenia zbiórki podpisów"
-    = f.input :status, label: "Status", collection: ['W trakcie zbierania podpisów', 'Złożona do Sejmu', 'Przyjęta', 'Odrzucona'], prompt: "Wybierz status"
+    .form-group
+      = f.label :title, "Tytuł ustawy", class: 'form-label'
+      = f.input :title, class: 'form-control', label: false
+
+    .form-group
+      = f.label :content, "Treść ustawy", class: 'form-label'
+      = f.rich_text_area :content, class: 'form-control', label: false
+
+    .form-group
+      = f.label :justification, "Uzasadnienie", class: 'form-label'
+      = f.rich_text_area :justification, class: 'form-control', label: false
+
+    .form-group
+      = f.label :category, "Kategoria", class: 'form-label'
+      = f.input :category, as: :select, collection: ['Gospodarka', 'Edukacja', 'Zdrowie', 'Prawo', 'Inne'], prompt: "Wybierz kategorię", class: 'form-control', label: false
+
+    .form-group
+      = f.label :required_signatures, "Wymagana liczba podpisów", class: 'form-label'
+      = f.input :required_signatures, class: 'form-control', label: false
+
+    .form-group
+      = f.label :signatures_deadline, "Termin zakończenia zbiórki podpisów", class: 'form-label'
+      = f.input :signatures_deadline, as: :date, class: 'form-control', label: false
+
+    .form-group
+      = f.label :status, "Status", class: 'form-label'
+      = f.input :status, as: :select, collection: Bill.statuses.keys.map { |status| [status.humanize, status] }, prompt: "Wybierz status", class: 'form-control', label: false
+
+  h3 Komitet inicjatywny
+  = f.fields_for :bill_committee do |committee_form|
+    .form-group
+      = committee_form.label :chairman_email, "Przewodniczący", class: 'form-label'
+      = committee_form.text_field :chairman_email, class: 'form-control', placeholder: "Email przewodniczącego"
+
+    .form-group
+      = committee_form.label :vice_chairman_email, "Wiceprzewodniczący", class: 'form-label'
+      = committee_form.text_field :vice_chairman_email, class: 'form-control', placeholder: "Email wiceprzewodniczącego"
+
+    - (1..13).each do |i|
+      .form-group
+        = committee_form.label "member_email_#{i}", "Członek komitetu #{i}", class: 'form-label'
+        = committee_form.text_field "member_email_#{i}", class: 'form-control', placeholder: "Email członka komitetu #{i}"
 
   .form-actions
-    = f.button :submit, "Zapisz projekt ustawy"
+    = f.button :submit, "Zapisz projekt ustawy", class: 'btn btn-primary'

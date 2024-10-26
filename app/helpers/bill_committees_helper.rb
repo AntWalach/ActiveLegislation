@@ -1,0 +1,2 @@
+module BillCommitteesHelper
+end

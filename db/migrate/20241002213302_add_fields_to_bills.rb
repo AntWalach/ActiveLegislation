@@ -5,7 +5,7 @@ class AddFieldsToBills < ActiveRecord::Migration[7.1]
     add_column :bills, :category, :string 
     add_column :bills, :required_signatures, :integer, default: 100000 
     add_column :bills, :signatures_deadline, :datetime  
-    add_column :bills, :status, :string
+    add_column :bills, :status, :integer
 
     add_index :bills, :category
     add_index :bills, :status

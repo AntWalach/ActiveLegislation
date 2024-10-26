@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bill: one
+  required_signatures: 1
+
+two:
+  bill: two
+  required_signatures: 1

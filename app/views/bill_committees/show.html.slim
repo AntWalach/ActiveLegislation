@@ -1,0 +1,16 @@
+h1 = @bill_committee.bill.title
+p Wymagana liczba podpisów: 1000
+p Liczba zebranych podpisów: #{@bill_committee.committee_signatures.count}
+
+- if user_signed_in?
+  - if @bill_committee.committee_signatures.exists?(user: current_user)
+    p Już poparłeś ten komitet.
+  - else
+    = link_to 'Poprzyj komitet', sign_bill_bill_committee_path(@bill_committee.bill), method: :post, class: "btn btn-primary"
+- else
+  p Musisz się = link_to 'zalogować', new_user_session_path, to poprzeć ten komitet.
+
+h2 Podpisy poparcia
+ul
+  - @signatures.each do |signature|
+    li = signature.user.email

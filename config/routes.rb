@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
-  resources :bills
+  resources :notifications, only: [] do
+    member do
+      patch :mark_as_read
+    end
+  end
+
+  resources :bills do
+    resource :bill_committee do
+      post :sign
+    end
+  end
   resources :petitions do
     resources :signatures, only: [:create]
   end

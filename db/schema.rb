@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_18_220521) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_26_193723) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -49,6 +49,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_18_220521) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "bill_committees", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "bill_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "chairman_id"
+    t.integer "vice_chairman_id"
+    t.index ["bill_id"], name: "index_bill_committees_on_bill_id"
+    t.index ["chairman_id"], name: "index_bill_committees_on_chairman_id"
+    t.index ["vice_chairman_id"], name: "index_bill_committees_on_vice_chairman_id"
+  end
+
   create_table "bills", charset: "utf8mb3", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -60,10 +71,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_18_220521) do
     t.string "category"
     t.integer "required_signatures", default: 100000
     t.datetime "signatures_deadline"
-    t.string "status"
+    t.integer "status"
     t.index ["category"], name: "index_bills_on_category"
     t.index ["status"], name: "index_bills_on_status"
     t.index ["user_id"], name: "index_bills_on_user_id"
+  end
+
+  create_table "committee_signatures", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "bill_committee_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_committee_id"], name: "index_committee_signatures_on_bill_committee_id"
+    t.index ["user_id"], name: "index_committee_signatures_on_user_id"
+  end
+
+  create_table "notifications", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "message"
+    t.boolean "read", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "petitions", charset: "utf8mb3", force: :cascade do |t|
@@ -142,7 +171,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_18_220521) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bill_committees", "bills"
   add_foreign_key "bills", "users"
+  add_foreign_key "committee_signatures", "bill_committees"
+  add_foreign_key "committee_signatures", "users"
+  add_foreign_key "notifications", "users"
   add_foreign_key "petitions", "users"
   add_foreign_key "signatures", "petitions"
   add_foreign_key "signatures", "users"

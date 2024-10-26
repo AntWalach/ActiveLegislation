@@ -1,7 +1,7 @@
 class Signature < ApplicationRecord
   belongs_to :user
   belongs_to :petition
-
+  belongs_to :bill
   validates :user_id, uniqueness: { scope: :petition_id, message: "już podpisałeś tę petycję" }
   validates :digital_signature, presence: true
 
