@@ -1,5 +1,7 @@
 require 'openssl'
 class User < ApplicationRecord
+
+  self.inheritance_column = :type
   has_many :petitions, dependent: :destroy
   has_many :bills, dependent: :destroy
   # Include default devise modules. Others available are:
@@ -14,6 +16,17 @@ class User < ApplicationRecord
   "S" => "standard",
   "O" => "official"
   }
+
+
+  def auto_set_role
+    default_role = case type
+                   when "Admin" then "A"
+                   when "StandardUser" then "S"
+                   when "Official" then "O"
+                   else nil
+                   end
+    update_column(:role_mask, default_role) if default_role && role_mask.nil?
+  end
 
   def roles
     return [] unless role_mask

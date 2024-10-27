@@ -1,1 +1,8 @@
-= render "form", user: @user
+/= render "form", user: @user
+
+- if @user.is_a?(Admin)
+  = render partial: "form", locals: { user: @user }
+- elsif @user.is_a?(Official)
+  = render partial: "officials/form", locals: { user: @user }
+- elsif @user.is_a?(StandardUser)
+  = render partial: "standard_users/form", locals: { user: @user }

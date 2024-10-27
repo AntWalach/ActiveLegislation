@@ -1,0 +1,10 @@
+h1 Dodaj nowego użytkownika
+= simple_form_for([:admin, @user]) do |f|
+    = f.input :first_name, label: "Imię"
+    = f.input :last_name, label: "Nazwisko"
+    = f.input :email, label: "Email"
+    = f.input :phone_number, label: "Numer telefonu"
+    = f.input :password, label: "Hasło"
+    = f.input :password_confirmation, label: "Potwierdzenie hasła"
+    = f.select :type, [["Standardowy Użytkownik", "StandardUser"], ["Admin", "Admin"], ["Urzędnik", "Official"]], prompt: "Wybierz typ użytkownika"
+    = f.submit "Dodaj użytkownika", class: "btn btn-primary"

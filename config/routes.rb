@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   resources :notifications, only: [] do
     member do
       patch :mark_as_read
@@ -10,9 +11,11 @@ Rails.application.routes.draw do
       post :sign
     end
   end
+
   resources :petitions do
     resources :signatures, only: [:create]
   end
+
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     registrations: 'users/registrations'
@@ -46,5 +49,9 @@ Rails.application.routes.draw do
         patch :reject
       end
     end
+  end
+
+  namespace :admin do
+    resources :users, only: [:new, :create, :edit, :update, :destroy]
   end
 end

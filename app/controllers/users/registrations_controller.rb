@@ -11,12 +11,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    super do |resource|
-      if resource.persisted?
-        private_key = resource.generate_keys! # Generowanie kluczy dla nowego użytkownika
-        # Tutaj możesz wyświetlić klucz prywatny użytkownikowi lub wysłać go e-mailem
-        flash[:notice] = "Rejestracja zakończona sukcesem. Zapamiętaj swój klucz prywatny: #{private_key}"
+    # Tworzymy nowego użytkownika typu StandardUser
+    build_resource(sign_up_params.merge(type: "StandardUser"))
+
+    # Próba zapisania użytkownika
+    if resource.save
+      private_key = resource.generate_keys! 
+      flash[:notice] = "Rejestracja zakończona sukcesem. "
+
+      if resource.active_for_authentication?
+        
+        sign_up(resource_name, resource)
+        respond_with resource, location: after_sign_up_path_for(resource)
+      else
+        expire_data_after_sign_in!
+        respond_with resource, location: after_inactive_sign_up_path_for(resource)
       end
+    else
+      clean_up_passwords resource
+      respond_with resource
     end
   end
 
@@ -65,4 +78,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
+  private
+    def sign_up_params
+      params.require(:user).permit(:first_name, :last_name, :phone_number, :email, :password, :password_confirmation)
+    rescue ActionController::ParameterMissing
+      {} # Zwracamy pusty hash, jeśli brakuje klucza `:user`
+    end
 end

@@ -70,9 +70,6 @@ class UsersController < ApplicationController
 
   private
 
-  def set_user
-    @user = User.find(params[:id])
-  end
 
   def check_admin_params
 
@@ -85,6 +82,12 @@ class UsersController < ApplicationController
       false
     end
   end
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+
   
   # def user_params
   #   permitted = [:email, :phone_number, :password, :password_confirmation, :first_name, :last_name, :address, :postal_code, :city, :country, :pesel, :date_of_birth, :verified, :public_key]
@@ -95,23 +98,33 @@ class UsersController < ApplicationController
   #   params.require(@user.class.name.underscore.to_sym).permit(permitted)
   # end
 
-  def user_params
+  # def user_params
 
+  #   permitted = [
+  #     :first_name, :last_name, :email, :address, :postal_code, :city, :country,
+  #     :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
+  #     :verified, :public_key, :type
+  #   ]
+  
+  #   permitted += [:department, :office_location] if params[:official]
+  
+  #   if params[:admin]
+  #     params.require(:admin).permit(permitted)
+  #   elsif params[:official]
+  #     params.require(:official).permit(permitted)
+  #   else
+  #     params.require(:standard_user).permit(permitted)
+  #   end
+  # end
+
+  def user_params
     permitted = [
       :first_name, :last_name, :email, :address, :postal_code, :city, :country,
       :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
       :verified, :public_key, :type
     ]
-  
     permitted += [:department, :office_location] if params[:official]
-  
-    if params[:admin]
-      params.require(:admin).permit(permitted)
-    elsif params[:official]
-      params.require(:official).permit(permitted)
-    else
-      params.require(:standard_user).permit(permitted)
-    end
+    params.require(user_type_class.to_s.underscore.to_sym).permit(permitted)
   end
 
 end
