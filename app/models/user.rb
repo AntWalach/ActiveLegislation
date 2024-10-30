@@ -52,11 +52,5 @@ class User < ApplicationRecord
     roles.include?(role.to_s)
   end
   
-  def generate_keys!
-    rsa_key = OpenSSL::PKey::RSA.new(2048)
-    self.public_key = rsa_key.public_key.to_pem
-    save!
-    rsa_key.to_pem 
-  end
 
 end

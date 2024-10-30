@@ -35,6 +35,6 @@ class Officials::PetitionsController < ApplicationController
   private
 
   def authorize_official!
-    redirect_to root_path, alert: "Nie masz dostępu do tej strony" unless current_user.is?(:official)
+    redirect_to root_path, alert: "Nie masz dostępu do tej strony" unless Official
   end
 end

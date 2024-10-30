@@ -13,10 +13,7 @@ class Users::SessionsController < Devise::SessionsController
     Rails.logger.info "Custom SessionsController#create was called"
 
     super do |resource|
-      if resource.persisted? && resource.public_key.present?
-        private_key = resource.generate_keys!
-        session[:private_key] = private_key
-        Rails.logger.info "Private key set in session: #{session[:private_key]}"
+      if resource.persisted?
       else
         Rails.logger.info "Problem with generating or setting the private key."
       end

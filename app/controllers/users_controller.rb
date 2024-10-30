@@ -58,15 +58,7 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
-  def generate_keys
-    private_key = current_user.generate_keys!
-    render plain: private_key
-  end
 
-  def upload_public_key
-    current_user.update(public_key: params[:public_key])
-    render json: { message: 'Klucz publiczny został zapisany.' }, status: :ok
-  end
 
   private
 
@@ -98,33 +90,33 @@ class UsersController < ApplicationController
   #   params.require(@user.class.name.underscore.to_sym).permit(permitted)
   # end
 
-  # def user_params
-
-  #   permitted = [
-  #     :first_name, :last_name, :email, :address, :postal_code, :city, :country,
-  #     :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
-  #     :verified, :public_key, :type
-  #   ]
-  
-  #   permitted += [:department, :office_location] if params[:official]
-  
-  #   if params[:admin]
-  #     params.require(:admin).permit(permitted)
-  #   elsif params[:official]
-  #     params.require(:official).permit(permitted)
-  #   else
-  #     params.require(:standard_user).permit(permitted)
-  #   end
-  # end
-
   def user_params
+
     permitted = [
       :first_name, :last_name, :email, :address, :postal_code, :city, :country,
       :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
       :verified, :public_key, :type
     ]
+  
     permitted += [:department, :office_location] if params[:official]
-    params.require(user_type_class.to_s.underscore.to_sym).permit(permitted)
+  
+    if params[:admin]
+      params.require(:admin).permit(permitted)
+    elsif params[:official]
+      params.require(:official).permit(permitted)
+    else
+      params.require(:standard_user).permit(permitted)
+    end
   end
+
+  # def user_params
+  #   permitted = [
+  #     :first_name, :last_name, :email, :address, :postal_code, :city, :country,
+  #     :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
+  #     :verified, :type
+  #   ]
+  #   permitted += [:department, :office_location] if params[:official]
+  #   params.require(user_type_class.to_s.underscore.to_sym).permit(permitted)
+  # end
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_26_193723) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_30_215117) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -124,10 +124,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_26_193723) do
 
   create_table "signatures", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "petition_id", null: false
+    t.bigint "petition_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "digital_signature"
+    t.bigint "bill_id"
+    t.index ["bill_id"], name: "index_signatures_on_bill_id"
     t.index ["petition_id"], name: "index_signatures_on_petition_id"
     t.index ["user_id"], name: "index_signatures_on_user_id"
   end
@@ -151,7 +152,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_26_193723) do
     t.string "role_mask"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "public_key"
     t.string "first_name"
     t.string "last_name"
     t.string "address"
@@ -177,6 +177,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_26_193723) do
   add_foreign_key "committee_signatures", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "petitions", "users"
+  add_foreign_key "signatures", "bills"
   add_foreign_key "signatures", "petitions"
   add_foreign_key "signatures", "users"
 end

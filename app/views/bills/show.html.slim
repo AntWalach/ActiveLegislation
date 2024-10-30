@@ -1,6 +1,16 @@
 p style="color: green" = notice
 
 == render @bill
+- if user_signed_in?
+  - if current_user.id == @bill.user_id || current_user.is?(:admin)
+    = link_to 'Edytuj', edit_bill_path(@bill), class: "btn btn-warning"
+    = link_to 'Usuń', bill_path(@bill), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę ustawę?" }, class: "btn btn-danger"
+
+  - if current_user != @bill.user && !@bill.signatures.exists?(user: current_user)
+      = link_to 'Poprzyj ustawę', bill_sign_path(@bill), method: :post, class: "btn btn-primary"
+
+  - if @bill.signatures.exists?(user: current_user)
+    p.alert.alert-info Już podpisałeś tą ustawę.
 
 div
   => link_to "Edit this bill", edit_bill_path(@bill)

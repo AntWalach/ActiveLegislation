@@ -10,10 +10,11 @@ Rails.application.routes.draw do
     resource :bill_committee do
       post :sign
     end
+    post 'sign', to: 'signatures#bill_create'
   end
 
   resources :petitions do
-    resources :signatures, only: [:create]
+    post 'sign', to: 'signatures#petition_create'
   end
 
   devise_for :users, controllers: {
@@ -37,10 +38,8 @@ Rails.application.routes.draw do
   end
 
   resources :users do
-    post 'generate_keys', on: :collection
   end
 
-  post 'users/upload_public_key', to: 'users#upload_public_key'
 
   namespace :officials do
     resources :petitions, only: [:index, :show] do

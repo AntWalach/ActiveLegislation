@@ -1,4 +1,4 @@
-div data-controller="petition" data-petition-id="#{@petition.id}"
+div
 
   h1 = @petition.title
 
@@ -80,18 +80,17 @@ div data-controller="petition" data-petition-id="#{@petition.id}"
 
       p
         strong Status petycji:
-        = @petition.status.humanize.presence || "Brak statusu"
+        = @petition.status&.humanize.presence || "Brak statusu"
 
       hr
 
       - if user_signed_in?
-        - if current_user.id == @petition.user_id || current_user.is?(:admin)
+        - if current_user.id == @petition.user_id || current_user.is_a?(Admin)
           = link_to 'Edytuj', edit_petition_path(@petition), class: "btn btn-warning"
           = link_to 'Usuń', petition_path(@petition), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę petycję?" }, class: "btn btn-danger"
 
         - if current_user != @petition.user && !@petition.signatures.exists?(user: current_user)
-          button data-petition-target="generateKey" Kliknij, aby wygenerować parę kluczy
-          button data-petition-target="signPetition" data-petition-id="#{@petition.id}" Podpisz petycję
+          = link_to 'Poprzyj petycję', petition_sign_path(@petition), method: :post, class: "btn btn-primary"
 
         - if @petition.signatures.exists?(user: current_user)
           p.alert.alert-info Już podpisałeś tę petycję.

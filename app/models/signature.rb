@@ -1,14 +1,20 @@
 class Signature < ApplicationRecord
   belongs_to :user
-  belongs_to :petition
-  belongs_to :bill
-  validates :user_id, uniqueness: { scope: :petition_id, message: "już podpisałeś tę petycję" }
-  validates :digital_signature, presence: true
+  belongs_to :petition, optional: true
+  belongs_to :bill, optional: true
 
-  def verify_signature
-    public_key = OpenSSL::PKey::RSA.new(user.public_key)
-    message = petition.id.to_s
-    signature_bytes = Base64.decode64(digital_signature)
-    public_key.verify(OpenSSL::Digest::SHA256.new, signature_bytes, message)
+  validates :user_id, uniqueness: { 
+    scope: [:petition_id, :bill_id],
+    message: "Już podpisałeś ten dokument"
+  }
+
+  validate :must_have_either_petition_or_bill
+
+  private
+
+  def must_have_either_petition_or_bill
+    if petition_id.nil? && bill_id.nil?
+      errors.add(:base, "Signature must belong to either a petition or a bill")
+    end
   end
 end
