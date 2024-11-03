@@ -15,6 +15,10 @@ Rails.application.routes.draw do
 
   resources :petitions do
     post 'sign', to: 'signatures#petition_create'
+    member do
+      post :start_collecting_signatures
+      post :submit
+    end
   end
 
   devise_for :users, controllers: {
@@ -42,10 +46,23 @@ Rails.application.routes.draw do
 
 
   namespace :officials do
+    resources :bills, only: [:index, :show] do
+      member do
+        post :approve_committee
+        post :approve_for_signatures
+        post :start_collecting_signatures
+        post :verify_signatures
+        post :marshal_review
+        post :committee_review
+      end
+    end
+
     resources :petitions, only: [:index, :show] do
       member do
-        patch :approve
-        patch :reject
+        post :approve
+        post :reject
+        post :verify_signatures
+        post :respond
       end
     end
   end

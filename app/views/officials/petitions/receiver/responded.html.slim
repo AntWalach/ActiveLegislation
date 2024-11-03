@@ -1,0 +1,17 @@
+h1 Zakończone petycje (z odpowiedzią)
+
+- @petitions.each do |petition|
+  .petition
+    h2 = petition.title
+    p
+      strong Opis:
+      | = petition.description
+    p
+      strong Liczba podpisów:
+      | = petition.signatures.count
+    p
+      strong Odpowiedź:
+      | = petition.comments
+    p
+      strong Data odpowiedzi:
+      | = petition.updated_at.strftime("%Y-%m-%d")

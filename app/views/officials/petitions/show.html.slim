@@ -1,26 +1,27 @@
 h1 = @petition.title
-
-p
-  strong Kategoria:
-= @petition.category
-
 p
   strong Opis:
-= @petition.description
+  = @petition.description
+
+p
+  strong Uzasadnienie:
+  = @petition.justification
 
 p
   strong Liczba podpisów:
-= @petition.signatures.count
+  = @petition.signatures.count
 
 p
-  strong Status petycji:
-= @petition.status
+  strong Typ petycji:
+  = @petition.petition_type.humanize
 
-- if @petition.comments.present?
-  p
-    strong Komentarze urzędnika:
-= @petition.comments
-br
+p
+  strong Status:
+  = @petition.status.humanize
 
-= link_to 'Zatwierdź', approve_officials_petition_path(@petition), method: :patch, class: "btn btn-success", data: { confirm: "Czy na pewno chcesz zatwierdzić tę petycję?" }
-= link_to 'Odrzuć', reject_officials_petition_path(@petition), method: :patch, class: "btn btn-danger", data: { confirm: "Czy na pewno chcesz odrzucić tę petycję?" }
+
+- if @petition.submitted? && current_user.official_role == 'initial_verifier'
+  = link_to 'Approve for Review', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-primary'
+  = link_to 'Reject Petition', reject_officials_petition_path(@petition), method: :post, class: 'btn btn-danger'
+- if @petition.collecting_signatures? && current_user.official_role == 'signature_verifier'
+  = link_to 'Verify Signatures', verify_signatures_officials_petition_path(@petition), method: :post, class: 'btn btn-success'

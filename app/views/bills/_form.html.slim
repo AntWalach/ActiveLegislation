@@ -22,8 +22,32 @@
       = f.input :category, as: :select, collection: ['Gospodarka', 'Edukacja', 'Zdrowie', 'Prawo', 'Inne'], prompt: "Wybierz kategorię", class: 'form-control', label: false
 
     .form-group
-      = f.label :required_signatures, "Wymagana liczba podpisów", class: 'form-label'
-      = f.input :required_signatures, class: 'form-control', label: false
+      = f.label :current_state, "Aktualny stan prawny", class: 'form-label'
+      = f.rich_text_area :current_state, class: 'form-control', label: false
+
+    .form-group
+      = f.label :proposed_changes, "Różnica między dotychczasowym a projektowanym stanem prawnym", class: 'form-label'
+      = f.rich_text_area :proposed_changes, class: 'form-control', label: false
+
+    .form-group
+      = f.label :expected_effects, "Przewidywane skutki (społeczne, gospodarcze, finansowe i prawne)", class: 'form-label'
+      = f.rich_text_area :expected_effects, class: 'form-control', label: false
+
+    .form-group
+      = f.label :funding_sources, "Źródła finansowania (jeśli wymagane)", class: 'form-label'
+      = f.rich_text_area :funding_sources, class: 'form-control', label: false
+
+    .form-group
+      = f.label :implementation_guidelines, "Założenia aktów wykonawczych", class: 'form-label'
+      = f.rich_text_area :implementation_guidelines, class: 'form-control', label: false
+
+    .form-group
+      = f.label :eu_compliance, "Zgodność z prawem UE", class: 'form-label'
+      = f.check_box :eu_compliance, class: 'form-check-input', label: false
+
+    .form-group
+      = f.label :eu_remarks, "Uwagi dot. zgodności z UE", class: 'form-label'
+      = f.text_area :eu_remarks, class: 'form-control', placeholder: "Jeśli brak zgodności, dodaj uzasadnienie", label: false
 
     .form-group
       = f.label :signatures_deadline, "Termin zakończenia zbiórki podpisów", class: 'form-label'
@@ -32,6 +56,25 @@
     .form-group
       = f.label :status, "Status", class: 'form-label'
       = f.input :status, as: :select, collection: Bill.statuses.keys.map { |status| [status.humanize, status] }, prompt: "Wybierz status", class: 'form-control', label: false
+
+    h3 Załączniki
+    .form-group
+      = f.label :attachments, "Dodaj załączniki", class: 'form-label'
+      = f.file_field :attachments, multiple: true, class: 'form-control', label: false
+
+
+    h3 Zgody
+    .form-group
+      = f.label :gdpr_consent, "Zgoda na przetwarzanie danych osobowych", class: 'form-label'
+      = f.check_box :gdpr_consent, class: 'form-check-input', label: false
+
+    .form-group
+      = f.label :privacy_policy, "Zapoznałem/am się z polityką prywatności", class: 'form-label'
+      = f.check_box :privacy_policy, class: 'form-check-input', label: false
+
+    .form-group
+      = f.label :public_disclosure_consent, "Wyrażam zgodę na publiczne udostępnienie moich danych", class: 'form-label'
+      = f.check_box :public_disclosure_consent, class: 'form-check-input', label: false
 
   h3 Komitet inicjatywny
   = f.fields_for :bill_committee do |committee_form|

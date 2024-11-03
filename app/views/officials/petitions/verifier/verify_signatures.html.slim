@@ -1,0 +1,7 @@
+h1 Weryfikacja podpisów
+p Liczba zebranych podpisów: = @petition.signatures.count
+- if @petition.ready_for_review?
+  p Wszystkie wymagane podpisy zostały zebrane.
+  = link_to "Zatwierdź podpisy", verify_signatures_officials_petition_path(@petition), method: :post, class: "btn btn-success"
+- else
+  p Liczba podpisów jest niewystarczająca do zatwierdzenia.

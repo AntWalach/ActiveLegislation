@@ -1,0 +1,17 @@
+h2 Initial Verifier - Petitions Pending Review
+
+table
+  thead
+    tr
+      th Title
+      th Status
+      th Actions
+  tbody
+    - @petitions.each do |petition|
+      tr
+        td = petition.title
+        td = petition.status.humanize
+        td
+          = link_to 'View', officials_petition_path(petition), class: 'btn btn-secondary'
+          = link_to 'Approve for Signature Collection', approve_officials_petition_path(petition), method: :post, class: 'btn btn-primary' if petition.submitted?
+          = link_to 'Reject', reject_officials_petition_path(petition), method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'

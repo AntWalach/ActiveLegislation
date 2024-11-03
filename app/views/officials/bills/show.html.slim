@@ -1,0 +1,22 @@
+h1 = @bill.title
+
+p
+  strong Kategoria:
+= @bill.category
+
+p
+  strong Opis:
+= @bill.description
+
+p
+  strong Liczba podpisów:
+= @bill.signatures.count
+
+p
+  strong Status petycji:
+= @bill.status
+
+br
+
+= link_to 'Zatwierdź', approve_officials_bill_path(@bill), method: :patch, class: "btn btn-success", data: { confirm: "Czy na pewno chcesz zatwierdzić tę ustawę?" }
+= link_to 'Odrzuć', reject_officials_bill_path(@bill), method: :patch, class: "btn btn-danger", data: { confirm: "Czy na pewno chcesz odrzucić tę ustawę?" }

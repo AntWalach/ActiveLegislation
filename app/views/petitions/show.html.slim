@@ -88,6 +88,8 @@ div
         - if current_user.id == @petition.user_id || current_user.is_a?(Admin)
           = link_to 'Edytuj', edit_petition_path(@petition), class: "btn btn-warning"
           = link_to 'Usuń', petition_path(@petition), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę petycję?" }, class: "btn btn-danger"
+          - if @petition.draft?
+            = link_to 'Submit for Review', submit_petition_path(@petition), method: :post, class: 'btn btn-primary'
 
         - if current_user != @petition.user && !@petition.signatures.exists?(user: current_user)
           = link_to 'Poprzyj petycję', petition_sign_path(@petition), method: :post, class: "btn btn-primary"

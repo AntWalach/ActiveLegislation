@@ -16,7 +16,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     # Próba zapisania użytkownika
     if resource.save
-      private_key = resource.generate_keys! 
       flash[:notice] = "Rejestracja zakończona sukcesem. "
 
       if resource.active_for_authentication?

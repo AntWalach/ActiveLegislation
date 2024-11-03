@@ -4,6 +4,7 @@ class User < ApplicationRecord
   self.inheritance_column = :type
   has_many :petitions, dependent: :destroy
   has_many :bills, dependent: :destroy
+  has_many :notifications, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

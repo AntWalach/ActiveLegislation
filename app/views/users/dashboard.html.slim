@@ -1,2 +1,6 @@
 h1 = "DASHBOARD"
 = current_user.email
+h2 Powiadomienia
+ul
+  - current_user.notifications.each do |notification|
+    li = notification.message

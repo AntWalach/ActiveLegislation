@@ -12,7 +12,7 @@ class Ability
           can [:dashboard], User
         when StandardUser
           can [:dashboard, :upload_public_key], User
-          can [:index, :show, :create, :new, :edit, :destroy], Petition
+          can [:index, :show, :create, :new, :edit, :destroy, :submit, :start_collecting_signatures], Petition
           can [:index, :show, :create, :new, :edit, :destroy], Bill
           can [:petition_create, :bill_create ], Signature
       end

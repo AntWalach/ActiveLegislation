@@ -1,21 +1,7 @@
-h1 Petycje do weryfikacji
-
-.table.table-striped
-  thead
-    tr
-      th Tytuł
-      th Kategoria
-      th Data dodania
-      th Liczba podpisów
-      th Opcje
-  tbody
-    - @petitions.each do |petition|
-      tr
-        td = petition.title
-        td = petition.category
-        td = petition.created_at.strftime("%d-%m-%Y")
-        td = petition.signatures.count
-        td
-          = link_to 'Pokaż', officials_petition_path(petition), class: "btn btn-info btn-sm"
-          = link_to 'Zatwierdź', approve_officials_petition_path(petition), method: :patch, class: "btn btn-success btn-sm", data: { confirm: "Czy na pewno chcesz zatwierdzić tę petycję?" }
-          = link_to 'Odrzuć', reject_officials_petition_path(petition), method: :patch, class: "btn btn-danger btn-sm", data: { confirm: "Czy na pewno chcesz odrzucić tę petycję?" }
+h1 Official Petition Review
+- if current_user.official_role == 'initial_verifier'
+  = render 'initial_verifier_index'
+- elsif current_user.official_role == 'signature_verifier'
+  = render 'signature_verifier_index'
+- elsif current_user.petition_handler?
+  = render 'receiver_index'

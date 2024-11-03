@@ -1,61 +1,23 @@
-/ p style="color: green" = notice
+h2 Przegląd petycji
 
-/ h1 Petitions
 
-/ #petitions
-/   - @petitions.each do |petition|
-/     == render petition
-/     p
-/       = link_to "Show this petition", petition
+table
+  thead
+    tr
+      th Title
+      th Status
+      th Actions
+  tbody
+    - @petitions.each do |petition|
+      tr
+        td = petition.title
+        td = petition.status.humanize
+        td
+          = link_to 'View', petition_path(petition), class: 'btn btn-secondary'
+          
 
-/ = link_to "New petition", new_petition_path
-h1 Przegląd petycji
+= paginate @petitions, param_name: :my_page
 
-.row
-  .col-md-8
-    / = search_form_for @search do |f|
-    /   .form-group
-    /     = f.label :title_cont, "Tytuł"
-    /     = f.text_field :title_cont, class: "form-control"
-
-    /   .form-group
-    /     = f.submit "Filtruj", class: "btn btn-primary"
-
-    table.table.table-striped
-      thead
-        tr
-          th Tytuł
-          th Kategoria
-          /th Podpisy
-          th 
-      tbody
-        - @petitions.each do |petition|
-          tr data-controller="petition" data-petition-id="#{petition.id}"
-            td = petition.title
-            td = petition.category
-            /td = petition.signatures.count
-            td
-              = link_to 'Pokaż', petition_path(petition), class: "btn btn-info"
-            /   - if user_signed_in?
-            /     - if petition.signatures.exists?(user: current_user)
-            /       p Już podpisałeś tę petycję.
-            /     - else
-            /       button data-petition-target="generateKey" Kliknij, aby wygenerować parę kluczy
-            /       button data-petition-target="signPetition" data-petition-id="#{petition.id}" Podpisz petycję
-            /   - else
-            /     p Musisz się 
-            /       = link_to 'zalogować', new_user_session_path
-            /       | , aby podpisać petycję.
-
-    = paginate @petitions
-
-  / .col-md-4
-  /   h2 Najpopularniejsze petycje
-  /   ul.list-group
-  /     - @popular_petitions.each do |petition|
-  /       li.list-group-item
-  /         strong = petition.title
-  /         = link_to 'Pokaż', petition_path(petition), class: "btn btn-info btn-sm"
 
 h2 Moje petycje
 table.table.table-striped
@@ -69,7 +31,10 @@ table.table.table-striped
       tr
         td = petition.title
         td = petition.status
-        td = link_to 'Pokaż', petition_path(petition), class: "btn btn-info"
+        td 
+          = link_to 'Pokaż', petition_path(petition), class: "btn btn-info"
+          - if petition.under_review? && petition.requires_signatures?
+            = link_to 'Start Collecting Signatures', start_collecting_signatures_petition_path(petition), method: :post, class: 'btn btn-success'
 
 = paginate @my_petitions, param_name: :my_page
 

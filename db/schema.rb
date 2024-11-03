@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_30_215117) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_31_185158) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -72,6 +72,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_30_215117) do
     t.integer "required_signatures", default: 100000
     t.datetime "signatures_deadline"
     t.integer "status"
+    t.boolean "gdpr_consent", default: false, null: false
+    t.boolean "privacy_policy", default: false, null: false
+    t.boolean "public_disclosure_consent", default: false, null: false
+    t.text "current_state"
+    t.text "proposed_changes"
+    t.text "expected_effects"
+    t.text "funding_sources"
+    t.text "implementation_guidelines"
+    t.boolean "eu_compliance", default: false
+    t.text "eu_remarks"
     t.index ["category"], name: "index_bills_on_category"
     t.index ["status"], name: "index_bills_on_status"
     t.index ["user_id"], name: "index_bills_on_user_id"
@@ -165,6 +175,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_30_215117) do
     t.string "type"
     t.string "department"
     t.string "office_location"
+    t.string "official_role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
