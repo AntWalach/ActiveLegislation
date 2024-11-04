@@ -13,13 +13,13 @@ class Bill < ApplicationRecord
   
   # Statusy inicjatywy ustawodawczej
   enum status: { 
-    draft: 0,                              # Faza robocza – obywatel tworzy inicjatywę ustawodawczą.
+    draft: 0,                               # Faza robocza – obywatel tworzy inicjatywę ustawodawczą.
     committee_formation: 1,                 # Zbieranie podpisów na rzecz utworzenia komitetu.
-    awaiting_committee_verification: 2,     # Czekanie na zatwierdzenie komitetu przez Marszałka (marshal).
+    awaiting_committee_verification: 2,     # Czekanie na zatwierdzenie komitetu przez Marszałka (marshal). po uzbieraniu 1000
     submitted: 3,                           # Komitet został zatwierdzony, inicjatywa złożona formalnie.
     under_review: 4,                        # Przegląd formalny przez Weryfikatora Wstępnego (initial_verifier).
     collecting_signatures: 5,               # Zbieranie wymaganej liczby podpisów (np. 100 000).
-    awaiting_marshal_review: 6,             # Marszałek weryfikuje poprawność zebranych podpisów (marshal).
+    awaiting_marshal_review: 6,             # Marszałek weryfikuje poprawność zebranych podpisów (marshal). po zebraniu 1 000 000
     committee_review: 7,                    # Rozpatrzenie inicjatywy przez komisję (committee_member lub committee_secretary).
     approved: 8,                            # Inicjatywa została przyjęta do dalszego procesu legislacyjnego.
     rejected: 9                             # Inicjatywa została odrzucona na dowolnym etapie.

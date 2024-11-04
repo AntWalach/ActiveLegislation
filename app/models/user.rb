@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_many :petitions, dependent: :destroy
   has_many :bills, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_many :committee_members, dependent: :destroy
+  has_many :bill_committees, through: :committee_members
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

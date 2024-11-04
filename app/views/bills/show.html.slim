@@ -5,6 +5,11 @@ p style="color: green" = notice
   - if current_user.id == @bill.user_id || current_user.is?(:admin)
     = link_to 'Edytuj', edit_bill_path(@bill), class: "btn btn-warning"
     = link_to 'Usuń', bill_path(@bill), method: :delete, data: { confirm: "Czy na pewno chcesz usunąć tę ustawę?" }, class: "btn btn-danger"
+    - if @bill.draft?
+      = button_to 'Rozpocznij zbieranie podpisów dla komitetu', bill_initialize_committee_formation_path(@bill), method: :post, class: 'btn btn-primary'
+    
+
+
 
   - if current_user != @bill.user && !@bill.signatures.exists?(user: current_user)
       = link_to 'Poprzyj ustawę', bill_sign_path(@bill), method: :post, class: "btn btn-primary"

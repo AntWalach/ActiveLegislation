@@ -1,0 +1,18 @@
+h1 Inicjatywy ustawodawcze do przeglądu przez komisję
+
+table.table
+  thead
+    tr
+      th Tytuł
+      th Status
+      th Opcje
+  tbody
+    - @bills.each do |bill|
+      tr
+        td = bill.title
+        td = bill.status.humanize
+        td
+          = link_to 'Pokaż', officials_bill_path(bill), class: 'btn btn-secondary'
+          - if bill.committee_review?
+            = button_to 'Zaakceptuj', committee_review_officials_bill_path(bill, decision: 'approve'), method: :post, class: 'btn btn-success'
+            = button_to 'Odrzuć', committee_review_officials_bill_path(bill, decision: 'reject'), method: :post, class: 'btn btn-danger'

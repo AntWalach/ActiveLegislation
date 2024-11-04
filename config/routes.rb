@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       post :sign
     end
     post 'sign', to: 'signatures#bill_create'
+    post :initialize_committee_formation
   end
 
   resources :petitions do

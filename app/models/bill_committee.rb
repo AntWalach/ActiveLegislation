@@ -1,17 +1,20 @@
 class BillCommittee < ApplicationRecord
   belongs_to :bill
   has_many :committee_signatures, dependent: :destroy
-  has_many :users, through: :committee_signatures
+  has_many :committee_members, dependent: :destroy, class_name: 'CommitteeMember'
+  has_many :users, through: :committee_members
 
-  attr_accessor :chairman_email, :vice_chairman_email,
-                :member_email_1, :member_email_2, :member_email_3, 
-                :member_email_4, :member_email_5, :member_email_6,
-                :member_email_7, :member_email_8, :member_email_9, 
-                :member_email_10, :member_email_11, :member_email_12, 
-                :member_email_13
-
-  # validates :bill_id, presence: true
+  # Wirtualne atrybuty do obsługi formularza
+  attr_accessor :chairman_email, :vice_chairman_email, :member_emails
+  validate :minimum_committee_members
 
   private
 
+  # Sprawdza, czy komitet posiada wymagane minimum członków (5 w tym przewodniczący i wiceprzewodniczący)
+  def minimum_committee_members
+    emails = [chairman_email, vice_chairman_email] + member_emails.to_s.split(',').map(&:strip)
+    if emails.compact.uniq.size < 5
+      errors.add(:base, "Komitet musi mieć co najmniej 5 członków, w tym przewodniczącego i wiceprzewodniczącego")
+    end
+  end
 end

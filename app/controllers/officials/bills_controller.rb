@@ -4,9 +4,33 @@ class Officials::BillsController < ApplicationController
 
   def index
     @bills = Bill.all
+    case current_user.official_role
+    when 'marshal'
+      render 'officials/bills/marshal/index'
+    when 'initial_verifier'
+      render 'officials/bills/initial_verifier/index'
+    when 'signature_verifier'
+      render 'officials/bills/signature_verifier/index'
+    when 'committee_member'
+      render 'officials/bills/committee_member/index'
+    else
+      redirect_to root_path, alert: "Brak uprawnień do tej sekcji."
+    end
   end
   
   def show
+    case current_user.official_role
+    when 'marshal'
+      render 'officials/bills/marshal/show'
+    when 'initial_verifier'
+      render 'officials/bills/initial_verifier/show'
+    when 'signature_verifier'
+      render 'officials/bills/signature_verifier/show'
+    when 'committee_member'
+      render 'officials/bills/committee_member/show'
+    else
+      redirect_to root_path, alert: "Brak uprawnień do tej sekcji."
+    end
   end
 
   # Zatwierdzenie komitetu przez Marszałka

@@ -53,9 +53,6 @@
       = f.label :signatures_deadline, "Termin zakończenia zbiórki podpisów", class: 'form-label'
       = f.input :signatures_deadline, as: :date, class: 'form-control', label: false
 
-    .form-group
-      = f.label :status, "Status", class: 'form-label'
-      = f.input :status, as: :select, collection: Bill.statuses.keys.map { |status| [status.humanize, status] }, prompt: "Wybierz status", class: 'form-control', label: false
 
     h3 Załączniki
     .form-group
@@ -76,20 +73,21 @@
       = f.label :public_disclosure_consent, "Wyrażam zgodę na publiczne udostępnienie moich danych", class: 'form-label'
       = f.check_box :public_disclosure_consent, class: 'form-check-input', label: false
 
-  h3 Komitet inicjatywny
-  = f.fields_for :bill_committee do |committee_form|
-    .form-group
-      = committee_form.label :chairman_email, "Przewodniczący", class: 'form-label'
-      = committee_form.text_field :chairman_email, class: 'form-control', placeholder: "Email przewodniczącego"
-
-    .form-group
-      = committee_form.label :vice_chairman_email, "Wiceprzewodniczący", class: 'form-label'
-      = committee_form.text_field :vice_chairman_email, class: 'form-control', placeholder: "Email wiceprzewodniczącego"
-
-    - (1..13).each do |i|
+    h3 Komitet inicjatywny
+    = f.fields_for :bill_committee do |committee_form|
       .form-group
-        = committee_form.label "member_email_#{i}", "Członek komitetu #{i}", class: 'form-label'
-        = committee_form.text_field "member_email_#{i}", class: 'form-control', placeholder: "Email członka komitetu #{i}"
+        = committee_form.label :chairman_email, "Email Przewodniczącego", class: 'form-label'
+        = committee_form.text_field :chairman_email, class: 'form-control', placeholder: "Email Przewodniczącego"
+
+      .form-group
+        = committee_form.label :vice_chairman_email, "Email Wiceprzewodniczącego", class: 'form-label'
+        = committee_form.text_field :vice_chairman_email, class: 'form-control', placeholder: "Email Wiceprzewodniczącego"
+
+      h4 Członkowie komitetu
+      .form-group
+        = committee_form.label :member_emails, "Adresy e-mail członków", class: 'form-label'
+        = committee_form.text_area :member_emails, class: 'form-control', placeholder: "Podaj co najmniej 3 adresy e-mail członków komitetu, oddzielone przecinkami"
+
 
   .form-actions
     = f.button :submit, "Zapisz projekt ustawy", class: 'btn btn-primary'

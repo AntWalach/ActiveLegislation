@@ -1,0 +1,6 @@
+h1 = @bill.title
+h2 Weryfikacja wstępna projektu ustawy
+= render 'officials/bills/shared/bill_details', bill: @bill
+
+- if @bill.submitted?
+  = button_to 'Zatwierdź do przeglądu', approve_for_signatures_officials_bill_path(@bill), method: :post, class: 'btn btn-primary'

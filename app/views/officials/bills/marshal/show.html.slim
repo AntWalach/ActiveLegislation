@@ -1,0 +1,6 @@
+h1 = @bill.title
+h2 Szczegóły projektu ustawy
+= render 'officials/bills/shared/bill_details', bill: @bill
+
+- if @bill.committee_formation?
+  = button_to 'Zatwierdź Komitet', approve_committee_officials_bill_path(@bill), method: :post, class: 'btn btn-success'

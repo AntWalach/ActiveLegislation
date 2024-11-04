@@ -1,0 +1,19 @@
+h1 Inicjatywy ustawodawcze do zatwierdzenia przez Marszałka
+
+table.table
+  thead
+    tr
+      th Tytuł
+      th Status
+      th Opcje
+  tbody
+    - @bills.each do |bill|
+      tr
+        td = bill.title
+        td = bill.status.humanize
+        td
+          = link_to 'Pokaż', officials_bill_path(bill), class: 'btn btn-secondary'
+          - if bill.committee_formation?
+            = button_to 'Zatwierdź Komitet', approve_committee_officials_bill_path(bill), method: :post, class: 'btn btn-success'
+          - if bill.awaiting_marshal_review?
+            = button_to 'Prześlij do komisji', marshal_review_officials_bill_path(bill), method: :post, class: 'btn btn-success'

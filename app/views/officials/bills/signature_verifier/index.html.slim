@@ -1,0 +1,17 @@
+h1 Inicjatywy ustawodawcze do weryfikacji podpisów
+
+table.table
+  thead
+    tr
+      th Tytuł
+      th Status
+      th Opcje
+  tbody
+    - @bills.each do |bill|
+      tr
+        td = bill.title
+        td = bill.status.humanize
+        td
+          = link_to 'Pokaż', officials_bill_path(bill), class: 'btn btn-secondary'
+          - if bill.collecting_signatures? && bill.signatures.count >= Bill::MIN_SIGNATURES_FOR_REVIEW
+            = button_to 'Zatwierdź Podpisy', verify_signatures_officials_bill_path(bill), method: :post, class: 'btn btn-success'

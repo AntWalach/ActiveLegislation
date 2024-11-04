@@ -20,8 +20,24 @@ p
   = @petition.status.humanize
 
 
-- if @petition.submitted? && current_user.official_role == 'initial_verifier'
-  = link_to 'Approve for Review', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-primary'
-  = link_to 'Reject Petition', reject_officials_petition_path(@petition), method: :post, class: 'btn btn-danger'
-- if @petition.collecting_signatures? && current_user.official_role == 'signature_verifier'
-  = link_to 'Verify Signatures', verify_signatures_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
+- if current_user.official_role == 'initial_verifier' && @petition.submitted?
+  = link_to 'Approve Petition', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
+
+- if current_user.official_role == 'signature_verifier' && @petition.collecting_signatures?
+  = link_to 'Verify Signatures', verify_signatures_officials_petition_path(@petition), method: :post, class: 'btn btn-primary'
+
+- if current_user.petition_handler? && @petition.awaiting_response?
+  = form_with url: respond_officials_petition_path(@petition), method: :post, local: true do |f|
+    .form-group
+      = f.label :comments, "Dodaj odpowiedź"
+      = f.text_area :comments, class: 'form-control'
+    .form-group
+      = f.submit 'Send Response', class: 'btn btn-success'
+
+- if @petition.submitted? || @petition.under_review?
+  = form_with url: reject_officials_petition_path(@petition), method: :post, local: true do |f|
+    .form-group
+      = f.label :comments, "Powód odrzucenia"
+      = f.text_area :comments, class: 'form-control'
+    .form-group
+      = f.submit 'Reject Petition', class: 'btn btn-danger'

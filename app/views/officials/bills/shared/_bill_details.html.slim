@@ -1,0 +1,16 @@
+.div.bill-details
+  p
+    strong Twórca:
+    = bill.user.first_name
+  p
+    strong Data utworzenia:
+    = bill.created_at.strftime('%Y-%m-%d')
+  p
+    strong Stan:
+    = bill.status.humanize
+  p
+    strong Opis:
+    = bill.content.body
+  p
+    strong Uzasadnienie:
+    = bill.justification.body

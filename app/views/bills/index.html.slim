@@ -1,11 +1,52 @@
-p style="color: green" = notice
+/ p style="color: green" = notice
 
-h1 Bills
+/ h1 Bills
 
-#bills
-  - @bills.each do |bill|
-    == render bill
-    p
-      = link_to "Show this bill", bill
+/ #bills
+/   - @bills.each do |bill|
+/     == render bill
+/     p
+/       = link_to "Show this bill", bill
 
-= link_to "New bill", new_bill_path
+/ = link_to "New bill", new_bill_path
+h2 Przegląd petycji
+
+
+table
+  thead
+    tr
+      th Title
+      th Status
+      th Actions
+  tbody
+    - @bills.each do |bill|
+      tr
+        td = bill.title
+        td = bill.status.humanize
+        td
+          = link_to 'View', bill_path(bill), class: 'btn btn-secondary'
+          
+
+= paginate @bills, param_name: :my_page
+
+
+h2 Moje petycje
+table.table.table-striped
+  thead
+    tr
+      th Tytuł
+      th Status
+      th Opcje
+  tbody
+    - @my_bills.each do |bill|
+      tr
+        td = bill.title
+        td = bill.status
+        td 
+          = link_to 'Pokaż', bill_path(bill), class: "btn btn-info"
+          - if bill.under_review? && bill.requires_signatures?
+            = link_to 'Start Collecting Signatures', start_collecting_signatures_bill_path(bill), method: :post, class: 'btn btn-success'
+
+= paginate @my_bills, param_name: :my_page
+
+= link_to 'Dodaj nową petycję', new_bill_path, class: "btn btn-primary"

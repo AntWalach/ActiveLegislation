@@ -1,0 +1,20 @@
+h1 Inicjatywy ustawodawcze do wstępnej weryfikacji
+
+table.table
+  thead
+    tr
+      th Tytuł
+      th Status
+      th Opcje
+  tbody
+    - @bills.each do |bill|
+      tr
+        td = bill.title
+        td = bill.status.humanize
+        td
+          = link_to 'Pokaż', officials_bill_path(bill), class: 'btn btn-secondary'
+          - if bill.submitted?
+            = button_to 'Zatwierdź do przeglądu', approve_for_signatures_officials_bill_path(bill), method: :post, class: 'btn btn-primary'
+          - if bill.under_review?
+            = button_to 'Zatwierdź do zbierania podpisów', start_collecting_signatures_officials_bill_path(bill), method: :post, class: 'btn btn-primary'
+  
