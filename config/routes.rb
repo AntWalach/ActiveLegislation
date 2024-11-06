@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'reports/annual_report'
   
   resources :notifications, only: [] do
     member do
@@ -64,6 +65,11 @@ Rails.application.routes.draw do
         post :reject
         post :verify_signatures
         post :respond
+        post :request_supplement
+        post :forward_for_response
+      end
+      collection do
+        post :merge_petitions
       end
     end
   end
@@ -71,4 +77,5 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users, only: [:new, :create, :edit, :update, :destroy]
   end
+  get 'reports/annual_report', to: 'reports#annual_report', as: 'annual_report'
 end

@@ -1,5 +1,7 @@
 h1 = "DASHBOARD"
 = current_user.email
+- if current_user.is_a? (Official)
+  = link_to 'Raport roczny', annual_report_path, class: 'btn btn-primary'
 h2 Powiadomienia
 ul
   - current_user.notifications.each do |notification|

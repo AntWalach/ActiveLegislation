@@ -1,0 +1,16 @@
+h1 Raport roczny za rok = @year
+
+table
+  thead
+    tr
+      th Tytuł
+      th Status
+      th Data złożenia
+      th Data zakończenia
+  tbody
+    - @petitions.each do |petition|
+      tr
+        td = petition.title
+        td = petition.status.humanize
+        td = petition.created_at.strftime("%d-%m-%Y")
+        td = petition.updated_at.strftime("%d-%m-%Y")

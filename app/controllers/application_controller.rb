@@ -85,4 +85,10 @@ class ApplicationController < ActionController::Base
       @admin_menu = true
       # @first_breadcrumb = I18n.t(:admin_zone)  
     end
+
+    protected
+    
+    def authenticate_official!
+      redirect_to root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official)
+    end
 end

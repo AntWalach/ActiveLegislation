@@ -1,74 +1,57 @@
-= simple_form_for @petition, html: { class: 'form-horizontal' } do |f|
+= simple_form_for @petition do |f|
   = f.error_notification
 
-  .form-inputs
-    .form-group
-      = f.label :title, "Tytuł", class: 'form-label'
-      = f.input :title, class: 'form-control', label: false
+  / Petition Details
+  .card
+    .card-header
+      h3 "Szczegóły petycji"
+    .card-body
+      = f.input :title, required: true
+      = f.input :description, as: :rich_text_area, required: true
+      = f.input :justification, as: :rich_text_area, required: true
 
-    .form-group
-      = f.label :description, "Opis", class: 'form-label'
-      = f.rich_text_area :description, class: 'form-control', label: false
+  / Additional Information
+  .card
+    .card-header
+      h3 "Informacje dodatkowe"
+    .card-body
+      = f.input :petition_type, collection: Petition.petition_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz rodzaj petycji", required: true, input_html: { onchange: 'toggleThirdPartyFields()' }
 
-    .form-group
-      = f.label :category, "Kategoria", class: 'form-label'
-      = f.input :category, as: :select, collection: ["Edukacja", "Zdrowie", "Środowisko", "Prawa człowieka"], class: 'form-control', label: false
+      / Fields for Third Party Petitions
+      .third-party-fields
+        = f.input :third_party_name, required: true
+        = f.input :third_party_address, required: true
+        = f.input :third_party_consent, as: :file, required: true
 
-    .form-group
-      = f.label :subcategory, "Podkategoria", class: 'form-label'
-      = f.input :subcategory, as: :select, collection: ["Edukacja: Szkoły", "Edukacja: Uniwersytety", "Środowisko: Klimat", "Środowisko: Zwierzęta"], class: 'form-control', label: false
+      = f.input :recipient, required: true
 
-    .form-group
-      = f.label :address, "Adres zamieszkania lub siedziby", class: 'form-label'
-      = f.input :address, class: 'form-control', label: false
-
-    .form-group
-      = f.label :recipient, "Adresat petycji", class: 'form-label'
-      = f.input :recipient, as: :select, collection: ["Prezydent RP", "Sejm RP", "Minister Edukacji", "Minister Środowiska", "Rada Miasta", "Inna instytucja"], class: 'form-control', label: false
-
-    .form-group
-      = f.label :justification, "Uzasadnienie", class: 'form-label'
-      = f.rich_text_area :justification, class: 'form-control', label: false
-
-    .form-group
-      = f.label :petition_type, "Rodzaj petycji", class: 'form-label'
-      = f.input :petition_type, collection: Petition.petition_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz rodzaj petycji", label: false
-
-    .form-group
-      = f.label :signature_goal, "Liczba wymaganych podpisów", class: 'form-label'
-      = f.input :signature_goal, class: 'form-control', label: false
-
-    .form-group
-      = f.label :end_date, "Termin zakończenia zbierania podpisów", class: 'form-label'
-      = f.input :end_date, as: :date, class: 'form-control', label: false
-
-    .form-group
-      = f.label :public_comment, "Komentarz publiczny (widoczny dla podpisujących)", class: 'form-label'
-      = f.input :public_comment, as: :text, class: 'form-control', label: false
-
-    .form-group
-      = f.label :attachment, "Załączniki (opcjonalne)", class: 'form-label'
-      = f.input :attachment, as: :file, class: 'form-control-file', label: false
-
-    .form-group
-      = f.label :external_links, "Linki do zewnętrznych źródeł", class: 'form-label'
-      = f.input :external_links, placeholder: "Dodaj linki do artykułów lub stron wspierających petycję", class: 'form-control', label: false
-
-    .form-group
-      = f.label :priority, "Priorytet petycji", class: 'form-label'
-      = f.input :priority, as: :select, collection: ["Pilna", "Standardowa", "Długoterminowa"], class: 'form-control', label: false
-
-    .form-group
-      = f.label :comments, "Dodatkowe uwagi", class: 'form-label'
-      = f.input :comments, as: :text, class: 'form-control', label: false
-
-    .form-group.checkbox-group
-      .form-check
-        = f.input :gdpr_consent, as: :boolean, label: "Zgoda na przetwarzanie danych osobowych zgodnie z RODO *", class: 'form-check-input', wrapper: false
-
-      .form-check
-        = f.input :privacy_policy, as: :boolean, label: "Akceptuję politykę prywatności *", class: 'form-check-input', wrapper: false
-
+  / Consents
+  .card
+    .card-header
+      h3 "Zgody"
+    .card-body
+      = f.input :gdpr_consent, as: :boolean, required: true
+      = f.input :privacy_policy, as: :boolean, required: true
 
   .form-actions
-    = f.button :submit, "Złóż petycję", class: 'btn btn-primary'
+    = f.submit "Złóż petycję", class: 'btn btn-primary'
+
+
+javascript:
+  document.addEventListener("DOMContentLoaded", function() {
+    var petitionTypeField = document.querySelector('#petition_petition_type');
+    if (petitionTypeField) {
+      petitionTypeField.addEventListener('change', toggleThirdPartyFields);
+      toggleThirdPartyFields(); // Initial call
+    }
+  });
+
+  function toggleThirdPartyFields() {
+    var petitionType = document.querySelector('#petition_petition_type').value;
+    var thirdPartyFields = document.querySelector('.third-party-fields');
+    if (petitionType === 'third_party') {
+      thirdPartyFields.style.display = 'block';
+    } else {
+      thirdPartyFields.style.display = 'none';
+    }
+  }

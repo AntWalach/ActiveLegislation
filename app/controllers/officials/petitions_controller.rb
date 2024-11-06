@@ -1,7 +1,7 @@
 class Officials::PetitionsController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_official!
-  before_action :set_petition, only: %i[ show approve reject verify_signatures respond ]
+  before_action :set_petition, only: %i[ show approve reject verify_signatures respond request_supplement forward_for_response ]
 
   def index
     @search = Petition.all.ransack(params[:q])
@@ -74,13 +74,54 @@ class Officials::PetitionsController < ApplicationController
     end
   end
 
+  def merge_petitions
+    primary_petition = Petition.find(params[:primary_petition_id])
+    petitions_to_merge = Petition.where(id: params[:petition_ids])
+
+    petitions_to_merge.update_all(grouped_petition_id: primary_petition.id)
+
+    # Aktualizacja statusu petycji
+    primary_petition.update(status: :under_review)
+
+    redirect_to officials_petitions_path, notice: "Petycje zostały połączone do wspólnego rozpatrzenia."
+  end
+
+  def leave_unconsidered
+    if @petition.update(status: :unconsidered, comments: params[:comments])
+      NotificationsController.notify_unconsidered(@petition.user, @petition, params[:comments])
+      redirect_to officials_petitions_path, notice: "Petycja została pozostawiona bez rozpatrzenia."
+    else
+      redirect_to officials_petitions_path, alert: "Nie udało się zmienić statusu petycji."
+    end
+  end
+
+  def request_supplement
+    if @petition.update(status: :supplement_required, comments: params[:comments])
+      NotificationsController.notify_supplement_required(@petition.user, @petition, params[:comments])
+      redirect_to officials_petitions_path, notice: "Wysłano wezwanie do uzupełnienia petycji."
+    else
+      redirect_to officials_petitions_path, alert: "Nie udało się wysłać wezwania."
+    end
+  end
+
+
+  def forward_for_response
+    if current_user.official_role == 'petition_verifier' && @petition.under_review?
+      if @petition.update(status: :awaiting_response)
+        NotificationsController.notify_forwarded(@petition.user, @petition)
+        redirect_to officials_petitions_path, notice: "Petycja została przekazana do rozpatrzenia."
+      else
+        redirect_to officials_petitions_path, alert: "Nie udało się przekazać petycji."
+      end
+    else
+      redirect_to officials_petitions_path, alert: "Brak uprawnień do wykonania tej akcji."
+    end
+  end
+
   private
 
   def set_petition
     @petition = Petition.find(params[:id])
   end
 
-  def authenticate_official!
-    redirect_to root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official)
-  end
 end

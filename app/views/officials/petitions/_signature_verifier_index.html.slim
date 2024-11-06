@@ -1,15 +1,18 @@
-h2 Signature Verifier - Petitions Awaiting Signature Verification
+h2 "Petycje oczekujące na weryfikację podpisów"
 
-table
+table.table.table-hover
   thead
     tr
-      th Title
-      th Status
-      th Actions
+      th "Tytuł"
+      th "Zebrane podpisy"
+      th "Wymagane podpisy"
+      th "Akcje"
   tbody
-    - @petitions.each do |petition|
-      tr
-        td = petition.title
-        td = petition.status.humanize
-        td
-          = link_to 'Verify Signatures', verify_signatures_officials_petition_path(petition), method: :post, class: 'btn btn-primary' if petition.collecting_signatures?
+    - @petitions.where(status: 'collecting_signatures').each do |petition|
+      - if petition.ready_for_review?
+        tr
+          td = link_to petition.title, officials_petition_path(petition)
+          td = petition.signatures.count
+          td = petition.signature_goal
+          td
+            = link_to 'Zweryfikuj podpisy', verify_signatures_officials_petition_path(petition), method: :post, class: 'btn btn-primary btn-sm'

@@ -36,4 +36,20 @@ class NotificationsController < ApplicationController
   def self.notify_response(user, petition, comments)
     Notification.create(user: user, message: "Twoja petycja '#{petition.title}' otrzymała odpowiedź. Komentarz: #{comments}")
   end
+
+  def self.notify_supplement_required(user, petition, comments)
+    # Implementacja powiadomienia, np. wysłanie e-maila lub wiadomości w aplikacji
+    # Przykład:
+    Notification.create(
+      user: user,
+      petition: petition,
+      message: "Twoja petycja wymaga uzupełnienia. Komentarz: #{comments}"
+    )
+  end
+
+  def self.notify_forwarded(user, petition)
+    message = "Twoja petycja '#{petition.title}' została przekazana do rozpatrzenia."
+    Notification.create(user: user, message: message)
+    # Optionally, send an email or other notification mechanisms here
+  end
 end

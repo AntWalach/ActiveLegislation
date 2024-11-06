@@ -1,0 +1,17 @@
+h2 "Petycje oczekujące na weryfikację formalną"
+
+table.table.table-hover
+  thead
+    tr
+      th "Tytuł"
+      th "Data złożenia"
+      th "Akcje"
+  tbody
+    - @petitions.where(status: 'under_review').each do |petition|
+      tr
+        td = link_to petition.title, officials_petition_path(petition)
+        td = petition.created_at.strftime("%d-%m-%Y")
+        td
+          = link_to 'Przekaż do rozpatrzenia', forward_for_response_officials_petition_path(petition), method: :post, class: 'btn btn-primary btn-sm'
+          = link_to 'Wezwij do uzupełnienia', request_supplement_officials_petition_path(petition), method: :post, class: 'btn btn-warning btn-sm'
+          = link_to 'Odrzuć', reject_officials_petition_path(petition), method: :post, data: { confirm: "Czy na pewno chcesz odrzucić tę petycję?" }, class: 'btn btn-danger btn-sm'

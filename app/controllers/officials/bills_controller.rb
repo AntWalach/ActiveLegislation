@@ -104,7 +104,5 @@ class Officials::BillsController < ApplicationController
     @bill = Bill.find(params[:id])
   end
 
-  def authenticate_official!
-    redirect_to root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official)
-  end
+
 end

@@ -1,40 +1,12 @@
-h2 Przegląd petycji
+h1 Petycje publiczne
 
+= render 'petitions_list', petitions: @petitions
 
-table
-  thead
-    tr
-      th Title
-      th Status
-      th Actions
-  tbody
-    - @petitions.each do |petition|
-      tr
-        td = petition.title
-        td = petition.status.humanize
-        td
-          = link_to 'View', petition_path(petition), class: 'btn btn-secondary'
-          
+= paginate @petitions
 
-= paginate @petitions, param_name: :my_page
+h1 Moje petycje
 
-
-h2 Moje petycje
-table.table.table-striped
-  thead
-    tr
-      th Tytuł
-      th Status
-      th Opcje
-  tbody
-    - @my_petitions.each do |petition|
-      tr
-        td = petition.title
-        td = petition.status
-        td 
-          = link_to 'Pokaż', petition_path(petition), class: "btn btn-info"
-          - if petition.under_review? && petition.requires_signatures?
-            = link_to 'Start Collecting Signatures', start_collecting_signatures_petition_path(petition), method: :post, class: 'btn btn-success'
+= render 'petitions_list', petitions: @my_petitions
 
 = paginate @my_petitions, param_name: :my_page
 

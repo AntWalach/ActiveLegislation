@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_04_200741) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_05_232453) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -135,6 +135,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_04_200741) do
     t.string "subcategory"
     t.integer "signatures_count", default: 0
     t.integer "petition_type"
+    t.bigint "grouped_petition_id"
+    t.boolean "published", default: false
+    t.text "updates"
+    t.string "third_party_name"
+    t.string "third_party_address"
+    t.index ["grouped_petition_id"], name: "index_petitions_on_grouped_petition_id"
     t.index ["user_id"], name: "index_petitions_on_user_id"
   end
 
@@ -195,6 +201,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_04_200741) do
   add_foreign_key "committee_signatures", "bill_committees"
   add_foreign_key "committee_signatures", "users"
   add_foreign_key "notifications", "users"
+  add_foreign_key "petitions", "petitions", column: "grouped_petition_id"
   add_foreign_key "petitions", "users"
   add_foreign_key "signatures", "bills"
   add_foreign_key "signatures", "petitions"

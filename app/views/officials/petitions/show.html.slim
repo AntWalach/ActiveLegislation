@@ -1,43 +1,43 @@
 h1 = @petition.title
-p
-  strong Opis:
-  = @petition.description
+
+= render 'petitions/details', petition: @petition
 
 p
-  strong Uzasadnienie:
-  = @petition.justification
+  strong "Status: "
+  span.badge.badge-info = @petition.status.humanize
 
-p
-  strong Liczba podpisów:
-  = @petition.signatures.count
+hr
 
-p
-  strong Typ petycji:
-  = @petition.petition_type.humanize
+h3 "Opis"
+= @petition.description.to_s.html_safe
 
-p
-  strong Status:
-  = @petition.status.humanize
+h3 "Uzasadnienie"
+= @petition.justification.to_s.html_safe
 
+- if @petition.requires_signatures?
+  p
+    strong "Zebrane podpisy: "
+    = @petition.signatures.count
+    |  /
+    = @petition.signature_goal
+
+hr
 
 - if current_user.official_role == 'initial_verifier' && @petition.submitted?
-  = link_to 'Approve Petition', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
+  = link_to 'Zatwierdź', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
+  = link_to 'Odrzuć', reject_officials_petition_path(@petition), method: :post, class: 'btn btn-danger'
+  = link_to 'Wezwij do uzupełnienia', request_supplement_officials_petition_path(@petition), method: :post, class: 'btn btn-warning'
 
-- if current_user.official_role == 'signature_verifier' && @petition.collecting_signatures?
-  = link_to 'Verify Signatures', verify_signatures_officials_petition_path(@petition), method: :post, class: 'btn btn-primary'
+- elsif current_user.official_role == 'signature_verifier' && @petition.collecting_signatures?
+  - if @petition.ready_for_review?
+    = link_to 'Zweryfikuj podpisy', verify_signatures_officials_petition_path(@petition), method: :post, class: 'btn btn-primary'
+  - else
+    p.alert.alert-info "Petycja nie zebrała wymaganej liczby podpisów."
 
-- if current_user.petition_handler? && @petition.awaiting_response?
+- elsif current_user.petition_handler? && @petition.awaiting_response?
   = form_with url: respond_officials_petition_path(@petition), method: :post, local: true do |f|
     .form-group
       = f.label :comments, "Dodaj odpowiedź"
       = f.text_area :comments, class: 'form-control'
     .form-group
-      = f.submit 'Send Response', class: 'btn btn-success'
-
-- if @petition.submitted? || @petition.under_review?
-  = form_with url: reject_officials_petition_path(@petition), method: :post, local: true do |f|
-    .form-group
-      = f.label :comments, "Powód odrzucenia"
-      = f.text_area :comments, class: 'form-control'
-    .form-group
-      = f.submit 'Reject Petition', class: 'btn btn-danger'
+      = f.submit 'Wyślij odpowiedź', class: 'btn btn-success'

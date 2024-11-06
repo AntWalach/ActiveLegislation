@@ -26,7 +26,7 @@ class Official < User
     end
   
     def petition_handler?
-      %w[petition_verifier petition_receiver].include?(official_role)
+      %w[petition_receiver].include?(official_role)
     end
   end
   
