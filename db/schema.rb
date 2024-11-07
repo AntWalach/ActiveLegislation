@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_07_004219) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_07_215016) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -119,8 +119,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_07_004219) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "petition_id"
+    t.bigint "petition_comment_id"
+    t.index ["petition_comment_id"], name: "index_notifications_on_petition_comment_id"
     t.index ["petition_id"], name: "index_notifications_on_petition_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "petition_comments", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "petition_id"
+    t.bigint "official_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "comment_type"
+    t.index ["official_id"], name: "index_petition_comments_on_official_id"
+    t.index ["petition_id"], name: "index_petition_comments_on_petition_id"
   end
 
   create_table "petitions", charset: "utf8mb3", force: :cascade do |t|
@@ -216,8 +229,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_07_004219) do
   add_foreign_key "committee_members", "users"
   add_foreign_key "committee_signatures", "bill_committees"
   add_foreign_key "committee_signatures", "users"
+  add_foreign_key "notifications", "petition_comments"
   add_foreign_key "notifications", "petitions"
   add_foreign_key "notifications", "users"
+  add_foreign_key "petition_comments", "petitions"
+  add_foreign_key "petition_comments", "users", column: "official_id"
   add_foreign_key "petitions", "departments"
   add_foreign_key "petitions", "petitions", column: "grouped_petition_id"
   add_foreign_key "petitions", "users"

@@ -68,6 +68,8 @@ Rails.application.routes.draw do
         post :respond
         post :request_supplement
         post :forward_for_response
+        get :request_supplement_form
+        post :add_comment
       end
       collection do
         post :merge_petitions

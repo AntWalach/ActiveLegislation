@@ -45,7 +45,7 @@ class PetitionsController < ApplicationController
 
   def submit
     if @petition.draft? && @petition.update(status: :submitted)
-      NotificationsController.notify_submission(@petition.user, @petition)
+      Notification.notify_submission(@petition.user, @petition)
       redirect_to petition_url(@petition), notice: "Petycja została zgłoszona do weryfikacji."
     else
       redirect_to petition_url(@petition), alert: "Nie udało się zgłosić petycji."
@@ -56,7 +56,7 @@ class PetitionsController < ApplicationController
 
     if (@petition.submitted? || @petition.under_review?) && @petition.requires_signatures?
       if @petition.update(status: :collecting_signatures)
-        NotificationsController.notify_collecting_signatures(@petition.user, @petition)
+        Notification.notify_collecting_signatures(@petition.user, @petition)
         redirect_to petition_url(@petition), notice: "Rozpoczęto zbieranie podpisów."
       else
         redirect_to petition_url(@petition), alert: "Nie udało się rozpocząć zbierania podpisów."

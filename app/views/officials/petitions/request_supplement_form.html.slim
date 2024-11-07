@@ -1,0 +1,8 @@
+h1 "Wezwanie do uzupełnienia petycji"
+
+= form_with model: [ :officials, @petition, @comment ], url: add_comment_officials_petition_path(@petition), method: :post, local: true do |f|
+  .form-group
+    = f.hidden_field :comment_type, value: 'request_supplement'
+    = f.label :content, "Komentarz"
+    = f.text_area :content, class: 'form-control', required: true
+  = f.submit "Wyślij wezwanie", class: 'btn btn-primary'

@@ -7,7 +7,7 @@ class Ability
         when Admin
           can :manage, :all
         when Official
-          can [:read,:index, :show, :approve, :reject, :forward_for_response, :request_supplement], Petition
+          can [:read,:index, :show, :approve, :reject, :forward_for_response, :request_supplement, :add_comment], Petition
           can [:index, :show, :create, :new, :edit, :destroy], Bill
           can [:dashboard], User
         when StandardUser

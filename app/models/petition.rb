@@ -4,6 +4,7 @@ class Petition < ApplicationRecord
   has_many :signatures, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_one_attached :attachment
+  has_many :petition_comments, dependent: :destroy
 
   has_rich_text :description
   has_rich_text :justification
@@ -62,6 +63,9 @@ class Petition < ApplicationRecord
     group_petition? || organizational?
   end
 
+  def editable_by?(user)
+    (draft? || supplement_required?) && self.user == user
+  end
 
   def self.ransackable_attributes(auth_object = nil)
     [

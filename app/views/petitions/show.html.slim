@@ -1,25 +1,30 @@
 h1 = @petition.title
 = render 'petitions/details', petition: @petition
+
 p
-  strong = "Status: "
+  strong "Status: "
   span.badge.badge-info = @petition.status.humanize
 
 hr
 
-h3 Opis
+h3 "Opis"
 = @petition.description.to_s.html_safe
 
-h3 Uzasadnienie
+h3 "Uzasadnienie"
 = @petition.justification.to_s.html_safe
-
-hr
 
 - if @petition.requires_signatures?
   p
-    strong = "Zebrane podpisy: "
+    strong "Zebrane podpisy: "
     = @petition.signatures.count
     |  /
     = @petition.signature_goal
+
+hr
+
+h3 "Komentarze"
+= render 'petitions/comments/comments', comments: @petition.petition_comments.includes(:official).order(created_at: :asc)
+
 
 - if @petition.user == current_user && (@petition.draft? || @petition.supplement_required?)
   = link_to 'Edytuj petycję', edit_petition_path(@petition), class: 'btn btn-secondary'

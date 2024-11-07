@@ -23,10 +23,17 @@ h3 "Uzasadnienie"
 
 hr
 
+h3 "Komentarze"
+= render 'officials/petitions/comments/comments', comments: @comments
+
+- if can?(:add_comment, @petition)
+  = render 'officials/petitions/comments/form', comment: @comment
+
+hr
+
 - if current_user.official_role == 'initial_verifier' && @petition.submitted?
   = link_to 'Zatwierdź', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
   = link_to 'Odrzuć', reject_officials_petition_path(@petition), method: :post, class: 'btn btn-danger'
-  = link_to 'Wezwij do uzupełnienia', request_supplement_officials_petition_path(@petition), method: :post, class: 'btn btn-warning'
 
 - elsif current_user.official_role == 'signature_verifier' && @petition.collecting_signatures?
   - if @petition.ready_for_review?
