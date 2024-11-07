@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
         if current_user
           render_error 403, exception
         else
-          redirect_to root_path
+          redirect_to authenticated_root_path
         end
       end
     end
@@ -89,6 +89,6 @@ class ApplicationController < ActionController::Base
     protected
     
     def authenticate_official!
-      redirect_to root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official)
+      redirect_to authenticated_root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official)
     end
 end

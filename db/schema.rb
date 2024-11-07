@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_05_232453) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_07_004219) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -102,12 +102,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_232453) do
     t.index ["user_id"], name: "index_committee_signatures_on_user_id"
   end
 
+  create_table "departments", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.string "city"
+    t.string "address"
+    t.string "postal_code"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notifications", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "message"
     t.boolean "read", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "petition_id"
+    t.index ["petition_id"], name: "index_notifications_on_petition_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -140,6 +152,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_232453) do
     t.text "updates"
     t.string "third_party_name"
     t.string "third_party_address"
+    t.bigint "department_id"
+    t.index ["department_id"], name: "index_petitions_on_department_id"
     t.index ["grouped_petition_id"], name: "index_petitions_on_grouped_petition_id"
     t.index ["user_id"], name: "index_petitions_on_user_id"
   end
@@ -188,6 +202,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_232453) do
     t.string "department"
     t.string "office_location"
     t.string "official_role"
+    t.bigint "department_id"
+    t.index ["department_id"], name: "index_users_on_department_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -200,10 +216,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_232453) do
   add_foreign_key "committee_members", "users"
   add_foreign_key "committee_signatures", "bill_committees"
   add_foreign_key "committee_signatures", "users"
+  add_foreign_key "notifications", "petitions"
   add_foreign_key "notifications", "users"
+  add_foreign_key "petitions", "departments"
   add_foreign_key "petitions", "petitions", column: "grouped_petition_id"
   add_foreign_key "petitions", "users"
   add_foreign_key "signatures", "bills"
   add_foreign_key "signatures", "petitions"
   add_foreign_key "signatures", "users"
+  add_foreign_key "users", "departments"
 end

@@ -14,7 +14,7 @@ class Officials::BillsController < ApplicationController
     when 'committee_member'
       render 'officials/bills/committee_member/index'
     else
-      redirect_to root_path, alert: "Brak uprawnień do tej sekcji."
+      redirect_to authenticated_root_path, alert: "Brak uprawnień do tej sekcji."
     end
   end
   
@@ -29,7 +29,7 @@ class Officials::BillsController < ApplicationController
     when 'committee_member'
       render 'officials/bills/committee_member/show'
     else
-      redirect_to root_path, alert: "Brak uprawnień do tej sekcji."
+      redirect_to authenticated_root_path, alert: "Brak uprawnień do tej sekcji."
     end
   end
 

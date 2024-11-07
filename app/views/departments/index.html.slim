@@ -1,0 +1,11 @@
+p style="color: green" = notice
+
+h1 Departments
+
+#departments
+  - @departments.each do |department|
+    == render department
+    p
+      = link_to "Show this department", department
+
+= link_to "New department", new_department_path

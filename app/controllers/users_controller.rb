@@ -95,10 +95,10 @@ class UsersController < ApplicationController
     permitted = [
       :first_name, :last_name, :email, :address, :postal_code, :city, :country,
       :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
-      :verified, :public_key, :type
+      :verified, :type
     ]
   
-    permitted += [:department, :office_location] if params[:official]
+    permitted += [:department, :office_location, :department_id] if params[:official]
   
     if params[:admin]
       params.require(:admin).permit(permitted)

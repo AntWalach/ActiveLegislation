@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :departments
   get 'reports/annual_report'
   
   resources :notifications, only: [] do

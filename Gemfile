@@ -93,6 +93,7 @@ gem 'material_icons'
 gem 'country_select'
 
 gem 'recaptcha', require: 'recaptcha/rails'
+gem 'faker'
 # group :production do
 #   gem 'sqlite3', '~> 1.4'
 # end

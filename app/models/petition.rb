@@ -1,6 +1,8 @@
 class Petition < ApplicationRecord
   belongs_to :user
+  belongs_to :department, optional: true
   has_many :signatures, dependent: :destroy
+  has_many :notifications, dependent: :destroy
   has_one_attached :attachment
 
   has_rich_text :description

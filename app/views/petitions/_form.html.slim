@@ -24,6 +24,7 @@
         = f.input :third_party_consent, as: :file, required: true
 
       = f.input :recipient, required: true
+      = f.input :department_id, collection: Department.all.map { |d| [d.name, d.id] }, prompt: 'Wybierz Departament', label: 'Departament'
 
   / Consents
   .card

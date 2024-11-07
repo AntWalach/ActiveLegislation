@@ -20,8 +20,9 @@ h1 Official
         .col-lg-6.form-cont 
             - if can? :assign_roles, User
                 -if @user.is_a?(Official)
-                    = f.input :department, wrapper: false
+                    = f.input :department_id, collection: Department.all.map { |d| [d.name, d.id] }, prompt: 'Wybierz Departament', label: 'Departament'
                     = f.input :office_location, wrapper: false
+                    = f.input :official_role, as: :select, collection: Official.official_roles.keys, label: "Rola urzędowa", prompt: "Wybierz rolę"
                 = f.input :verified, wrapper: false
                 = f.input :type, as: :select, collection: [['Admin', 'Admin'], ['Official', 'Official'], ['User', 'StandardUser']], label: "Select Role"
     br

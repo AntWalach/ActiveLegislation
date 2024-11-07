@@ -121,7 +121,7 @@ class PetitionsController < ApplicationController
       :title, :description, :category, :subcategory, :address, :recipient,
       :justification, :signature_goal, :privacy_policy, :end_date, :public_comment,
       :attachment, :external_links, :priority, :comments, :gdpr_consent, :petition_type,
-      :third_party_name, :third_party_address, :third_party_consent
+      :third_party_name, :third_party_address, :third_party_consent, :department_id
     )
   end
 end
