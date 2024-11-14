@@ -1,149 +1,25 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-# db/seeds.rb
-
-# Tworzenie urzędników z każdą rolą
 require 'faker'
 Faker::Config.locale = 'pl' # Ustawienie języka na polski
-# Admin.create!(
-#   email: "antek@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Antoni",
-#   last_name: "Wałach",
-# )
 
-# Official.create!(
-#   email: "official@gmail.com",
-#   password: "Antek.123",
-#   first_name: "General",
-#   last_name: "Official",
-#   official_role: "official"
-# )
+# Tworzenie administratora
+Admin.create!(
+  email: "antek@gmail.com",
+  password: "Antek.123",
+  first_name: "Antoni",
+  last_name: "Wałach"
+)
 
-# Official.create!(
-#   email: "initial_verifier@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Initial",
-#   last_name: "Verifier",
-#   official_role: "initial_verifier"
-# )
+# Tworzenie przykładowych użytkowników standardowych
+5.times do |i|
+  StandardUser.create!(
+    email: "standard#{i + 1}@gmail.com",
+    password: "Antek.123",
+    first_name: "Standard#{i + 1}",
+    last_name: "User"
+  )
+end
 
-# Official.create!(
-#   email: "signature_verifier@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Signature",
-#   last_name: "Verifier",
-#   official_role: "signature_verifier"
-# )
-
-# Official.create!(
-#   email: "marshal@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Main",
-#   last_name: "Marshal",
-#   official_role: "marshal"
-# )
-
-# Official.create!(
-#   email: "vice_marshal@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Vice",
-#   last_name: "Marshal",
-#   official_role: "vice_marshal"
-# )
-
-# Official.create!(
-#   email: "committee_secretary@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Committee",
-#   last_name: "Secretary",
-#   official_role: "committee_secretary"
-# )
-
-# Official.create!(
-#   email: "committee_member@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Committee",
-#   last_name: "Member",
-#   official_role: "committee_member"
-# )
-
-# Official.create!(
-#   email: "petition_verifier@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Petition",
-#   last_name: "Verifier",
-#   official_role: "petition_verifier"
-# )
-
-# Official.create!(
-#   email: "petition_receiver@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Petition",
-#   last_name: "Receiver",
-#   official_role: "petition_receiver"
-# )
-
-
-
-# StandardUser.create!(
-#   email: "standard@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Standard",
-#   last_name: "Standard",
-# )
-
-
-# StandardUser.create!(
-#   email: "standard2@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Standard",
-#   last_name: "Standard",
-# )
-
-# StandardUser.create!(
-#   email: "standard3@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Standard",
-#   last_name: "Standard",
-# )
-
-
-
-# StandardUser.create!(
-#   email: "standard4@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Standard",
-#   last_name: "Standard",
-# )
-
-
-# StandardUser.create!(
-#   email: "standard5@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Standard",
-#   last_name: "Standard",
-# )
-
-# StandardUser.create!(
-#   email: "standard6@gmail.com",
-#   password: "Antek.123",
-#   first_name: "Standard",
-#   last_name: "Standard",
-# )
-
-
-
-# puts "Urzędnicy z różnymi rolami zostali utworzeni!"
-
-
+# Lista departamentów z możliwością posiadania oddziałów w różnych miastach
 departments = {
   ministry_of_education_and_science: 'Ministerstwo Edukacji i Nauki',
   ministry_of_health: 'Ministerstwo Zdrowia',
@@ -170,36 +46,51 @@ departments = {
   central_statistical_office: 'Główny Urząd Statystyczny',
   agency_for_restructuring_and_modernization_of_agriculture: 'Agencja Restrukturyzacji i Modernizacji Rolnictwa',
   national_prosecutors_office: 'Prokuratura Krajowa',
-  police_headquarters: 'Komenda Główna Policji',
-  central_anti_corruption_bureau: 'Centralne Biuro Antykorupcyjne',
-  national_health_fund: 'Narodowy Fundusz Zdrowia',
-  internal_security_agency: 'Agencja Bezpieczeństwa Wewnętrznego',
-  military_property_agency: 'Agencja Mienia Wojskowego',
-  institute_of_freedom: 'Narodowy Instytut Wolności',
-  state_labour_inspection: 'Państwowa Inspekcja Pracy',
-  chief_sanitary_inspectorate: 'Główny Inspektorat Sanitarny',
-  environmental_protection_inspectorate: 'Główny Inspektorat Ochrony Środowiska',
-  electronic_communications_office: 'Urząd Komunikacji Elektronicznej',
-  polish_investment_and_trade_agency: 'Polska Agencja Inwestycji i Handlu',
-  polish_tourist_organisation: 'Polska Organizacja Turystyczna',
-  national_bank_of_poland: 'Narodowy Bank Polski',
-  water_management_authority: 'Krajowy Zarząd Gospodarki Wodnej',
-  polish_development_fund: 'Polski Fundusz Rozwoju',
-  city_hall: 'Urząd Miasta',
-  county_office: 'Starostwo Powiatowe',
-  voivodeship_office: 'Urząd Marszałkowski',
-  city_council: 'Rada Miasta',
-  county_council: 'Rada Powiatowa'
+  police_headquarters: 'Komenda Główna Policji', # Może mieć lokalizacje w różnych miastach
+  city_hall: 'Urząd Miasta',                     # Może mieć lokalizacje w różnych miastach
+  county_office: 'Starostwo Powiatowe',          # Może mieć lokalizacje w różnych miastach
+  voivodeship_office: 'Urząd Marszałkowski',      # Może mieć lokalizacje w różnych miastach
+  sejm: 'Sejm Rzeczypospolitej Polskiej',         # Tylko Sejm ma marszałków i wicemarszałków
+  senat: 'Senat Rzeczypospolitej Polskiej'        # Tylko Senat ma marszałków i wicemarszałków
 }
 
+# Tworzenie departamentów z urzędnikami w losowych miastach
 departments.each_pair do |key, department_name|
-  Department.create!(
-    name: department_name,
-    city: Faker::Address.city,
-    address: Faker::Address.street_address,
-    postal_code: Faker::Address.zip_code,
-    email: Faker::Internet.email(name: department_name.gsub(' ', '_').downcase)
-  )
+  # Tworzenie 3 losowych lokalizacji dla departamentów, które mogą mieć wiele oddziałów
+  cities = if %i[police_headquarters city_hall county_office voivodeship_office].include?(key)
+             Array.new(3) { Faker::Address.city }.uniq # Losowe miasta
+           else
+             [Faker::Address.city] # Jeden urząd centralny
+           end
+
+  cities.each do |city|
+    department = Department.create!(
+      name: department_name,
+      city: city,
+      address: Faker::Address.street_address,
+      postal_code: Faker::Address.zip_code,
+      email: Faker::Internet.email(name: department_name.gsub(' ', '_').downcase)
+    )
+
+    # Wybór ról w zależności od rodzaju departamentu
+    roles = if %i[sejm senat].include?(key)
+              %w[marshal vice_marshal committee_secretary committee_member petition_verifier petition_receiver]
+            else
+              %w[initial_verifier signature_verifier petition_verifier petition_receiver]
+            end
+
+    # Tworzenie urzędników z wybranymi rolami dla tego departamentu
+    roles.each do |role|
+      Official.create!(
+        email: Faker::Internet.email(name: "#{role}_#{city}".downcase),
+        password: "Antek.123",
+        first_name: Faker::Name.first_name,
+        last_name: Faker::Name.last_name,
+        official_role: role,
+        department: department
+      )
+    end
+  end
 end
 
-puts "Dodano #{departments.size} departamentów."
+puts "Dodano departamenty i przypisanych urzędników w różnych lokalizacjach."

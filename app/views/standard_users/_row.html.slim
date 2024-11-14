@@ -3,7 +3,13 @@ tr
         = el.first_name
     td  
         = el.email
+    - if el.type == "Official"
+        td 
+            = el.department.name
     td
+        = el.type
+
+    
     td 
         = link_to fa_icon("edit", type: :regular), edit_user_path(el), class: "light-text edit-user-btn" if can?(:edit, el)
     td 

@@ -3,8 +3,18 @@ p style="color: green" = notice
 == render @department
 
 div
-  => link_to "Edit this department", edit_department_path(@department)
-  '|
-  =< link_to "Back to departments", departments_path
-
+  = link_to "Edit this department", edit_department_path(@department)
+  | |
+  = link_to "Back to departments", departments_path
   = button_to "Destroy this department", @department, method: :delete
+
+h2 Officials in this Department
+- if @officials.any?
+  ul
+    - @officials.each do |official|
+      li
+        = link_to official.first_name, user_path(official)
+        p = "Email: #{official.email}"
+        p = "Position: #{official.official_role}"
+- else
+  p No officials assigned to this department.

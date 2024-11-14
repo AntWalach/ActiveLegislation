@@ -19,10 +19,6 @@ h1 StandardUser
             = f.input :password_confirmation, wrapper: false
         .col-lg-6.form-cont 
             - if can? :assign_roles, User
-                -if @user.is_a?(Official)
-                    = f.input :department, wrapper: false
-                    = f.input :office_location, wrapper: false
-                = f.input :verified, wrapper: false
                 = f.input :type, as: :select, collection: [['Admin', 'Admin'], ['Official', 'Official'], ['User', 'StandardUser']], label: "Select Role"
     br
 

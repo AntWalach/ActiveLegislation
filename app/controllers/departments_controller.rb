@@ -3,11 +3,23 @@ class DepartmentsController < ApplicationController
 
   # GET /departments or /departments.json
   def index
-    @departments = Department.all
+
+    @search_url = departments_path
+    
+    @search = Department.all.ransack(params[:q])
+
+
+    @list = @departments = @search.result(distinct: true).page(params[:page])
+    
+    respond_to do |f|
+      f.html
+      f.js { render "application/index" }
+    end
   end
 
   # GET /departments/1 or /departments/1.json
   def show
+    @officials = @department.officials
   end
 
   # GET /departments/new

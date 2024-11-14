@@ -45,8 +45,18 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    collection do
+      get 'admins', to: 'users#index_admins', as: 'index_admins'
+      get 'officials', to: 'users#index_officials', as: 'index_officials'
+      get 'new_admin', to: 'users#new_admin', as: 'new_admin'
+      post 'create_admin', to: 'users#create', as: 'create_admin'
+      get 'new_official', to: 'users#new_official', as: 'new_official'
+      post 'create_official', to: 'users#create', as: 'create_official'
+    end
   end
-
+  #get 'officials', to: 'users#index', defaults: { type: 'Official' }
+  # get 'new_official', to: 'users#new_official', as: 'new_official'
+  # get 'new_admin', to: 'users#new_admin', as: 'new_admin'
 
   namespace :officials do
     resources :bills, only: [:index, :show] do
