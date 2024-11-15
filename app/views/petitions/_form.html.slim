@@ -4,55 +4,51 @@
   / Petition Details
   .card
     .card-header
-      h3 "Szczegóły petycji"
+      h3 Szczegóły petycji
     .card-body
-      = f.input :title, required: true
-      = f.input :description, as: :rich_text_area, required: true
-      = f.input :justification, as: :rich_text_area, required: true
+      = f.input :title, required: true, label: 'Tytuł'
+      = f.input :description, as: :rich_text_area, required: true, label: 'Opis'
+      = f.input :justification, as: :rich_text_area, required: true, label: 'Uzasadnienie'
+      = f.input :tag_list, label: 'Tagi', hint: 'Wpisz tagi oddzielone przecinkami', required: false
+      = f.input :external_links, as: :text, label: 'Linki zewnętrzne (jeden na linię)'
+      = f.input :attachments, as: :file, label: 'Załącznik', input_html: { multiple: true }
+      = f.input :main_image, as: :file, label: 'Główne zdjęcie', input_html: { accept: 'image/*' }
+      = f.input :images, as: :file, label: 'Dodaj zdjęcia', input_html: { multiple: true, accept: 'image/*' }
+      = f.input :public_comment, as: :text, label: 'Komentarz publiczny'
 
-  / Additional Information
+  / Petitioner Details
   .card
     .card-header
-      h3 "Informacje dodatkowe"
+      h3 Dane wnioskodawcy
     .card-body
-      = f.input :petition_type, collection: Petition.petition_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz rodzaj petycji", required: true, input_html: { onchange: 'toggleThirdPartyFields()' }
+      = f.input :creator_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu'
+      = f.input :address, required: true, label: 'Adres zamieszkania lub siedziby'
+      - unless user_signed_in?
+        = f.input :email, required: true, label: 'Adres e-mail', as: :email
+
+  / Additional Information
+  .card(data-controller="petition-type")
+    .card-header
+      h3 Informacje dodatkowe
+    .card-body
+      = f.input :petition_type, collection: Petition.petition_types.keys.map { |type| [t("petition_types.#{type}"), type] }, prompt: "Wybierz rodzaj petycji", required: true, label: 'Rodzaj petycji', input_html: { data: { action: "petition-type#toggleThirdPartyFields", petition_type_target: "petitionTypeSelect" } }
 
       / Fields for Third Party Petitions
-      .third-party-fields
-        = f.input :third_party_name, required: true
-        = f.input :third_party_address, required: true
-        = f.input :third_party_consent, as: :file, required: true
+      .third-party-fields(data-petition-type-target="thirdPartyFields")
+        = f.input :third_party_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu osoby trzeciej'
+        = f.input :third_party_address, required: true, label: 'Adres osoby trzeciej'
+        = f.input :third_party_consent, as: :file, required: true, label: 'Zgoda osoby trzeciej'
 
-      = f.input :recipient, required: true
+      = f.input :recipient, required: true, label: 'Adresat petycji'
       = f.input :department_id, collection: Department.all.map { |d| [d.name, d.id] }, prompt: 'Wybierz Departament', label: 'Departament'
 
   / Consents
   .card
     .card-header
-      h3 "Zgody"
+      h3 Zgody
     .card-body
-      = f.input :gdpr_consent, as: :boolean, required: true
-      = f.input :privacy_policy, as: :boolean, required: true
+      = f.input :gdpr_consent, as: :boolean, required: true, label: "Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z [klauzulą informacyjną]"
+      = f.input :privacy_policy, as: :boolean, required: true, label: "Zapoznałem się z [polityką prywatności]"
 
   .form-actions
     = f.submit "Złóż petycję", class: 'btn btn-primary'
-
-
-javascript:
-  document.addEventListener("DOMContentLoaded", function() {
-    var petitionTypeField = document.querySelector('#petition_petition_type');
-    if (petitionTypeField) {
-      petitionTypeField.addEventListener('change', toggleThirdPartyFields);
-      toggleThirdPartyFields(); // Initial call
-    }
-  });
-
-  function toggleThirdPartyFields() {
-    var petitionType = document.querySelector('#petition_petition_type').value;
-    var thirdPartyFields = document.querySelector('.third-party-fields');
-    if (petitionType === 'third_party') {
-      thirdPartyFields.style.display = 'block';
-    } else {
-      thirdPartyFields.style.display = 'none';
-    }
-  }

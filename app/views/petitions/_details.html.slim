@@ -1,15 +1,15 @@
 p
-  strong "Tytuł: "
+  strong Tytuł: 
   = petition.title
 
 p
-  strong "Status: "
-  span.badge.badge-info = petition.status.humanize
+  strong Status: 
+  span = petition.status.humanize
 
 p
-  strong "Opis: "
+  strong Opis: 
   = petition.description.to_s.html_safe
 
 p
-  strong "Uzasadnienie: "
+  strong Uzasadnienie: 
   = petition.justification.to_s.html_safe

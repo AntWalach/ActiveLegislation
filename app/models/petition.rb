@@ -3,11 +3,14 @@ class Petition < ApplicationRecord
   belongs_to :department, optional: true
   has_many :signatures, dependent: :destroy
   has_many :notifications, dependent: :destroy
-  has_one_attached :attachment
+  has_many_attached :attachments
   has_many :petition_comments, dependent: :destroy
-
+  has_many_attached :images
+  has_one_attached :main_image
   has_rich_text :description
   has_rich_text :justification
+  acts_as_taggable_on :tags
+  acts_as_ordered_taggable_on :tags
 
   validates :title, presence: true
   validates :description, presence: true
@@ -18,7 +21,7 @@ class Petition < ApplicationRecord
   validates :privacy_policy, acceptance: true
 
 
-  has_one_attached :third_party_consent
+  has_many_attached :third_party_consents
 
   validates :third_party_name, presence: true, if: :in_behalf_of_third_party?
   validates :third_party_address, presence: true, if: :in_behalf_of_third_party?

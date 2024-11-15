@@ -5,11 +5,11 @@
       |  - 
       small = comment.created_at.strftime("%d-%m-%Y %H:%M")
       - if comment.request_supplement?
-        span.badge.badge-warning "Wezwanie do uzupełnienia"
+        span.badge.badge-warning Wezwanie do uzupełnienia
       - elsif comment.response?
-        span.badge.badge-success "Odpowiedź"
+        span.badge.badge-success Odpowiedź
       - else
-        span.badge.badge-secondary "Komentarz"
+        span.badge Komentarz
     .comment-body
       = comment.content
     hr

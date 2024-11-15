@@ -118,10 +118,11 @@ class PetitionsController < ApplicationController
 
   def petition_params
     params.require(:petition).permit(
-      :title, :description, :category, :subcategory, :address, :recipient,
-      :justification, :signature_goal, :privacy_policy, :end_date, :public_comment,
-      :attachment, :external_links, :priority, :comments, :gdpr_consent, :petition_type,
-      :third_party_name, :third_party_address, :third_party_consent, :department_id
+      :title, :description, :justification, :petition_type, :recipient, :department_id,
+      :creator_name, :address, :email, :gdpr_consent, :privacy_policy,
+      :third_party_name, :third_party_address, :third_party_consent,
+      :category, :subcategory, :external_links, :end_date, :public_comment, :tag_list, :main_image, attachments: [], images: [],
+      
     )
   end
 end

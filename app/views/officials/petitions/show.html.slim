@@ -3,12 +3,12 @@ h1 = @petition.title
 = render 'petitions/details', petition: @petition
 
 p
-  strong "Status: "
-  span.badge.badge-info = @petition.status.humanize
+  strong Status: 
+  span = @petition.status.humanize
 
 hr
 
-h3 "Opis"
+h3 Opis
 = @petition.description.to_s.html_safe
 
 h3 "Uzasadnienie"
@@ -23,7 +23,7 @@ h3 "Uzasadnienie"
 
 hr
 
-h3 "Komentarze"
+h3 Komentarze
 = render 'officials/petitions/comments/comments', comments: @comments
 
 - if can?(:add_comment, @petition)

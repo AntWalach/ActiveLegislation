@@ -94,6 +94,7 @@ gem 'country_select'
 
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'faker'
+gem 'acts-as-taggable-on'
 # group :production do
 #   gem 'sqlite3', '~> 1.4'
 # end
