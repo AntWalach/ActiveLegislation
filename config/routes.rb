@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   resources :departments
   get 'reports/annual_report'
   
-  resources :notifications, only: [] do
-    member do
-      patch :mark_as_read
+  resources :notifications do
+    collection do
+      post :mark_as_read
     end
   end
 

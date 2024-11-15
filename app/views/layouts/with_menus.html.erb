@@ -11,7 +11,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body data-controller="notification" data-action="click@window->notification#hideDropdown"
     <div class="content" data-controller="dropdown" data-action="click->dropdown#hideDropdownContent">
       <%= render "top_menu" %>
 

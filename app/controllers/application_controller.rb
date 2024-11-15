@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
     protect_from_forgery with: :exception
     before_action :https_redirect
     before_action :set_notification_exception
+    before_action :set_notifications
     layout :layout_by_resource
 
 
@@ -90,5 +91,15 @@ class ApplicationController < ActionController::Base
     
     def authenticate_official!
       redirect_to authenticated_root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official)
+    end
+
+    private
+
+    def set_notifications
+      if user_signed_in?
+        @notifications = current_user.notifications.unread
+      else
+        @notifications = []
+      end
     end
 end

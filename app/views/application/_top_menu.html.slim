@@ -1,1 +1,17 @@
 .top-menu
+  .menu-left
+
+  .menu-right
+    .notification-wrapper(data-controller="notification")
+      = link_to '#', class: 'notification-icon', data: { action: 'click->notification#toggle' } do
+        i.fas.fa-bell
+
+      .notification-dropdown.hidden(data-notification-target="dropdown")
+        ul.notification-list
+          - if @notifications.any?
+            - @notifications.each do |notification|
+              li.notification-item
+                = notification.message
+          - else
+            li.notification-item
+              | Brak nowych powiadomień.
