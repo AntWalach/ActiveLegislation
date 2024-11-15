@@ -1,41 +1,91 @@
-h1 = @petition.title
+.container
+  .petition-header.row.align-items-center.mb-4
+    .title-section.col-md-8.col-12
+      h1.display-4.mb-3 = @petition.title
+      
+      - if @petition.tag_list.any?
+        p.text-muted.mb-1.mr-3
+          strong Tagi: 
+          = @petition.tag_list.join(', ')
+      p.text-muted.mb-1.mr-3
+        | • Data utworzenia: 
+        strong = l(@petition.created_at, format: :long)
+      p.text-muted.mb-1.mr-3
+        | • Autor: 
+        strong = @petition.creator_name
+      p.lead.mb-1
+        strong Status: 
+        span = @petition.status.humanize
 
-= render 'petitions/details', petition: @petition
+    - if @petition.main_image.attached?
+      .main-image.col-md-4.col-12.text-center
+        = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
 
-p
-  strong Status: 
-  span = @petition.status.humanize
+  .petition-content
+    .card.mb-4
+      .card-header.bg-light
+        h3 Opis
+      .card-body
+        = @petition.description.body
 
-hr
+    .card.mb-4
+      .card-header.bg-light
+        h3 Uzasadnienie
+      .card-body
+        = @petition.justification.body
+        
+    - if @petition.external_links.present?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Linki zewnętrzne
+        .card-body
+          .list-group
+            - @petition.external_links.split("\n").each do |link|
+              a.list-group-item.list-group-item-action href=link target="_blank" rel="noopener noreferrer" = link
 
-h3 Opis
-= @petition.description.to_s.html_safe
+    - if @petition.attachments.attached?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Załączniki
+        .card-body
+          .list-group
+            - @petition.attachments.each do |attachment|
+              a.list-group-item.list-group-item-action href=rails_blob_path(attachment, disposition: "attachment") = attachment.filename.to_s
+    - else
+      p.text-muted Brak załączników.
 
-h3 "Uzasadnienie"
-= @petition.justification.to_s.html_safe
+    - if @petition.images.attached?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Załączone zdjęcia
+        .card-body
+          .row
+            - @petition.images.each do |image|
+              .col-md-4.mb-3
+                = image_tag image.variant(resize_to_limit: [800, 600]), class: 'img-fluid rounded shadow-sm'
 
-- if @petition.requires_signatures?
-  p
-    strong "Zebrane podpisy: "
-    = @petition.signatures.count
-    |  /
-    = @petition.signature_goal
+    - if @petition.public_comment.present?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Komentarz publiczny
+        .card-body
+          = sanitize(@petition.public_comment.to_s, tags: %w(p strong em), attributes: %w(class))
 
+  hr
 hr
 
 h3 Komentarze
 = render 'officials/petitions/comments/comments', comments: @comments
 
-- if can?(:add_comment, @petition)
-  = render 'officials/petitions/comments/form', comment: @comment
 
+- if can?(:add_comment, @petition)
+  .floating-comment-form(data-controller="toggle-form")
+    button.btn.btn-secondary(type="button" data-action="toggle-form#toggle") Komentarz
+    .form-content(data-toggle-form-target="formContent")
+      = render 'officials/petitions/comments/form', comment: @comment
 hr
 
-- if current_user.official_role == 'initial_verifier' && @petition.submitted?
-  = link_to 'Zatwierdź', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
-  = link_to 'Odrzuć', reject_officials_petition_path(@petition), method: :post, class: 'btn btn-danger'
-
-- elsif current_user.official_role == 'signature_verifier' && @petition.collecting_signatures?
+- if current_user.official_role == 'signature_verifier' && @petition.collecting_signatures?
   - if @petition.ready_for_review?
     = link_to 'Zweryfikuj podpisy', verify_signatures_officials_petition_path(@petition), method: :post, class: 'btn btn-primary'
   - else

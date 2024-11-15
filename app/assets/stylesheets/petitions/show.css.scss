@@ -1,0 +1,36 @@
+.floating-comment-form {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    max-width: 90%;
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 1050; 
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .floating-comment-form .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .floating-comment-form .btn {
+    width: 100%;
+  }
+  
+  .floating-comment-form .form-content {
+    display: none; 
+  }
+  
+  @media (max-width: 768px) {
+    .floating-comment-form {
+      width: 90%;
+      right: 5%;
+      bottom: 10px;
+    }
+  }
+  

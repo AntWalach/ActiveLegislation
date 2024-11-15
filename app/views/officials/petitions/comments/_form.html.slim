@@ -3,7 +3,7 @@
     = f.label :comment_type, "Typ komentarza"
     = f.select :comment_type, PetitionComment.comment_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz typ", class: 'form-control', required: true
   .form-group
-    = f.label :content, "Dodaj komentarz"
-    = f.text_area :content, class: 'form-control', required: true
+    = f.label :content, "Treść komentarza"
+    = f.text_area :content, class: 'form-control', required: true, rows: 3
   .form-group
     = f.submit "Dodaj komentarz", class: 'btn btn-primary mt-2'
