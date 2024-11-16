@@ -88,4 +88,9 @@ class Notification < ApplicationRecord
       message: "Twoja petycja '#{petition.title}' otrzymała odpowiedź. Komentarz: #{comment.content}"
     )
   end
+
+  def self.send_acknowledgment(user, petition)
+    # Implementacja wysyłki e-maila z potwierdzeniem
+    #UserMailer.petition_acknowledgment(user, petition).deliver_later
+  end
 end

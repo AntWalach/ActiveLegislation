@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
-  create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
+ActiveRecord::Schema[7.1].define(version: 2024_11_16_162800) do
+  create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
     t.string "record_type", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
-  create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb3", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -43,20 +43,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb3", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "bill_committees", charset: "utf8mb3", force: :cascade do |t|
+  create_table "bill_committees", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "bill_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bill_id"], name: "index_bill_committees_on_bill_id"
   end
 
-  create_table "bills", charset: "utf8mb3", force: :cascade do |t|
+  create_table "bills", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.bigint "user_id", null: false
@@ -83,7 +83,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["user_id"], name: "index_bills_on_user_id"
   end
 
-  create_table "committee_members", charset: "utf8mb3", force: :cascade do |t|
+  create_table "committee_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "bill_committee_id", null: false
     t.bigint "user_id", null: false
     t.string "role", null: false
@@ -93,7 +93,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["user_id"], name: "index_committee_members_on_user_id"
   end
 
-  create_table "committee_signatures", charset: "utf8mb3", force: :cascade do |t|
+  create_table "committee_signatures", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "bill_committee_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -102,7 +102,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["user_id"], name: "index_committee_signatures_on_user_id"
   end
 
-  create_table "departments", charset: "utf8mb3", force: :cascade do |t|
+  create_table "departments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "city"
     t.string "address"
@@ -112,7 +112,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "notifications", charset: "utf8mb3", force: :cascade do |t|
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "message"
     t.boolean "read", default: false
@@ -125,7 +125,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "petition_comments", charset: "utf8mb3", force: :cascade do |t|
+  create_table "petition_comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "petition_id"
     t.bigint "official_id"
     t.text "content"
@@ -136,7 +136,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["petition_id"], name: "index_petition_comments_on_petition_id"
   end
 
-  create_table "petitions", charset: "utf8mb3", force: :cascade do |t|
+  create_table "petitions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.bigint "user_id", null: false
@@ -166,12 +166,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.string "third_party_name"
     t.string "third_party_address"
     t.bigint "department_id"
+    t.datetime "deadline"
+    t.bigint "assigned_official_id"
+    t.index ["assigned_official_id"], name: "index_petitions_on_assigned_official_id"
     t.index ["department_id"], name: "index_petitions_on_department_id"
     t.index ["grouped_petition_id"], name: "index_petitions_on_grouped_petition_id"
     t.index ["user_id"], name: "index_petitions_on_user_id"
   end
 
-  create_table "signatures", charset: "utf8mb3", force: :cascade do |t|
+  create_table "signatures", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "petition_id"
     t.datetime "created_at", null: false
@@ -182,7 +185,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["user_id"], name: "index_signatures_on_user_id"
   end
 
-  create_table "taggings", charset: "utf8mb3", force: :cascade do |t|
+  create_table "taggings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "tag_id"
     t.string "taggable_type"
     t.bigint "taggable_id"
@@ -205,7 +208,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["tenant"], name: "index_taggings_on_tenant"
   end
 
-  create_table "tags", charset: "utf8mb3", force: :cascade do |t|
+  create_table "tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -213,7 +216,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "users", charset: "utf8mb3", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -268,6 +271,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_15_193862) do
   add_foreign_key "petitions", "departments"
   add_foreign_key "petitions", "petitions", column: "grouped_petition_id"
   add_foreign_key "petitions", "users"
+  add_foreign_key "petitions", "users", column: "assigned_official_id"
   add_foreign_key "signatures", "bills"
   add_foreign_key "signatures", "petitions"
   add_foreign_key "signatures", "users"

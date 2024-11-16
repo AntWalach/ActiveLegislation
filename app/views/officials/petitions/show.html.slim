@@ -15,8 +15,23 @@
         strong = @petition.creator_name
       p.lead.mb-1
         strong Status: 
-        span = @petition.status.humanize
+        span = @petition.status
 
+      - if @petition.assigned_official.nil?
+        = link_to 'Przypisz do mnie', assign_to_me_officials_petition_path(@petition), method: :post, class: 'btn btn-success btn-sm'
+      
+      / - if @petition.assigned_official == current_user
+      /   - if @petition.submitted?
+      /     = link_to 'Zatwierdź', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success btn-sm'
+      /     = link_to 'Odrzuć', reject_officials_petition_path(@petition), method: :post, data: { confirm: "Czy na pewno chcesz odrzucić tę petycję?" }, class: 'btn btn-danger btn-sm'
+      /   - elsif @petition.under_review?
+      /     = form_with url: respond_officials_petition_path(@petition), method: :post, local: true do |f|
+      /       .form-group
+      /         = f.label :comments, "Dodaj odpowiedź"
+      /         = f.text_area :comments, class: 'form-control'
+      /       .form-group
+      /         = f.submit 'Wyślij odpowiedź', class: 'btn btn-success'
+    
     - if @petition.main_image.attached?
       .main-image.col-md-4.col-12.text-center
         = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
@@ -77,24 +92,31 @@ hr
 h3 Komentarze
 = render 'officials/petitions/comments/comments', comments: @comments
 
+- if @petition.assigned_official == current_user
+  - if can?(:add_comment, @petition)
+    .floating-comment-form(data-controller="toggle-form")
+      button.btn.btn-secondary(type="button" data-action="toggle-form#toggle") Narzędzia Urzędnika
+      .form-content(data-toggle-form-target="formContent")
+        / Formularz komentarza
+        = render 'officials/petitions/comments/form', comment: @comment
 
-- if can?(:add_comment, @petition)
-  .floating-comment-form(data-controller="toggle-form")
-    button.btn.btn-secondary(type="button" data-action="toggle-form#toggle") Komentarz
-    .form-content(data-toggle-form-target="formContent")
-      = render 'officials/petitions/comments/form', comment: @comment
-hr
+        hr
 
-- if current_user.official_role == 'signature_verifier' && @petition.collecting_signatures?
-  - if @petition.ready_for_review?
-    = link_to 'Zweryfikuj podpisy', verify_signatures_officials_petition_path(@petition), method: :post, class: 'btn btn-primary'
-  - else
-    p.alert.alert-info "Petycja nie zebrała wymaganej liczby podpisów."
+        / Akcje urzędnika
+        - if @petition.submitted?
+          = link_to 'Zatwierdź petycję', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success btn-block mb-2'
+          = link_to 'Odrzuć petycję', reject_officials_petition_path(@petition), method: :post, data: { confirm: "Czy na pewno chcesz odrzucić tę petycję?" }, class: 'btn btn-danger btn-block mb-2'
+        - elsif @petition.under_review?
+          = link_to 'Udziel odpowiedzi', '#', class: 'btn btn-primary btn-block mb-2', data: { action: 'toggle-form#toggleResponseForm' }
+          
+          / Formularz odpowiedzi (ukryty domyślnie)
+          .response-form(data-toggle-form-target="responseForm", style="display: none;")
+            = form_with url: respond_officials_petition_path(@petition), method: :post, local: true do |f|
+              .form-group
+                = f.label :comments, "Treść odpowiedzi"
+                = f.text_area :comments, class: 'form-control', rows: 3
+              .form-group
+                = f.submit 'Wyślij odpowiedź', class: 'btn btn-success btn-block'
 
-- elsif current_user.petition_handler? && @petition.awaiting_response?
-  = form_with url: respond_officials_petition_path(@petition), method: :post, local: true do |f|
-    .form-group
-      = f.label :comments, "Dodaj odpowiedź"
-      = f.text_area :comments, class: 'form-control'
-    .form-group
-      = f.submit 'Wyślij odpowiedź', class: 'btn btn-success'
+
+

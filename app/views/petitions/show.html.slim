@@ -76,7 +76,7 @@
   .petition-actions.mt-5
     - if user_signed_in?
       .btn-group
-        - if @petition.user == current_user && (@petition.draft? || @petition.supplement_required?)
+        - if @petition.user == current_user && (@petition.draft? || @petition.awaiting_supplement?)
           = link_to 'Edytuj petycję', edit_petition_path(@petition), class: 'btn btn-secondary'
         - if @petition.user == current_user && @petition.draft?
           = link_to 'Zgłoś petycję do weryfikacji', submit_petition_path(@petition), method: :post, class: 'btn btn-primary', data: { confirm: 'Czy na pewno chcesz zgłosić tę petycję do weryfikacji? Po zgłoszeniu nie będzie można jej edytować.' }

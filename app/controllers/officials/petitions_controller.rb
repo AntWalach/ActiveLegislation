@@ -1,11 +1,15 @@
 class Officials::PetitionsController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_official!
-  before_action :set_petition, only: %i[ show approve reject verify_signatures respond request_supplement forward_for_response add_comment ]
+  before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment ]
+
+  # def index
+  #   @search = Petition.all.ransack(params[:q])
+  #   @petitions = @search.result(distinct: true).page(params[:page])
+  # end
 
   def index
-    @search = Petition.all.ransack(params[:q])
-    @petitions = @search.result(distinct: true).page(params[:page])
+    @petitions = Petition.where(department: current_user.department).order(created_at: :desc).page(params[:page])
   end
 
   def show
@@ -13,9 +17,18 @@ class Officials::PetitionsController < ApplicationController
     @comment = PetitionComment.new
   end
 
+  def assign_to_me
+    @petition = Petition.find(params[:id])
+    if @petition.update(assigned_official: current_user)
+      redirect_to officials_petitions_path, notice: 'Petycja została przypisana do Ciebie.'
+    else
+      redirect_to officials_petitions_path, alert: 'Nie udało się przypisać petycji.'
+    end
+  end
+
   # Zatwierdzenie petycji przez weryfikatora wstępnego
   def approve
-    if current_user.official_role == 'initial_verifier' && @petition.submitted?
+    if current_user.official_role == 'petition_officer' && @petition.submitted?
       if @petition.update(status: :under_review)
         Notification.notify_approval(@petition.user, @petition)
         redirect_to officials_petitions_path, notice: "Petycja została zatwierdzona do przeglądu."
@@ -37,34 +50,10 @@ class Officials::PetitionsController < ApplicationController
     end
   end
 
-  # Weryfikacja podpisów przez urzędnika ds. kompletności głosów
-# In officials/petitions_controller.rb
-  def verify_signatures
-    Rails.logger.debug "Current User Role: #{current_user.official_role}"
-    Rails.logger.debug "Petition Status: #{@petition.status}"
-    Rails.logger.debug "Petition Signatures Required: #{@petition.requires_signatures?}"
-    Rails.logger.debug "Petition Ready for Review: #{@petition.ready_for_review?}"
-
-    if current_user.official_role == 'signature_verifier' && @petition.collecting_signatures? && @petition.ready_for_review?
-      if @petition.update(status: :awaiting_response)
-        #create_notification(@petition.user, "Podpisy pod Twoją petycją zostały zweryfikowane.")
-        Notification.notify_signature_verification(@petition.user, @petition)
-        redirect_to officials_petitions_path, notice: "Podpisy zostały zweryfikowane."
-      else
-        Rails.logger.debug "Update failed: #{@petition.errors.full_messages.join(', ')}"
-        redirect_to officials_petitions_path, alert: "Nie udało się zweryfikować podpisów."
-      end
-    else
-      Rails.logger.debug "Verification conditions not met."
-      redirect_to officials_petitions_path, alert: "Brak uprawnień lub niekompletna liczba podpisów."
-    end
-  end
-
-
   # Odpowiedź na petycję
   def respond
     begin
-      if current_user.petition_handler? && @petition.awaiting_response?
+      if current_user.petition_handler? && @petition.under_review?
         ActiveRecord::Base.transaction do
           # Aktualizacja statusu petycji
           @petition.update!(status: :responded)
@@ -114,26 +103,13 @@ class Officials::PetitionsController < ApplicationController
   end
 
 
-  def forward_for_response
-    if current_user.official_role == 'petition_verifier' && @petition.under_review?
-      if @petition.update(status: :awaiting_response)
-        Notification.notify_forwarded(@petition.user, @petition)
-        redirect_to officials_petitions_path, notice: "Petycja została przekazana do rozpatrzenia."
-      else
-        redirect_to officials_petitions_path, alert: "Nie udało się przekazać petycji."
-      end
-    else
-      redirect_to officials_petitions_path, alert: "Brak uprawnień do wykonania tej akcji."
-    end
-  end
-
   def add_comment
     @comment = @petition.petition_comments.new(comment_params)
     @comment.official = current_user
   
     ActiveRecord::Base.transaction do
       if @comment.request_supplement?
-        @petition.update!(status: :supplement_required)
+        @petition.update!(status: :awaiting_supplement)
       end
       @comment.save!
       Notification.notify_comment(@petition.user, @petition, @comment)

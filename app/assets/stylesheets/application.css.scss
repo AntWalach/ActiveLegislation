@@ -87,3 +87,36 @@ i.material-icons {
     line-height: 1;
   }
   @import 'actiontext.css';
+
+  .accessibility-tools {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+  
+    .accessibility-button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 5px 10px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 1em;
+  
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+  
+
+  .high-contrast {
+    background-color: #000 !important;
+    color: #fff !important;
+  
+    a {
+      color: #0ff !important;
+    }
+  
+    /* Dostosuj inne elementy interfejsu według potrzeb */
+  }

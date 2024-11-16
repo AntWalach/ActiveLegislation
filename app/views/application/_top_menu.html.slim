@@ -1,5 +1,10 @@
 .top-menu
   .menu-left
+    ul.accessibility-tools
+        li = link_to 'A+', '#', id: 'increase-font', class: 'accessibility-button'
+        li = link_to 'A-', '#', id: 'decrease-font', class: 'accessibility-button'
+        li = link_to 'A', '#', id: 'reset-font', class: 'accessibility-button'
+        li = link_to 'Wysoki kontrast', '#', id: 'toggle-contrast', class: 'accessibility-button'
 
   .menu-right
     .notification-wrapper(data-controller="notification")

@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   resources :petitions do
     post 'sign', to: 'signatures#petition_create'
     member do
-      post :start_collecting_signatures
+      # post :start_collecting_signatures
       post :submit
     end
   end
@@ -54,9 +54,7 @@ Rails.application.routes.draw do
       post 'create_official', to: 'users#create', as: 'create_official'
     end
   end
-  #get 'officials', to: 'users#index', defaults: { type: 'Official' }
-  # get 'new_official', to: 'users#new_official', as: 'new_official'
-  # get 'new_admin', to: 'users#new_admin', as: 'new_admin'
+
 
   namespace :officials do
     resources :bills, only: [:index, :show] do
@@ -80,6 +78,7 @@ Rails.application.routes.draw do
         post :forward_for_response
         get :request_supplement_form
         post :add_comment
+        post :assign_to_me
       end
       collection do
         post :merge_petitions

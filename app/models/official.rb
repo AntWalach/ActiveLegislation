@@ -2,15 +2,13 @@ class Official < User
     belongs_to :department, optional: true
     
     enum official_role: { 
-      official: 'official',          # Ogólny urzędnik
       initial_verifier: 'initial_verifier', # Weryfikator Wstępny
       signature_verifier: 'signature_verifier', # Urzędnik ds. Kompletności Głosów
       marshal: 'marshal',             # Marszałek
       vice_marshal: 'vice_marshal',   # Wicemarszałek
       committee_secretary: 'committee_secretary', # Sekretarz Komisji
       committee_member: 'committee_member',       # Członek Komisji
-      petition_verifier: 'petition_verifier',     # Weryfikator Petycji
-      petition_receiver: 'petition_receiver'      # Odbiorca Petycji
+      petition_officer: 'petition_officer'
     }
 
 
@@ -75,10 +73,7 @@ class Official < User
       county_council: 'Rada Powiatowa'
   }
   
-    def official?
-      official_role == 'official'
-    end
-  
+
     def marshal?
       %w[marshal vice_marshal].include?(official_role)
     end
@@ -88,7 +83,7 @@ class Official < User
     end
   
     def petition_handler?
-      %w[petition_receiver].include?(official_role)
+      %w[petition_officer].include?(official_role)
     end
   end
   

@@ -1,12 +1,3 @@
-h1 "Panel Urzędnika"
+h1 Panel Urzędnika
 
-- if current_user.official_role == 'initial_verifier'
-  = render 'initial_verifier_index'
-- elsif current_user.official_role == 'signature_verifier'
-  = render 'signature_verifier_index'
-- elsif current_user.official_role == 'petition_verifier'
-  = render 'petition_verifier_index'
-- elsif current_user.petition_handler?
-  = render 'receiver_index'
-- else
-  p.alert.alert-info "Nie masz przypisanej roli do rozpatrywania petycji."
+= render "index_table", list: @petitions

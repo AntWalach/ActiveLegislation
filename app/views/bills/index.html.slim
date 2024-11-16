@@ -1,15 +1,4 @@
-/ p style="color: green" = notice
-
-/ h1 Bills
-
-/ #bills
-/   - @bills.each do |bill|
-/     == render bill
-/     p
-/       = link_to "Show this bill", bill
-
-/ = link_to "New bill", new_bill_path
-h2 Przegląd petycji
+h2 Przegląd ustaw
 
 
 table
@@ -49,4 +38,4 @@ table.table.table-striped
 
 = paginate @my_bills, param_name: :my_page
 
-= link_to 'Dodaj nową petycję', new_bill_path, class: "btn btn-primary"
+= link_to 'Dodaj nową ustawę', new_bill_path, class: "btn btn-primary"

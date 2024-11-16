@@ -1,15 +1,13 @@
 class PetitionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_petition, only: %i[ show edit update destroy submit start_collecting_signatures ]
+  before_action :set_petition, only: %i[ show edit update destroy submit ]
   before_action :authenticate_user!
   
   # GET /petitions or /petitions.json
   def index
 
-
-    @search = Petition.where(status: [:responded, :collecting_signatures]).ransack(params[:q])
+    @search = Petition.where(status: [:responded]).ransack(params[:q])
     @petitions = @search.result(distinct: true).page(params[:page])
-
 
     @my_petitions = current_user.petitions.page(params[:my_page])
   end
@@ -28,7 +26,6 @@ class PetitionsController < ApplicationController
   def create
     @petition = current_user.petitions.new(petition_params)
     @petition.status = "draft"
-    @petition.signature_goal ||= Petition::MIN_SIGNATURES_FOR_REVIEW if @petition.requires_signatures?
 
     respond_to do |format|
       if @petition.save
@@ -46,28 +43,17 @@ class PetitionsController < ApplicationController
   def submit
     if @petition.draft? && @petition.update(status: :submitted)
       Notification.notify_submission(@petition.user, @petition)
+      # Wysyłanie potwierdzenia
+      Notification.send_acknowledgment(@petition.user, @petition)
       redirect_to petition_url(@petition), notice: "Petycja została zgłoszona do weryfikacji."
     else
       redirect_to petition_url(@petition), alert: "Nie udało się zgłosić petycji."
     end
   end
 
-  def start_collecting_signatures
-
-    if (@petition.submitted? || @petition.under_review?) && @petition.requires_signatures?
-      if @petition.update(status: :collecting_signatures)
-        Notification.notify_collecting_signatures(@petition.user, @petition)
-        redirect_to petition_url(@petition), notice: "Rozpoczęto zbieranie podpisów."
-      else
-        redirect_to petition_url(@petition), alert: "Nie udało się rozpocząć zbierania podpisów."
-      end
-    else
-      redirect_to petition_url(@petition), alert: "Nie udało się rozpocząć zbierania podpisów."
-    end
-  end
 
   def edit
-    if @petition.user == current_user && (@petition.draft? || @petition.supplement_required?)
+    if @petition.user == current_user && (@petition.draft? || @petition.awaiting_supplement?)
       # Allow editing
     else
       redirect_to @petition, alert: "Nie masz uprawnień do edycji tej petycji."
@@ -79,9 +65,9 @@ class PetitionsController < ApplicationController
   def update
     respond_to do |format|
       if @petition.update(petition_params)
-        if @petition.supplement_required?
+        if @petition.awaiting_supplement?
           @petition.update(status: :submitted)
-          # Możesz powiadomić urzędnika o ponownym złożeniu petycji
+
         end
         format.html { redirect_to petition_url(@petition), notice: "Petycja została zaktualizowana." }
         format.json { render :show, status: :ok, location: @petition }
