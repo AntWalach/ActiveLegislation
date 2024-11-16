@@ -15,6 +15,11 @@ class PetitionsController < ApplicationController
 
   # GET /petitions/1 or /petitions/1.json
   def show
+    @petition.increment!(:views)
+
+    unless PetitionView.exists?(petition: @petition, ip_address: request.remote_ip)
+      PetitionView.create!(petition: @petition, user: current_user, ip_address: request.remote_ip)
+    end
   end
 
   # GET /petitions/new

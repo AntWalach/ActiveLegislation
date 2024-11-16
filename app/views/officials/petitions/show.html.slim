@@ -20,18 +20,7 @@
       - if @petition.assigned_official.nil?
         = link_to 'Przypisz do mnie', assign_to_me_officials_petition_path(@petition), method: :post, class: 'btn btn-success btn-sm'
       
-      / - if @petition.assigned_official == current_user
-      /   - if @petition.submitted?
-      /     = link_to 'Zatwierdź', approve_officials_petition_path(@petition), method: :post, class: 'btn btn-success btn-sm'
-      /     = link_to 'Odrzuć', reject_officials_petition_path(@petition), method: :post, data: { confirm: "Czy na pewno chcesz odrzucić tę petycję?" }, class: 'btn btn-danger btn-sm'
-      /   - elsif @petition.under_review?
-      /     = form_with url: respond_officials_petition_path(@petition), method: :post, local: true do |f|
-      /       .form-group
-      /         = f.label :comments, "Dodaj odpowiedź"
-      /         = f.text_area :comments, class: 'form-control'
-      /       .form-group
-      /         = f.submit 'Wyślij odpowiedź', class: 'btn btn-success'
-    
+
     - if @petition.main_image.attached?
       .main-image.col-md-4.col-12.text-center
         = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'

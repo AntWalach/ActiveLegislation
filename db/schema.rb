@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_16_162800) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_16_225643) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -136,6 +136,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_162800) do
     t.index ["petition_id"], name: "index_petition_comments_on_petition_id"
   end
 
+  create_table "petition_views", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "petition_id"
+    t.bigint "user_id"
+    t.string "ip_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["petition_id"], name: "index_petition_views_on_petition_id"
+    t.index ["user_id"], name: "index_petition_views_on_user_id"
+  end
+
   create_table "petitions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -168,6 +178,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_162800) do
     t.bigint "department_id"
     t.datetime "deadline"
     t.bigint "assigned_official_id"
+    t.integer "views", default: 0
     t.index ["assigned_official_id"], name: "index_petitions_on_assigned_official_id"
     t.index ["department_id"], name: "index_petitions_on_department_id"
     t.index ["grouped_petition_id"], name: "index_petitions_on_grouped_petition_id"
@@ -209,7 +220,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_162800) do
   end
 
   create_table "tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
+    t.string "name", collation: "utf8mb3_bin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "taggings_count", default: 0
@@ -268,6 +279,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_162800) do
   add_foreign_key "notifications", "users"
   add_foreign_key "petition_comments", "petitions"
   add_foreign_key "petition_comments", "users", column: "official_id"
+  add_foreign_key "petition_views", "petitions"
+  add_foreign_key "petition_views", "users"
   add_foreign_key "petitions", "departments"
   add_foreign_key "petitions", "petitions", column: "grouped_petition_id"
   add_foreign_key "petitions", "users"
