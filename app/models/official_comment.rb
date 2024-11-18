@@ -1,4 +1,4 @@
-class PetitionComment < ApplicationRecord
+class OfficialComment < ApplicationRecord
   belongs_to :petition
   belongs_to :official, class_name: 'Official'
 

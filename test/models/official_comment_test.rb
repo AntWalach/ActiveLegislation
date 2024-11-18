@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PetitionCommentTest < ActiveSupport::TestCase
+class OfficialCommentTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

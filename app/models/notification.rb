@@ -1,7 +1,7 @@
 class Notification < ApplicationRecord
   belongs_to :user
   belongs_to :petition, optional: true
-  belongs_to :petition_comment, optional: true
+  belongs_to :official_comment, optional: true
 
   scope :unread, -> { where(read: false) }
 
@@ -66,7 +66,7 @@ class Notification < ApplicationRecord
     Notification.create(
       user: user,
       petition: petition,
-      petition_comment: comment,
+      official_comment: comment,
       message: "Nowy komentarz do Twojej petycji '#{petition.title}': #{comment.content}"
     )
   end
@@ -75,7 +75,7 @@ class Notification < ApplicationRecord
     Notification.create(
       user: user,
       petition: petition,
-      petition_comment: comment,
+      official_comment: comment,
       message: "Twoja petycja '#{petition.title}' wymaga uzupełnienia. Komentarz: #{comment.content}"
     )
   end
@@ -84,7 +84,7 @@ class Notification < ApplicationRecord
     Notification.create(
       user: user,
       petition: petition,
-      petition_comment: comment,
+      official_comment: comment,
       message: "Twoja petycja '#{petition.title}' otrzymała odpowiedź. Komentarz: #{comment.content}"
     )
   end

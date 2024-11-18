@@ -5,7 +5,7 @@ class Petition < ApplicationRecord
   has_many :signatures, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many_attached :attachments
-  has_many :petition_comments, dependent: :destroy
+  has_many :official_comments, dependent: :destroy
   has_many_attached :images
   has_one_attached :main_image
   has_rich_text :description

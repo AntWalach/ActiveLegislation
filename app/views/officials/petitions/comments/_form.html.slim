@@ -1,7 +1,7 @@
 = form_with model: [ :officials, @petition, @comment ], url: add_comment_officials_petition_path(@petition), method: :post, local: true do |f|
   .form-group
     = f.label :comment_type, "Typ komentarza"
-    = f.select :comment_type, PetitionComment.comment_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz typ", class: 'form-control', required: true
+    = f.select :comment_type, OfficialComment.comment_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz typ", class: 'form-control', required: true
   .form-group
     = f.label :content, "Treść komentarza"
     = f.text_area :content, class: 'form-control', required: true, rows: 3

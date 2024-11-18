@@ -119,21 +119,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_225643) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "petition_id"
-    t.bigint "petition_comment_id"
-    t.index ["petition_comment_id"], name: "index_notifications_on_petition_comment_id"
+    t.bigint "official_comment_id"
+    t.index ["official_comment_id"], name: "index_notifications_on_official_comment_id"
     t.index ["petition_id"], name: "index_notifications_on_petition_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "petition_comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "official_comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "petition_id"
     t.bigint "official_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "comment_type"
-    t.index ["official_id"], name: "index_petition_comments_on_official_id"
-    t.index ["petition_id"], name: "index_petition_comments_on_petition_id"
+    t.index ["official_id"], name: "index_official_comments_on_official_id"
+    t.index ["petition_id"], name: "index_official_comments_on_petition_id"
   end
 
   create_table "petition_views", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -220,7 +220,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_225643) do
   end
 
   create_table "tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name", collation: "utf8mb3_bin"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "taggings_count", default: 0
@@ -274,11 +274,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_225643) do
   add_foreign_key "committee_members", "users"
   add_foreign_key "committee_signatures", "bill_committees"
   add_foreign_key "committee_signatures", "users"
-  add_foreign_key "notifications", "petition_comments"
+  add_foreign_key "notifications", "official_comments"
   add_foreign_key "notifications", "petitions"
   add_foreign_key "notifications", "users"
-  add_foreign_key "petition_comments", "petitions"
-  add_foreign_key "petition_comments", "users", column: "official_id"
+  add_foreign_key "official_comments", "petitions"
+  add_foreign_key "official_comments", "users", column: "official_id"
   add_foreign_key "petition_views", "petitions"
   add_foreign_key "petition_views", "users"
   add_foreign_key "petitions", "departments"

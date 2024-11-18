@@ -13,8 +13,8 @@ class Officials::PetitionsController < ApplicationController
   end
 
   def show
-    @comments = @petition.petition_comments.includes(:official).order(created_at: :asc)
-    @comment = PetitionComment.new
+    @comments = @petition.official_comments.includes(:official).order(created_at: :asc)
+    @comment = OfficialComment.new
   end
 
   def assign_to_me
@@ -59,7 +59,7 @@ class Officials::PetitionsController < ApplicationController
           @petition.update!(status: :responded)
     
           # Tworzenie komentarza typu 'response'
-          comment = @petition.petition_comments.create!(
+          comment = @petition.official_comments.create!(
             official: current_user,
             content: params[:comments],
             comment_type: 'response'
@@ -104,7 +104,7 @@ class Officials::PetitionsController < ApplicationController
 
 
   def add_comment
-    @comment = @petition.petition_comments.new(comment_params)
+    @comment = @petition.official_comments.new(comment_params)
     @comment.official = current_user
   
     ActiveRecord::Base.transaction do
@@ -117,7 +117,7 @@ class Officials::PetitionsController < ApplicationController
   
     redirect_to officials_petition_path(@petition), notice: "Komentarz został dodany."
   rescue ActiveRecord::RecordInvalid => e
-    @comments = @petition.petition_comments.includes(:official).order(created_at: :asc)
+    @comments = @petition.official_comments.includes(:official).order(created_at: :asc)
     flash.now[:alert] = "Nie udało się dodać komentarza: #{e.message}"
     render :show
   end
@@ -129,7 +129,7 @@ class Officials::PetitionsController < ApplicationController
   end
 
   def comment_params
-    params.require(:petition_comment).permit(:content, :comment_type)
+    params.require(:official_comment).permit(:content, :comment_type)
   end
 
 end

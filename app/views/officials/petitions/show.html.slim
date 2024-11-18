@@ -86,7 +86,7 @@ h3 Komentarze
     .floating-comment-form(data-controller="toggle-form")
       button.btn.btn-secondary(type="button" data-action="toggle-form#toggle") Narzędzia Urzędnika
       .form-content(data-toggle-form-target="formContent")
-        / Formularz komentarza
+
         = render 'officials/petitions/comments/form', comment: @comment
 
         hr
