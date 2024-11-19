@@ -1,9 +1,9 @@
-= form_with model: [ :officials, @petition, @comment ], url: add_comment_officials_petition_path(@petition), method: :post, local: true do |f|
+= simple_form_for [ :officials, @petition, @comment ], url: add_comment_officials_petition_path(@petition), method: :post, html: { local: true } do |f|
   .form-group
-    = f.label :comment_type, "Typ komentarza"
-    = f.select :comment_type, OfficialComment.comment_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz typ", class: 'form-control', required: true
+    = f.input :comment_type, as: :select, collection: OfficialComment.comment_types.keys.map { |type| [type.humanize, type] }, prompt: "Wybierz typ", input_html: { class: 'form-control', required: true }
   .form-group
-    = f.label :content, "Treść komentarza"
-    = f.text_area :content, class: 'form-control', required: true, rows: 3
+    = f.input :content, as: :text, input_html: { class: 'form-control', required: true, rows: 3 }
   .form-group
-    = f.submit "Dodaj komentarz", class: 'btn btn-primary mt-2'
+    = f.input :attachments, as: :file, input_html: { multiple: true, class: 'form-control' }
+  .form-group
+    = f.button :submit, "Dodaj komentarz", class: 'btn btn-primary mt-2'

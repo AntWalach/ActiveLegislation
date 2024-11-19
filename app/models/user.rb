@@ -14,12 +14,21 @@ class User < ApplicationRecord
 
   after_create :auto_set_role
 
+  has_one_attached :avatar do |img|
+    img.variant :medium, resize_to_fit: [250, 250]
+    img.variant :thumb, resize_to_fit: [50, 50]
+  end
+
   ROLES = {
   "A" => "admin",
   "S" => "standard",
   "O" => "official"
   }
 
+
+  def avatar_url(v=:medium)
+    avatar.attached? ? rails_representation_url(avatar.variant(v), only_path: true) : "sessions_avatar.png"
+  end
 
   def auto_set_role
     default_role = case type

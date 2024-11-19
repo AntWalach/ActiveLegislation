@@ -79,6 +79,7 @@ Rails.application.routes.draw do
         get :request_supplement_form
         post :add_comment
         post :assign_to_me
+        post :transfer
       end
       collection do
         post :merge_petitions

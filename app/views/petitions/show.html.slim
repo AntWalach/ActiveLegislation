@@ -84,6 +84,8 @@
 
   hr
 
-  .petition-comments.mt-5
-    h3.mb-4 Komentarze
-    = render 'petitions/comments/comments', comments: @petition.official_comments.includes(:official).order(created_at: :asc)
+
+  - if current_user == @petition.user
+    .petition-comments.mt-5
+      h3.mb-4 Komentarze
+      = render 'officials/petitions/comments/comments', comments: @petition.official_comments.includes(:official).order(created_at: :asc)

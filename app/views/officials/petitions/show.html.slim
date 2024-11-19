@@ -85,8 +85,17 @@ h3 Komentarze
   - if can?(:add_comment, @petition)
     .floating-comment-form(data-controller="toggle-form")
       button.btn.btn-secondary(type="button" data-action="toggle-form#toggle") Narzędzia Urzędnika
+      
+      br
       .form-content(data-toggle-form-target="formContent")
-
+        br
+        = simple_form_for @petition, url: transfer_officials_petition_path(@petition), method: :post, html: { local: true } do |f|
+          .form-group
+            = f.input :assigned_official_id, as: :select, collection: Official.where(department: current_user.department).map { |o| [o.first_name, o.id] }, prompt: "Wybierz urzędnika", input_html: { class: 'form-control' }
+          .form-group
+            = f.button :submit, "Przekaż", class: 'btn btn-primary btn-block'
+        hr
+        br
         = render 'officials/petitions/comments/form', comment: @comment
 
         hr

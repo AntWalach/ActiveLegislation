@@ -1,7 +1,7 @@
 class Officials::PetitionsController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_official!
-  before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment ]
+  before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment transfer ]
 
   # def index
   #   @search = Petition.all.ransack(params[:q])
@@ -122,6 +122,12 @@ class Officials::PetitionsController < ApplicationController
     render :show
   end
 
+  def transfer
+    @petition.update!(assigned_official_id: params[:petition][:assigned_official_id])
+    redirect_to officials_petition_path(@petition), notice: "Petycja została przekazana."
+  end
+
+
   private
 
   def set_petition
@@ -129,7 +135,7 @@ class Officials::PetitionsController < ApplicationController
   end
 
   def comment_params
-    params.require(:official_comment).permit(:content, :comment_type)
+    params.require(:official_comment).permit(:content, :comment_type, attachments: [])
   end
 
 end

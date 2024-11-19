@@ -20,3 +20,8 @@
           - else
             li.notification-item
               | Brak nowych powiadomień.
+    .avatar-dropdown.dropdown
+      = link_to "#", data: {controller: "dropdown", action: "dropdown#barsClick"}, class: "dropdown-bars" do 
+          = image_tag current_user.avatar_url, class: "avatar-link"
+
+      = render "top_menu_dropdown"

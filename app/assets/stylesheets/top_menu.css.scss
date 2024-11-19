@@ -14,6 +14,13 @@
     height: 80px;
     min-height: 80px;
     width: 100%;
+    .avatar-dropdown{
+      .avatar-link{
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+      }
+  }
 }
 
 .menu-left {
@@ -24,6 +31,7 @@
   .menu-right {
     display: flex;
     align-items: center;
+    gap: 40px;
   }
   .notification-wrapper {
     position: relative;
@@ -73,3 +81,111 @@
     }
   }
   
+
+  .dropdown{
+    position: relative;
+
+    .dropdown-bars{
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .dropdown-content{
+        position: absolute;
+        z-index: 9999;
+        top: 0;
+        right: 0;
+        background-color: white;
+        min-width: 300px;
+        border-radius: 15px;
+        box-shadow: 0 8px 6px -6px rgba(0,0,0,0.1);
+
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s  ease-in-out;
+        transition: opacity 0.2s  ease-in-out;
+
+        &.no-opacity{
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        padding: 10px 12px;
+
+        .close-btn{
+            text-align: end;
+
+            a{
+                color: black;
+                font-size: 19px;
+
+                &:hover{ color: black; }
+            }
+        }
+
+        .user-details{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 30px;
+
+            .user-details-avatar{
+                width: 55px;
+                height: 55px;
+                border-radius: 50%;
+            }
+
+            .user-data{
+                color: black;
+                font-size: 14px;
+
+                .name{ font-size: 18px; }
+            }
+        }
+
+        .dropdown-links{
+            a{
+                display: block;
+                margin: 10px 0;
+                border: 1px solid $dark_tan_link_background;
+                border-radius: 10px;
+                padding: 13px 15px;
+                color: $small_span_tan_color;
+                
+                span{ vertical-align: text-bottom; }
+
+                i{
+                    font-size: 20px;
+                    margin-right: 7px;
+                    color: $left_menu_active_link_color;
+                }
+
+                &:hover{
+                    color: $small_span_tan_color;
+                    background-color: $dark_tan_link_background;
+                }
+
+                &.gold > i{
+                    color: $premium_gold_icon;
+                }
+
+                &.grey{
+                    background-color: $dark_tan_link_background;
+                    color: black;
+
+                    &:hover{
+                        background-color: $left_menu_active_link_color;
+                        border-color: $left_menu_active_link_color;
+                        color: white;
+
+                        i{
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

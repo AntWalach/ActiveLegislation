@@ -45,11 +45,9 @@ class Petition < ApplicationRecord
   
   # Typy petycji
   enum petition_type: { 
-    individual: 0,      # Indywidualna (bez wymogu zbierania podpisów)
-    group_petition: 1,  # Grupa (wymaga podpisów)
-    organizational: 2,  # Organizacja (wymaga podpisów)
-    public_interest: 3, # Interes publiczny (zwykle bez wymogu podpisów)
-    third_party: 4 
+    individual: 0,      
+    group_petition: 1,  
+    third_party: 2 
   }
 
   #MIN_SIGNATURES_FOR_REVIEW = 5
