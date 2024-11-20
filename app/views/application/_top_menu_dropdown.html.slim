@@ -11,4 +11,5 @@
   .dropdown-links
     - if current_user.is?(:admin)
       hr
+    = link_to fa_icon("user", text: "Profile"), user_path(current_user), class: "grey", data: { turbo: false }
     = link_to fa_icon("sign-out-alt", text: t(:logout)), logout_path, class: "grey", data: { turbo: false }

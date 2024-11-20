@@ -1,4 +1,11 @@
-div
+div.white-cont
+  .title-with-actions
+    .title
+      = "Dane użytkownika"
+    .actions
+       = link_to fa_icon("edit", text: "Edytuj"), edit_user_path(@user), class: "action-btn" if can?(:edit, @user)
+
+
   h1 Admin: #{@user.first_name} #{@user.last_name}
   p Email: #{@user.email}
   p Role: Admin

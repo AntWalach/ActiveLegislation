@@ -1,21 +1,104 @@
-.signup-wrapper.new-login-page
-  .signup-left
-    .signup-container
-      h2 Sign up
+.row
+  .col-lg-8
+    div.signup-container
+      h2 Rejestracja
 
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
         = f.error_notification
 
         .form-inputs
-          = f.input :email, required: true, autofocus: true, input_html: { autocomplete: "email" }
-          = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), input_html: { autocomplete: "new-password" }
-          = f.input :password_confirmation, required: true, input_html: { autocomplete: "new-password" }
+          .input-section
+            h3 Dane osobowe
+            .input-row
+              = f.label :first_name, "Imię", class: "form-label"
+              = f.input :first_name, required: true, label: false
+            .input-row
+              = f.label :last_name, "Nazwisko", class: "form-label"
+              = f.input :last_name, required: true, label: false
+            .input-row
+              = f.label :pesel, "PESEL", class: "form-label"
+              = f.input :pesel, required: true, label: false
 
-        .form-actions
-          = f.button :submit, "Sign up", class: "signup-button"
+          .input-section
+            h3 Dane logowania
+            .input-row
+              = f.label :email, "E-mail", class: "form-label"
+              = f.input :email, required: true, label: false
+            .input-row
+              = f.label :password, "Hasło", class: "form-label"
+              = f.input :password, required: true, label: false
+            .input-row
+              = f.label :password_confirmation, "Powtórz hasło", class: "form-label"
+              = f.input :password_confirmation, required: true, label: false
 
-      = render "devise/shared/links"
+          .input-section
+            h3 Adres zamieszkania
+            .input-row
+              = f.label :province, "Województwo", class: "form-label"
+              = f.input :province, as: :select, collection: ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie",
+                "Łódzkie", "Małopolskie", "Mazowieckie", "Opolskie",
+                "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie",
+                "Świętokrzyskie", "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"], prompt: "Wybierz województwo", label: false
+            .input-row
+              = f.label :city, "Miasto", class: "form-label"
+              = f.input :city, required: true, label: false
+            .input-row
+              = f.label :postal_code, "Kod pocztowy", class: "form-label"
+              = f.input :postal_code, required: true, label: false
+            .input-row
+              = f.label :address, "Adres zamieszkania", class: "form-label"
+              = f.input :address, required: true, label: false
+          .input-section
+            h3 Oświadczenia
 
-  .signup-right
-    = link_to landing_path do
-      = image_tag(asset_url("legislatio_logo2_transparent4.png"))
+            .form-group
+              = f.check_box :terms_of_service, required: true, class: "form-check-input"
+              = f.label :terms_of_service do
+                | Akceptuję 
+                = link_to "Regulamin Konta Portalu LegisLatio, www.LegisLatio.pl", "#", target: "_blank"
+                |  *
+
+              - if resource.errors[:terms_of_service].present?
+                small.text-danger.mt-1.d-block = resource.errors[:terms_of_service].first
+
+            .form-group
+              = f.check_box :consent_data_processing, required: true, class: "form-check-input"
+              = f.label :consent_data_processing do
+                strong Oświadczam, że wyrażam zgodę
+                |  na przetwarzanie moich danych osobowych w powyższym zakresie i celu
+
+              - if resource.errors[:consent_data_processing].present?
+                small.text-danger.mt-1.d-block = resource.errors[:consent_data_processing].first
+
+            .form-group
+              = f.check_box :information_acknowledgment, required: true, class: "form-check-input"
+              = f.label :information_acknowledgment do
+                strong Oświadczam, że zapoznałem/-am się
+                |  z treścią powyższych informacji
+
+              - if resource.errors[:information_acknowledgment].present?
+                small.text-danger.mt-1.d-block = resource.errors[:information_acknowledgment].first
+
+
+
+          .form-actions
+            = f.button :submit, "Zarejestruj się", class: "signup-button"
+  .col-lg-3
+    .help-container
+      h3 Pomoc
+      hr
+      .help-section
+        h4 Etapy zakładania konta
+        ol
+          li Wypełnij formularz
+          li Potwierdź przyciskiem „Dalej”
+          li Potwierdź numer telefonu, wpisując kod otrzymany SMS-em
+          li Korzystaj z konta i składaj lub wybieraj propozycje petycji.
+
+        h4 Rejestracja w systemie
+        p
+          | Utwórz konto korzystając z załączonego obok formularza. Wymagane jest wypełnienie wszystkich pól z gwiazdką (*). Po uzupełnieniu wszystkich danych, wpisaniu kodu z obrazka (captcha) i naciśnięciu przycisku „Dalej”, przed zarejestrowaniem konta system zażąda weryfikacji podanego numeru telefonu. Weryfikacja przeprowadzana jest za pomocą kodu przesłanego SMS-em. Konto w systemie jest zakładane po poprawnym wpisaniu przez użytkownika 6-cyfrowego kodu, otrzymanego SMS-em na podany numer telefonu.
+
+        h4 Korzystaj z konta
+        p
+          | Od tego momentu możesz bez ograniczeń brać udział w zgłaszaniu petycji lub głosowaniu – również we wszystkich następnych edycjach Aktywnej Legislacji.

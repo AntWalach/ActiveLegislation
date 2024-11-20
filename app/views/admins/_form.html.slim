@@ -1,22 +1,21 @@
 = simple_form_for(@user, url: @user.persisted? ? user_path(@user) : create_admin_users_path, html: { method: @user.persisted? ? :patch : :post }) do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
-    .row
-        .col-lg-6.form-cont 
+    .row.official-form-row
+        .col-lg-6
             = f.input :first_name, wrapper: false
             = f.input :last_name, wrapper: false
             = f.input :email, wrapper: false
             = f.input :address, wrapper: false
             = f.input :postal_code, wrapper: false
             = f.input :city, wrapper: false
-            = f.country_select :country, { include_blank: 'Select a country' }, wrapper: false
             = f.input :pesel, wrapper: false
             = f.input :phone_number, wrapper: false
             = f.input :date_of_birth, as: :string, wrapper: false, input_html: { class: "datepicker", data: { controller: "flatpickr" } }
 
             = f.input :password, wrapper: false
             = f.input :password_confirmation, wrapper: false
-        .col-lg-6.form-cont 
+        .col-lg-6
     br
 
     = f.button :submit, class: "blue-btn inline"

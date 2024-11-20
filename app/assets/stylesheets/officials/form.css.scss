@@ -1,0 +1,65 @@
+
+
+.official-form-row {
+    flex-wrap: unset !important;
+    gap: 20px; /* Dodaje odstęp między kolumnami */
+  }
+  
+  .official-form-row .col-lg-6 {
+
+    gap: 15px; /* Dodaje odstęp między polami w kolumnie */
+  }
+  
+  
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .form-control:focus {
+    border-color: #0056b3;
+    box-shadow: 0px 0px 5px rgba(0, 86, 179, 0.2);
+    outline: none;
+  }
+  
+  /* Przycisk zapisu */
+  .btn-primary {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #003f82;
+  }
+  
+  /* Tytuł formularza */
+  .form-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #00274d;
+    margin-bottom: 20px;
+  }
+  
+  /* Responsywność */
+  @media (max-width: 768px) {
+    .form-control {
+      font-size: 13px;
+    }
+  
+    .btn-primary {
+      font-size: 14px;
+      padding: 8px 15px;
+    }
+  }
+  

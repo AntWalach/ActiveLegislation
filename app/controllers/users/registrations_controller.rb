@@ -80,8 +80,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   private
     def sign_up_params
-      params.require(:user).permit(:first_name, :last_name, :phone_number, :email, :password, :password_confirmation)
+      params.require(:user).permit(
+        :first_name, :last_name, :phone_number, :email, :province, :address, :postal_code, :city, :pesel,
+        :password, :password_confirmation,
+        :terms_of_service, :consent_data_processing, :information_acknowledgment
+      )
     rescue ActionController::ParameterMissing
-      {} # Zwracamy pusty hash, jeśli brakuje klucza `:user`
+      {}
     end
-end
+  end

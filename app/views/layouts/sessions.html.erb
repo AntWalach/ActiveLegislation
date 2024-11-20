@@ -12,14 +12,12 @@
   </head>
 
   <body>
-  <div class="" data-controller="dropdown" data-action="click->dropdown#hideDropdownContent">
-      <div class="sessions">
-        <%= render 'flash'%>
-        <div class="sessions-white-cont">
-            <%= yield %>
-        </div>
-      </div>
+  <div class="bg-sessions">
+    <%= render "landing_top_menu"%>
+    
+    <%= render 'flash'%>
+    <%= yield %>
+  </div>
 
-    </div>
   </body>
 </html>

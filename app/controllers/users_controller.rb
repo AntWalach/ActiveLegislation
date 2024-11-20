@@ -161,7 +161,7 @@ class UsersController < ApplicationController
     
     def standard_user_params
       params.require(:standard_user).permit(
-        :first_name, :last_name, :email, :address, :postal_code, :city, :country,
+        :first_name, :last_name, :email, :province, :address, :postal_code, :city, :country,
         :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
         :type
       )

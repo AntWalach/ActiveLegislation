@@ -21,6 +21,15 @@
  @import 'chosen';
  @import "config/colors";
 
+
+ .row {
+  --bs-gutter-x: 0;
+  }
+
+ .bg-sessions {
+  background: #e7eaf6;
+ }
+
  .bottom-cont {
      display: flex;
      flex-direction: row;
@@ -86,6 +95,7 @@ i.material-icons {
     display: inline-block;
     line-height: 1;
   }
+
   @import 'actiontext.css';
 
   .accessibility-tools {

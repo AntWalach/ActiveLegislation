@@ -1,24 +1,27 @@
-h1 Official
+h1.text-center.form-title Official
+
 = simple_form_for(@user, url: @user.persisted? ? user_path(@user) : create_official_users_path, html: { method: @user.persisted? ? :patch : :post }) do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
-  .row
-    .col-lg-6.form-cont 
-      = f.input :first_name, wrapper: false
-      = f.input :last_name, wrapper: false
-      = f.input :email, wrapper: false
-      = f.input :address, wrapper: false
-      = f.input :postal_code, wrapper: false
-      = f.input :city, wrapper: false
-      = f.country_select :country, { include_blank: 'Select a country' }, wrapper: false
-      = f.input :pesel, wrapper: false
-      = f.input :phone_number, wrapper: false
-      = f.input :date_of_birth, as: :string, wrapper: false, input_html: { class: "datepicker", data: { controller: "flatpickr" } }
-      = f.input :password, wrapper: false
-      = f.input :password_confirmation, wrapper: false
-    .col-lg-6.form-cont 
-      = f.input :department_id, collection: Department.all.map { |d| [d.name, d.id] }, prompt: 'Wybierz Departament', label: 'Departament'
-      = f.input :office_location, wrapper: false
-      = f.input :official_role, as: :select, collection: Official.official_roles.keys, label: "Rola urzędowa", prompt: "Wybierz rolę"
-  br
-  = f.button :submit, class: "blue-btn inline"
+
+  .row.official-form-row
+    .col-lg-6
+      = f.input :first_name, label: "Imię", input_html: { class: "form-control" }
+      = f.input :last_name, label: "Nazwisko", input_html: { class: "form-control" }
+      = f.input :email, label: "E-mail", input_html: { class: "form-control" }
+      = f.input :address, label: "Adres", input_html: { class: "form-control" }
+      = f.input :postal_code, label: "Kod pocztowy", input_html: { class: "form-control" }
+      = f.input :city, label: "Miasto", input_html: { class: "form-control" }
+      = f.input :pesel, label: "PESEL", input_html: { class: "form-control" }
+      = f.input :phone_number, label: "Telefon", input_html: { class: "form-control" }
+      = f.input :date_of_birth, as: :string, label: "Data urodzenia", input_html: { class: "datepicker form-control", data: { controller: "flatpickr" } }
+      = f.input :password, label: "Hasło", input_html: { class: "form-control" }
+      = f.input :password_confirmation, label: "Potwierdź hasło", input_html: { class: "form-control" }
+
+    .col-lg-6
+      = f.input :department_id, collection: Department.all.map { |d| [d.name, d.id] }, prompt: 'Wybierz Departament', label: 'Departament', input_html: { class: "form-control" }
+      = f.input :office_location, label: "Lokalizacja biura", input_html: { class: "form-control" }
+      = f.input :official_role, as: :select, collection: Official.official_roles.keys, label: "Rola urzędowa", prompt: "Wybierz rolę", input_html: { class: "form-control" }
+
+  .form-actions
+    = f.button :submit, "Zapisz", class: "btn btn-primary"

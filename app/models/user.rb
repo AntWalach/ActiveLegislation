@@ -12,6 +12,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  attr_accessor :terms_of_service, :consent_data_processing, :information_acknowledgment
+
+  validates :terms_of_service, acceptance: { message: "Musisz zaakceptować regulamin, aby się zarejestrować." }
+  validates :consent_data_processing, acceptance: { message: "Musisz wyrazić zgodę na przetwarzanie danych osobowych." }
+  validates :information_acknowledgment, acceptance: { message: "Musisz zapoznać się z treścią powyższych informacji." }
+
   after_create :auto_set_role
 
   has_one_attached :avatar do |img|

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_16_225643) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_20_134533) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -220,7 +220,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_225643) do
   end
 
   create_table "tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "name"
+    t.string "name", collation: "utf8mb3_bin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "taggings_count", default: 0
@@ -261,6 +261,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_16_225643) do
     t.string "office_location"
     t.string "official_role"
     t.bigint "department_id"
+    t.string "province"
     t.index ["department_id"], name: "index_users_on_department_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

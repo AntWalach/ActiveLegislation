@@ -55,10 +55,10 @@ button.site-header__menu-opener {
 }
 
 .site-header-spacer {
-    height: 12rem;
+    height: 100px;
 }
 
 .site-header__logo {
-    height: 12rem; 
-    width: auto; 
-}
+    max-width: 150px; 
+    height: 100px; 
+  }
