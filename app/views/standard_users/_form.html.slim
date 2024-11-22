@@ -1,27 +1,42 @@
-h1.text-center.form-title StandardUser
+
+.white-cont
+
+    h1.form-title StandardUser
 
 
+    = simple_form_for(@user, url: @user.persisted? ? user_path(@user) : users_path, html: { method: @user.persisted? ? :patch : :post }) do |f|
+        = f.error_notification
+        = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+        .row.form-row
+            .col-lg-6
+                .form-inputs
+                    .input-section
 
-= simple_form_for(@user, url: @user.persisted? ? user_path(@user) : users_path, html: { method: @user.persisted? ? :patch : :post }) do |f|
-    = f.error_notification
-    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
-    .row.official-form-row
-        .col-lg-6
-            = f.input :first_name, wrapper: false
-            = f.input :last_name, wrapper: false
-            = f.input :email, wrapper: false
-            = f.input :address, wrapper: false
-            = f.input :postal_code, wrapper: false
-            = f.input :city, wrapper: false
-            = f.input :pesel, wrapper: false
-            = f.input :phone_number, wrapper: false
-            = f.input :date_of_birth, as: :string, wrapper: false, input_html: { class: "datepicker", data: { controller: "flatpickr" } }
+                        .input-row
+                            = f.input :first_name, wrapper: false
+                        .input-row
+                            = f.input :last_name, wrapper: false
+                        .input-row
+                            = f.input :email, wrapper: false
+                        .input-row
+                            = f.input :city, wrapper: false
+                        .input-row
+                            = f.input :postal_code, wrapper: false 
+                        .input-row
+                            = f.input :address, wrapper: false
+                
 
-            = f.input :password, wrapper: false
-            = f.input :password_confirmation, wrapper: false
-        .col-lg-6
-            - if can? :assign_roles, User
-                = f.input :type, as: :select, collection: [['Admin', 'Admin'], ['Official', 'Official'], ['User', 'StandardUser']], label: "Select Role"
-    br
+                - if can? :assign_roles, User
+                    div style="background: #f5f5f5;"
+                        = f.input :type, as: :select, collection: [['Admin', 'Admin'], ['Official', 'Official'], ['User', 'StandardUser']], label: "Select Role"
 
-    = f.button :submit, class: "blue-btn inline"
+                        = f.input :pesel, wrapper: false
+                        = f.input :phone_number, wrapper: false
+                        = f.input :date_of_birth, as: :string, wrapper: false, input_html: { class: "datepicker", data: { controller: "flatpickr" } }
+
+                        = f.input :password, wrapper: false
+                        = f.input :password_confirmation, wrapper: false
+ 
+        br
+
+        = f.button :submit, class: "blue-btn inline"

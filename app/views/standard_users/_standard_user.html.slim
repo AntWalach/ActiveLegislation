@@ -1,10 +1,49 @@
-div.white-cont
-  .title-with-actions
-    .title
-      = "Dane użytkownika"
-    .actions
-      = link_to fa_icon("edit", text: "Edytuj"), edit_user_path(@user), class: "action-btn" if can?(:edit, @user)
+.row
+  .col-lg-8
+    .white-cont
+      .title-with-actions
+        .title
+          = "Profil użytkownika"
+        .actions
+      br
+
+      h4 Dane osobowe
+      p #{@user.first_name} #{@user.last_name}
+      p PESEL: #{@user.pesel}
+
+      h4 Dane kontaktowe
+      p Email: #{@user.email}
+      p Telefon: #{@user.phone_number}
+
+      h4 Adres zamieszkania
+      p Województwo: #{@user.province}
+      p Miasto: #{@user.city}
+      p Kod pocztowy: #{@user.postal_code}
+      p Adres: #{@user.address}
+
+      h4 Logi użytkownika
+
+      - last_successful_login = @user.logs.where(action: "Login", status: "Successful").order(created_at: :desc).first
+      - last_failed_login = @user.logs.where(action: "Login", status: "Failed").order(created_at: :desc).first
+
+      ul
+        - if last_successful_login
+          li
+            | Ostatnie udane logowanie: #{last_successful_login.created_at.strftime("%Y-%m-%d %H:%M:%S")}
+            br
+            | Szczegóły: #{last_successful_login.details}
+
+        - if last_failed_login
+          li
+            | Ostatnie nieudane logowanie: #{last_failed_login.created_at.strftime("%Y-%m-%d %H:%M:%S")}
+            br
+            | Szczegóły: #{last_failed_login.details}
+      
+
+  .col
+    .grey-cont
+      = link_to fa_icon("edit", text: "Aktualizuj dane"), edit_user_path(@user), class: "action-btn" if can?(:edit, @user)
+      = link_to fa_icon("lock", text: "Zmień hasło"), edit_password_user_path(@user), class: "action-btn" if can?(:update, @user)
+      = link_to fa_icon("phone", text: "Zmień numer telefonu"), edit_phone_number_user_path(@user), class: "action-btn" if can?(:update, @user)
+      = link_to fa_icon("file-alt", text: "Zobacz wszystkie logi"), logs_user_path(@user), class: "action-btn" if can?(:view_logs, @user)
       = link_to fa_icon("trash", text: "Usuń"), user_path(@user), class: "action-red-btn", method: :delete, data: { confirm: 'Czy na pewno chcesz usunąć tę wizytę?' } if can?(:destroy, @user)
-  h1 Użytkownik: #{@user.first_name} #{@user.last_name}
-  p Email: #{@user.email}
-  p Telefon: #{@user.phone_number}

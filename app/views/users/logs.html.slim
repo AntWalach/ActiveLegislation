@@ -1,0 +1,27 @@
+.row
+  .col-lg-12
+    .white-cont
+      .title-with-actions
+        .title
+          = "Logi użytkownika: #{@user.first_name} #{@user.last_name}"
+        .actions
+          = link_to fa_icon("arrow-left", text: "Powrót do profilu"), user_path(@user), class: "btn btn-secondary"
+
+      table.table
+        thead
+          tr
+            th Data i czas
+            th Akcja
+            th Status
+            th Szczegóły
+            th IP Address
+        tbody
+          - @logs.each do |log|
+            tr
+              td = log.created_at.strftime("%Y-%m-%d %H:%M:%S")
+              td = log.action
+              td = log.status
+              td = log.details
+              td = log.ip_address
+
+      = paginate @logs

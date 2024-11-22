@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_20_134533) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_22_183757) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -110,6 +110,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_20_134533) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "logs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "ip_address"
+    t.string "action"
+    t.string "status"
+    t.text "details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_logs_on_user_id"
   end
 
   create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -275,6 +286,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_20_134533) do
   add_foreign_key "committee_members", "users"
   add_foreign_key "committee_signatures", "bill_committees"
   add_foreign_key "committee_signatures", "users"
+  add_foreign_key "logs", "users"
   add_foreign_key "notifications", "official_comments"
   add_foreign_key "notifications", "petitions"
   add_foreign_key "notifications", "users"

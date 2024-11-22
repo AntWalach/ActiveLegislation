@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-
+  before_action :set_user, only: [:show, :edit, :update, :edit_password, :update_password, :edit_phone_number, :update_phone_number, :logs]
+  
   def index
     @search_url = users_path
     @search = params[:type].present? ? User.where(type: params[:type]).ransack(params[:q]) : User.all.ransack(params[:q])
@@ -75,11 +76,9 @@ class UsersController < ApplicationController
   end
 
   def edit
-    set_user
   end
 
   def update
-    set_user
     authorize! :update_admin_fields, User if check_admin_params
   
     self_update = current_user == @user
@@ -101,6 +100,41 @@ class UsersController < ApplicationController
         format.html { render :edit, status: :unprocessable_entity }
       end
     end
+  end
+
+  def edit_password
+    authorize! :update, @user
+  end
+
+  def update_password
+    if @user.update(user_password_params)
+      Log.create(user: @user, action: "Password Change", status: "Successful", details: "Password updated successfully")
+      bypass_sign_in(@user)
+      redirect_to user_path(@user), notice: 'Hasło zostało pomyślnie zmienione.'
+    else
+      Log.create(user: @user, action: "Password Change", status: "Failed", details: @user.errors.full_messages.join(", "))
+      flash[:alert] = 'Nie udało się zmienić hasła.'
+      render :edit_password
+    end
+  end
+
+  # Edycja numeru telefonu
+  def edit_phone_number
+    authorize! :update, @user
+  end
+
+  def update_phone_number
+    authorize! :update, @user
+    if @user.update(user_phone_params)
+      redirect_to user_path(@user), notice: "Numer telefonu został pomyślnie zmieniony."
+    else
+      render :edit_phone_number
+    end
+  end
+
+  def logs
+    authorize! :view_logs, @user
+    @logs = @user.logs.order(created_at: :desc).page(params[:page])
   end
   
 
@@ -166,5 +200,13 @@ class UsersController < ApplicationController
         :type
       )
     end
+
+  def user_password_params
+    params.require(@user.model_name.param_key).permit(:password, :password_confirmation)
+  end
+
+  def user_phone_params
+    params.require(@user.model_name.param_key).permit(:phone_number)
+  end
   
 end

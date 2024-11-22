@@ -1,0 +1,11 @@
+div.white-cont
+  h1 Zmień numer telefonu
+
+  = simple_form_for(@user, url: update_phone_number_user_path(@user), html: { method: :patch }) do |f|
+    = f.error_notification
+    .form-group
+      = f.label :phone_number, "Nowy numer telefonu"
+      = f.text_field :phone_number, class: "form-control"
+
+    .form-actions
+      = f.button :submit, "Zmień numer telefonu", class: "btn btn-primary"

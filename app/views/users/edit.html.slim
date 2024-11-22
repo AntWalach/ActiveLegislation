@@ -1,4 +1,4 @@
-div.white-cont
+div
   - if @user.is_a?(Admin)
     = render partial: "admins/form", locals: { user: @user }
   - elsif @user.is_a?(Official)

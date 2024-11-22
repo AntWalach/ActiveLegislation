@@ -45,6 +45,13 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    member do
+      get :edit_password
+      patch :update_password
+      get :edit_phone_number
+      patch :update_phone_number
+      get :logs, to: 'users#logs'
+    end
     collection do
       get 'admins', to: 'users#index_admins', as: 'index_admins'
       get 'officials', to: 'users#index_officials', as: 'index_officials'

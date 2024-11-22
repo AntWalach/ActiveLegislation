@@ -1,7 +1,7 @@
 = simple_form_for(@user, url: @user.persisted? ? user_path(@user) : users_path, html: { method: @user.persisted? ? :patch : :post }) do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
-    .row.official-form-row
+    .row.form-row
         .col-lg-6
             = f.input :first_name, wrapper: false
             = f.input :last_name, wrapper: false
