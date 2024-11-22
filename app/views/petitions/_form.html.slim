@@ -9,7 +9,7 @@
       = f.input :title, required: true, label: 'Tytuł'
       = f.input :description, as: :rich_text_area, required: true, label: 'Opis'
       = f.input :justification, as: :rich_text_area, required: true, label: 'Uzasadnienie'
-      = f.input :tag_list, label: 'Tagi', hint: 'Wpisz tagi oddzielone przecinkami', required: false
+      = f.input :tag_list, label: 'Tagi', hint: 'Wpisz tagi oddzielone przecinkami'
       = f.input :external_links, as: :text, label: 'Linki zewnętrzne (jeden na linię)'
       = f.input :attachments, as: :file, label: 'Załącznik', input_html: { multiple: true }
       = f.input :main_image, as: :file, label: 'Główne zdjęcie', input_html: { accept: 'image/*' }
@@ -17,30 +17,61 @@
       = f.input :public_comment, as: :text, label: 'Komentarz publiczny'
 
   / Petitioner Details
-  .card
+  .card(data-controller="address")
     .card-header
       h3 Dane wnioskodawcy
     .card-body
       = f.input :creator_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu'
-      = f.input :address, required: true, label: 'Adres zamieszkania lub siedziby'
-      - unless user_signed_in?
-        = f.input :email, required: true, label: 'Adres e-mail', as: :email
+
+      / Residence Address
+      .address-fields
+        h4 'Miejsce zamieszkania lub siedziby'
+        = f.input :residence_street, required: true, label: 'Ulica i numer', input_html: { data: { address_target: 'residenceStreet', action: 'address#updateAddress' } }
+        = f.input :residence_city, required: true, label: 'Miasto', input_html: { data: { address_target: 'residenceCity', action: 'address#updateAddress' } }
+        = f.input :residence_zip_code, required: true, label: 'Kod pocztowy', input_html: { data: { address_target: 'residenceZipCode', action: 'address#updateAddress' } }
+
+      / Same Address Checkbox
+      = f.input :same_address, as: :boolean, label: 'Adres do korespondencji jest taki sam jak miejsce zamieszkania/siedziby', input_html: { data: { action: 'address#toggle', address_target: 'sameAddressCheckbox' } }
+
+      / Correspondence Address
+      .address-fields(data-address-target="correspondenceFields")
+        h4 'Adres do korespondencji'
+        = f.input :address_street, required: true, label: 'Ulica i numer', input_html: { data: { address_target: 'addressStreet' } }
+        = f.input :address_city, required: true, label: 'Miasto', input_html: { data: { address_target: 'addressCity' } }
+        = f.input :address_zip_code, required: true, label: 'Kod pocztowy', input_html: { data: { address_target: 'addressZipCode' } }
+
+      = f.input :email, required: true, label: 'Adres e-mail', as: :email, input_html: { value: (user_signed_in? ? current_user.email : ''), readonly: user_signed_in? }
 
   / Additional Information
   .card(data-controller="petition-type")
     .card-header
       h3 Informacje dodatkowe
     .card-body
-      = f.input :petition_type, collection: Petition.petition_types.keys.map { |type| [t("petition_types.#{type}"), type] }, prompt: "Wybierz rodzaj petycji", required: true, label: 'Rodzaj petycji', input_html: { data: { action: "petition-type#toggleThirdPartyFields", petition_type_target: "petitionTypeSelect" } }
+      = f.input :petition_type,
+                collection: Petition.petition_types.keys.map { |type| [t("petition_types.#{type}"), type] },
+                prompt: 'Wybierz rodzaj petycji',
+                required: true,
+                label: 'Rodzaj petycji',
+                input_html: { data: { action: 'petition-type#toggleThirdPartyFields', petition_type_target: 'petitionTypeSelect' } }
 
       / Fields for Third Party Petitions
       .third-party-fields(data-petition-type-target="thirdPartyFields")
         = f.input :third_party_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu osoby trzeciej'
-        = f.input :third_party_address, required: true, label: 'Adres osoby trzeciej'
+
+        / Third Party Address
+        .address-fields
+          h4 'Adres osoby trzeciej'
+          = f.input :third_party_street, required: true, label: 'Ulica i numer'
+          = f.input :third_party_city, required: true, label: 'Miasto'
+          = f.input :third_party_zip_code, required: true, label: 'Kod pocztowy'
+
         = f.input :third_party_consent, as: :file, required: true, label: 'Zgoda osoby trzeciej'
 
       = f.input :recipient, required: true, label: 'Adresat petycji'
-      = f.input :department_id, collection: Department.all.map { |d| [d.name, d.id] }, prompt: 'Wybierz Departament', label: 'Departament'
+      = f.input :department_id,
+                collection: Department.all.map { |d| [d.name, d.id] },
+                prompt: 'Wybierz Departament',
+                label: 'Departament'
 
   / Consents
   .card

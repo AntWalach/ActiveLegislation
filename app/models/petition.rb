@@ -8,6 +8,7 @@ class Petition < ApplicationRecord
   has_many :official_comments, dependent: :destroy
   has_many_attached :images
   has_one_attached :main_image
+  has_many_attached :third_party_consents
   has_rich_text :description
   has_rich_text :justification
   acts_as_taggable_on :tags
@@ -23,11 +24,31 @@ class Petition < ApplicationRecord
   validates :privacy_policy, acceptance: true
 
 
-  has_many_attached :third_party_consents
+
 
   validates :third_party_name, presence: true, if: :in_behalf_of_third_party?
   validates :third_party_address, presence: true, if: :in_behalf_of_third_party?
   validates :third_party_consent, presence: true, if: :in_behalf_of_third_party?
+
+  validates :residence_street, :residence_city, :residence_zip_code, presence: true
+
+  # Walidacje dla adresu do korespondencji
+  validates :address_street, :address_city, :address_zip_code, presence: true, unless: -> { same_address == '1' || same_address == true }
+
+  # Walidacje dla kodu pocztowego (opcjonalnie)
+  validates :residence_zip_code, :address_zip_code, format: { with: /\A\d{2}-\d{3}\z/, message: 'musi być w formacie 00-000' }
+
+  with_options if: :third_party_petition? do |petition|
+    petition.validates :third_party_street, :third_party_city, :third_party_zip_code, presence: true
+    petition.validates :third_party_zip_code, format: { with: /\A\d{2}-\d{3}\z/, message: 'musi być w formacie 00-000' }
+  end
+
+ 
+
+  def third_party_petition?
+    petition_type == 'third_party'
+  end
+  
 
   def in_behalf_of_third_party?
     petition_type == 'third_party'
@@ -50,18 +71,6 @@ class Petition < ApplicationRecord
     third_party: 2 
   }
 
-  #MIN_SIGNATURES_FOR_REVIEW = 5
-
-
-  # def ready_for_review?
-  #   Rails.logger.debug "Current signatures_count: #{signatures.count} - Required: #{MIN_SIGNATURES_FOR_REVIEW}"
-  #   signatures.count >= MIN_SIGNATURES_FOR_REVIEW
-  # end
-
-
-  # def requires_signatures?
-  #   group_petition? || organizational?
-  # end
 
   def editable_by?(user)
     (draft? || awaiting_supplement?) && self.user == user

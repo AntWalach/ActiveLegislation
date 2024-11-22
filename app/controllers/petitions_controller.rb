@@ -109,11 +109,21 @@ class PetitionsController < ApplicationController
 
   def petition_params
     params.require(:petition).permit(
-      :title, :description, :justification, :petition_type, :recipient, :department_id,
-      :creator_name, :address, :email, :gdpr_consent, :privacy_policy,
-      :third_party_name, :third_party_address, :third_party_consent,
-      :category, :subcategory, :external_links, :end_date, :public_comment, :tag_list, :main_image, attachments: [], images: [],
-      
+      :title, :description, :justification, :tag_list, :external_links,
+      :attachments, :main_image, :images, :public_comment,
+      :creator_name, :email,
+      # Pola adresu zamieszkania lub siedziby
+      :residence_street, :residence_city, :residence_zip_code,
+      # Pola adresu do korespondencji
+      :address_street, :address_city, :address_zip_code,
+      # Checkbox same_address
+      :same_address,
+      # Pola dla petycji osób trzecich
+      :petition_type, :third_party_name, :third_party_consent,
+      :third_party_street, :third_party_city, :third_party_zip_code,
+      :recipient, :department_id,
+      # Zgody
+      :gdpr_consent, :privacy_policy
     )
   end
 end
