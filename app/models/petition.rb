@@ -9,40 +9,43 @@ class Petition < ApplicationRecord
   has_many_attached :images
   has_one_attached :main_image
   has_many_attached :third_party_consents
+  has_many :petition_views, dependent: :destroy
   has_rich_text :description
   has_rich_text :justification
   acts_as_taggable_on :tags
   acts_as_ordered_taggable_on :tags
   before_save :set_deadline, if: :status_changed_to_submitted?
+  before_validation :handle_same_address
 
+  scope :completed, -> { where(completed: true) }
 
-  validates :title, presence: true
-  validates :description, presence: true
-  validates :recipient, presence: true
-  validates :petition_type, presence: true
-  validates :gdpr_consent, acceptance: true
-  validates :privacy_policy, acceptance: true
-
-
-
-
-  validates :third_party_name, presence: true, if: :in_behalf_of_third_party?
-  validates :third_party_address, presence: true, if: :in_behalf_of_third_party?
-  validates :third_party_consent, presence: true, if: :in_behalf_of_third_party?
-
-  validates :residence_street, :residence_city, :residence_zip_code, presence: true
-
-  # Walidacje dla adresu do korespondencji
-  validates :address_street, :address_city, :address_zip_code, presence: true, unless: -> { same_address == '1' || same_address == true }
-
-  # Walidacje dla kodu pocztowego (opcjonalnie)
-  validates :residence_zip_code, :address_zip_code, format: { with: /\A\d{2}-\d{3}\z/, message: 'musi być w formacie 00-000' }
-
-  with_options if: :third_party_petition? do |petition|
-    petition.validates :third_party_street, :third_party_city, :third_party_zip_code, presence: true
-    petition.validates :third_party_zip_code, format: { with: /\A\d{2}-\d{3}\z/, message: 'musi być w formacie 00-000' }
+  with_options if: :basic_information_step? do |petition|
+    petition.validates :petition_type, presence: true
+    petition.validates :recipient, presence: true
+    petition.validates :department_id, presence: true
   end
 
+  # Validations for petitioner_details step
+  with_options if: :petitioner_details_step? do |petition|
+    petition.validates :creator_name, presence: true
+    petition.validates :email, presence: true
+    petition.validates :residence_street, presence: true
+    petition.validates :residence_city, presence: true
+    petition.validates :residence_zip_code, presence: true
+  end
+
+  # Validations for petition_details step
+  with_options if: :petition_details_step? do |petition|
+    petition.validates :title, presence: true
+    petition.validates :description, presence: true
+    petition.validates :justification, presence: true
+  end
+
+  # Validations for consents step
+  with_options if: :consents_step? do |petition|
+    petition.validates :gdpr_consent, acceptance: true
+    petition.validates :privacy_policy, acceptance: true
+  end
  
 
   def third_party_petition?
@@ -96,4 +99,31 @@ class Petition < ApplicationRecord
       "user_id"
     ]
   end
+
+  private
+
+
+    def handle_same_address
+      if same_address == '1' || same_address == true
+        self.address_street = residence_street
+        self.address_city = residence_city
+        self.address_zip_code = residence_zip_code
+      end
+    end
+
+    def basic_information_step?
+      current_step == 'basic_information'
+    end
+  
+    def petitioner_details_step?
+      current_step == 'petitioner_details'
+    end
+  
+    def petition_details_step?
+      current_step == 'petition_details'
+    end
+  
+    def consents_step?
+      current_step == 'consents'
+    end
 end

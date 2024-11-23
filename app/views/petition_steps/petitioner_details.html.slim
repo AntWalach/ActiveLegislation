@@ -1,0 +1,34 @@
+/ app/views/petition_steps/petitioner_details.html.slim
+= simple_form_for @petition, url: wizard_path, html: { data: { controller: 'address' } } do |f|
+  = f.error_notification
+
+  .card
+    .card-header
+      h3 Dane wnioskodawcy
+    .card-body
+      = f.input :creator_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu'
+
+      = f.input :email, required: true, label: 'Adres e-mail', as: :email,
+                input_html: { value: (user_signed_in? ? current_user.email : ''), readonly: user_signed_in? }
+
+      .address-fields
+        h4 'Miejsce zamieszkania lub siedziby'
+        = f.input :residence_street, required: true, label: 'Ulica i numer',
+                  input_html: { data: { address_target: 'residenceStreet', action: 'address#updateAddress' } }
+        = f.input :residence_city, required: true, label: 'Miasto',
+                  input_html: { data: { address_target: 'residenceCity', action: 'address#updateAddress' } }
+        = f.input :residence_zip_code, required: true, label: 'Kod pocztowy',
+                  input_html: { data: { address_target: 'residenceZipCode', action: 'address#updateAddress' } }
+
+      = f.input :same_address, as: :boolean, label: 'Adres do korespondencji jest taki sam jak miejsce zamieszkania/siedziby',
+                input_html: { data: { action: 'address#toggle', address_target: 'sameAddressCheckbox' } }
+
+      .address-fields(data-address-target="correspondenceFields")
+        h4 'Adres do korespondencji'
+        = f.input :address_street, required: true, label: 'Ulica i numer', input_html: { data: { address_target: 'addressStreet' } }
+        = f.input :address_city, required: true, label: 'Miasto', input_html: { data: { address_target: 'addressCity' } }
+        = f.input :address_zip_code, required: true, label: 'Kod pocztowy', input_html: { data: { address_target: 'addressZipCode' } }
+
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
+    = f.submit "Dalej", class: 'btn btn-primary'

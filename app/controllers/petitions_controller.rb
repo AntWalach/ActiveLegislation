@@ -5,11 +5,18 @@ class PetitionsController < ApplicationController
   
   # GET /petitions or /petitions.json
   def index
-
-    @search = Petition.where(status: [:responded]).ransack(params[:q])
-    @petitions = @search.result(distinct: true).page(params[:page])
-
-    @my_petitions = current_user.petitions.page(params[:my_page])
+    if current_user.is_a? Admin
+      # Administratorzy widzą wszystkie ukończone petycje
+      @search = Petition.completed.ransack(params[:q])
+      @petitions = @search.result(distinct: true).page(params[:page])
+    else
+      # Zwykli użytkownicy widzą petycje o statusie 'responded'
+      @search = Petition.where(status: :responded).ransack(params[:q])
+      @petitions = @search.result(distinct: true).page(params[:page])
+    end
+  
+    # Wszyscy użytkownicy widzą swoje własne petycje
+    @my_petitions = current_user.petitions.completed.page(params[:my_page])
   end
   
 
@@ -24,26 +31,44 @@ class PetitionsController < ApplicationController
 
   # GET /petitions/new
   def new
-    @petition = current_user.petitions.new
-  end
+    @petition = Petition.new(user: current_user)
 
-  # POST /petitions or /petitions.json
-  def create
-    @petition = current_user.petitions.new(petition_params)
-    @petition.status = "draft"
-
-    respond_to do |format|
-      if @petition.save
-        format.html { redirect_to petition_url(@petition), notice: "Petycja została pomyślnie utworzona." }
-        format.json { render :show, status: :created, location: @petition }
-      else
-        Rails.logger.debug "Validation errors: #{@petition.errors.full_messages.join(', ')}"
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @petition.errors, status: :unprocessable_entity }
-      end
+    if @petition.save(validate: false)
+      redirect_to petition_petition_step_path(@petition, :basic_information)
+    else
+      flash[:alert] = 'Nie udało się rozpocząć tworzenia petycji.'
+      redirect_to authenticated_root_path
     end
   end
 
+  # POST /petitions or /petitions.json
+  # def create
+  #   @petition = current_user.petitions.new(petition_params)
+  #   @petition.status = "draft"
+
+  #   respond_to do |format|
+  #     if @petition.save
+  #       format.html { redirect_to petition_url(@petition), notice: "Petycja została pomyślnie utworzona." }
+  #       format.json { render :show, status: :created, location: @petition }
+  #     else
+  #       Rails.logger.debug "Validation errors: #{@petition.errors.full_messages.join(', ')}"
+  #       format.html { render :new, status: :unprocessable_entity }
+  #       format.json { render json: @petition.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
+
+  def create
+    @petition = Petition.new(petition_params)
+    @petition.user = current_user if user_signed_in?
+    @petition.status = "draft"
+    if @petition.save
+      redirect_to petition_petition_steps_path(@petition)
+    else
+      render :new
+    end
+  end
 
   def submit
     if @petition.draft? && @petition.update(status: :submitted)
@@ -119,11 +144,11 @@ class PetitionsController < ApplicationController
       # Checkbox same_address
       :same_address,
       # Pola dla petycji osób trzecich
-      :petition_type, :third_party_name, :third_party_consent,
+      :petition_type, :third_party_name,
       :third_party_street, :third_party_city, :third_party_zip_code,
       :recipient, :department_id,
       # Zgody
-      :gdpr_consent, :privacy_policy
+      :gdpr_consent, :privacy_policy, third_party_consents: []
     )
   end
 end

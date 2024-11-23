@@ -9,7 +9,7 @@ class Officials::PetitionsController < ApplicationController
   # end
 
   def index
-    @petitions = Petition.where(department: current_user.department).order(created_at: :desc).page(params[:page])
+    @petitions = Petition.completed.where(department: current_user.department).order(created_at: :desc).page(params[:page])
   end
 
   def show

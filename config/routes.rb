@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   resources :departments
   get 'reports/annual_report'
   
@@ -17,12 +18,15 @@ Rails.application.routes.draw do
   end
 
   resources :petitions do
-    post 'sign', to: 'signatures#petition_create'
+    resources :petition_steps
+    #post 'sign', to: 'signatures#petition_create'
     member do
       # post :start_collecting_signatures
       post :submit
     end
   end
+
+  post 'petition_steps/:petition_id/finish', to: 'petition_steps#finish', as: :finish_wizard
 
   devise_for :users, controllers: {
     sessions: 'users/sessions',

@@ -1,0 +1,23 @@
+/ app/views/petition_steps/basic_information.html.slim
+= simple_form_for @petition, url: wizard_path do |f|
+  = f.error_notification
+
+  .card
+    .card-header
+      h3 Informacje podstawowe
+    .card-body
+      = f.input :petition_type,
+                collection: Petition.petition_types.keys.map { |type| [t("petition_types.#{type}"), type] },
+                prompt: 'Wybierz rodzaj petycji',
+                required: true,
+                label: 'Rodzaj petycji'
+
+      = f.input :recipient, required: true, label: 'Adresat petycji'
+
+      = f.input :department_id,
+                collection: Department.all.map { |d| [d.name, d.id] },
+                prompt: 'Wybierz Departament',
+                label: 'Departament'
+
+  .form-actions
+    = f.submit "Dalej", class: 'btn btn-primary'

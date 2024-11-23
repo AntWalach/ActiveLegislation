@@ -40,7 +40,7 @@
         = f.input :address_city, required: true, label: 'Miasto', input_html: { data: { address_target: 'addressCity' } }
         = f.input :address_zip_code, required: true, label: 'Kod pocztowy', input_html: { data: { address_target: 'addressZipCode' } }
 
-      = f.input :email, required: true, label: 'Adres e-mail', as: :email, input_html: { value: (user_signed_in? ? current_user.email : ''), readonly: user_signed_in? }
+      /= f.input :email, required: true, label: 'Adres e-mail', as: :email, input_html: { value: (user_signed_in? ? current_user.email : ''), readonly: user_signed_in? }
 
   / Additional Information
   .card(data-controller="petition-type")

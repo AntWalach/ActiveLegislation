@@ -1,0 +1,22 @@
+/ app/views/petition_steps/additional_information.html.slim
+= simple_form_for @petition, url: wizard_path do |f|
+  = f.error_notification
+
+  - if @petition.petition_type == 'third_party'
+    .card
+      .card-header
+        h3 Informacje dodatkowe dla petycji w imieniu osoby trzeciej
+      .card-body
+        = f.input :third_party_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu osoby trzeciej'
+
+        .address-fields
+          h4 'Adres osoby trzeciej'
+          = f.input :third_party_street, required: true, label: 'Ulica i numer'
+          = f.input :third_party_city, required: true, label: 'Miasto'
+          = f.input :third_party_zip_code, required: true, label: 'Kod pocztowy'
+
+        = f.input :third_party_consents, as: :file, required: true, label: 'Zgoda osoby trzeciej'
+
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
+    = f.submit "Dalej", class: 'btn btn-primary'

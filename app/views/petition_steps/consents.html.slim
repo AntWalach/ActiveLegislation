@@ -1,0 +1,16 @@
+/ app/views/petition_steps/consents.html.slim
+= simple_form_for @petition, url: wizard_path do |f|
+  = f.error_notification
+
+  .card
+    .card-header
+      h3 Zgody
+    .card-body
+      = f.input :gdpr_consent, as: :boolean, required: true,
+                label: "Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z [klauzulą informacyjną]"
+      = f.input :privacy_policy, as: :boolean, required: true,
+                label: "Zapoznałem się z [polityką prywatności]"
+
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
+    = f.submit "Dalej", class: 'btn btn-primary'

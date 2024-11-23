@@ -1,0 +1,21 @@
+/ app/views/petition_steps/confirmation.html.slim
+= simple_form_for @petition, url: finish_wizard_path, method: :post do |f|
+  .card
+    .card-header
+      h3 Podsumowanie petycji
+    .card-body
+      / Wyświetl podsumowanie wszystkich wprowadzonych danych
+      p
+        strong 'Rodzaj petycji: '
+        = t("petition_types.#{@petition.petition_type}")
+      p
+        strong 'Adresat petycji: '
+        = @petition.recipient
+      p
+        strong 'Tytuł petycji: '
+        = @petition.title
+      / Dodaj pozostałe pola według potrzeb
+
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
+    = f.submit "Złóż petycję", class: 'btn btn-primary'

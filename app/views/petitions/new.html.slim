@@ -1,8 +1,6 @@
-h1 New petition
+/ app/views/petitions/new.html.slim
+h1 Rozpocznij nową petycję
 
-== render "form", petition: @petition
+p Aby złożyć nową petycję, kliknij przycisk poniżej i postępuj zgodnie z instrukcjami na kolejnych krokach.
 
-br
-
-div
-  = link_to "Back to petitions", petitions_path
+= link_to 'Rozpocznij składanie petycji', petition_petition_step_path(@petition, PetitionStepsController.wizard_steps.first), class: 'btn btn-primary'

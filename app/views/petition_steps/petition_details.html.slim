@@ -1,0 +1,21 @@
+/ app/views/petition_steps/petition_details.html.slim
+= simple_form_for @petition, url: wizard_path do |f|
+  = f.error_notification
+
+  .card
+    .card-header
+      h3 Szczegóły petycji
+    .card-body
+      = f.input :title, required: true, label: 'Tytuł'
+      = f.input :description, as: :rich_text_area, required: true, label: 'Opis'
+      = f.input :justification, as: :rich_text_area, required: true, label: 'Uzasadnienie'
+      = f.input :tag_list, label: 'Tagi', hint: 'Wpisz tagi oddzielone przecinkami'
+      = f.input :external_links, as: :text, label: 'Linki zewnętrzne (jeden na linię)'
+      = f.input :attachments, as: :file, label: 'Załącznik', input_html: { multiple: true }
+      = f.input :main_image, as: :file, label: 'Główne zdjęcie', input_html: { accept: 'image/*' }
+      = f.input :images, as: :file, label: 'Dodaj zdjęcia', input_html: { multiple: true, accept: 'image/*' }
+      = f.input :public_comment, as: :text, label: 'Komentarz publiczny'
+
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
+    = f.submit "Dalej", class: 'btn btn-primary'
