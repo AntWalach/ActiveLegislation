@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_23_192950) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_24_114020) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -203,9 +203,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_23_192950) do
     t.string "current_step"
     t.string "email"
     t.boolean "completed", default: false
+    t.bigint "merged_into_id"
+    t.string "previous_status"
     t.index ["assigned_official_id"], name: "index_petitions_on_assigned_official_id"
     t.index ["department_id"], name: "index_petitions_on_department_id"
     t.index ["grouped_petition_id"], name: "index_petitions_on_grouped_petition_id"
+    t.index ["merged_into_id"], name: "index_petitions_on_merged_into_id"
     t.index ["user_id"], name: "index_petitions_on_user_id"
   end
 
@@ -309,6 +312,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_23_192950) do
   add_foreign_key "petition_views", "users"
   add_foreign_key "petitions", "departments"
   add_foreign_key "petitions", "petitions", column: "grouped_petition_id"
+  add_foreign_key "petitions", "petitions", column: "merged_into_id"
   add_foreign_key "petitions", "users"
   add_foreign_key "petitions", "users", column: "assigned_official_id"
   add_foreign_key "signatures", "bills"

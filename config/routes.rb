@@ -91,9 +91,12 @@ Rails.application.routes.draw do
         post :add_comment
         post :assign_to_me
         post :transfer
+        post :unmerge
       end
       collection do
         post :merge_petitions
+        get :merge_form
+        post :merge
       end
     end
   end

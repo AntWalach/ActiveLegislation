@@ -1,6 +1,9 @@
 .container
   .petition-header.row.align-items-center.mb-4
     .title-section.col-md-8.col-12
+      - if @petition.merged?
+        p Ta petycja została połączona z inną petycją.
+        = link_to 'Przejdź do petycji głównej', petition_path(@petition.merged_into)
       h1.display-4.mb-3 = @petition.title
       
       - if @petition.tag_list.any?

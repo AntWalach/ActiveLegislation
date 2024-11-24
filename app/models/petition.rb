@@ -16,6 +16,8 @@ class Petition < ApplicationRecord
   acts_as_ordered_taggable_on :tags
   before_save :set_deadline, if: :status_changed_to_submitted?
   before_validation :handle_same_address
+  belongs_to :merged_into, class_name: 'Petition', optional: true
+  has_many :merged_petitions, class_name: 'Petition', foreign_key: 'merged_into_id', dependent: :nullify
 
   scope :completed, -> { where(completed: true) }
 
@@ -64,14 +66,16 @@ class Petition < ApplicationRecord
     under_review: 2,
     awaiting_supplement: 3,
     responded: 5,
-    rejected: 6
+    rejected: 6,
+    merged: 7
   }
   
   # Typy petycji
-  enum petition_type: { 
-    individual: 0,      
-    group_petition: 1,  
-    third_party: 2 
+  enum petition_type: {
+    private_individual: 0,  # Osoba prywatna
+    business_individual: 1, # Osoba fizyczna prowadząca działalność
+    group_petition: 2,      # Grupa osób
+    third_party: 3          # Organizacja lub pełnomocnik
   }
 
 
@@ -98,6 +102,10 @@ class Petition < ApplicationRecord
       "signatures_count", "status", "subcategory", "title", "updated_at", 
       "user_id"
     ]
+  end
+
+  def restore_previous_status
+    update(status: previous_status)
   end
 
   private

@@ -1,12 +1,9 @@
 class Officials::PetitionsController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_official!
-  before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment transfer ]
+  before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment transfer unmerge]
+  before_action :require_official
 
-  # def index
-  #   @search = Petition.all.ransack(params[:q])
-  #   @petitions = @search.result(distinct: true).page(params[:page])
-  # end
 
   def index
     @petitions = Petition.completed.where(department: current_user.department).order(created_at: :desc).page(params[:page])
@@ -26,7 +23,7 @@ class Officials::PetitionsController < ApplicationController
     end
   end
 
-  # Zatwierdzenie petycji przez weryfikatora wstępnego
+
   def approve
     if current_user.official_role == 'petition_officer' && @petition.submitted?
       if @petition.update(status: :under_review)
@@ -50,22 +47,19 @@ class Officials::PetitionsController < ApplicationController
     end
   end
 
-  # Odpowiedź na petycję
+
   def respond
     begin
       if current_user.petition_handler? && @petition.under_review?
         ActiveRecord::Base.transaction do
-          # Aktualizacja statusu petycji
           @petition.update!(status: :responded)
-    
-          # Tworzenie komentarza typu 'response'
+
           comment = @petition.official_comments.create!(
             official: current_user,
             content: params[:comments],
             comment_type: 'response'
           )
     
-          # Tworzenie powiadomienia
           Notification.notify_response(@petition.user, @petition, comment)
         end
     
@@ -82,7 +76,6 @@ class Officials::PetitionsController < ApplicationController
 
     petitions_to_merge.update_all(grouped_petition_id: primary_petition.id)
 
-    # Aktualizacja statusu petycji
     primary_petition.update(status: :under_review)
 
     redirect_to officials_petitions_path, notice: "Petycje zostały połączone do wspólnego rozpatrzenia."
@@ -98,7 +91,6 @@ class Officials::PetitionsController < ApplicationController
   end
 
   def request_supplement
-    # Przekieruj do formularza dodawania komentarza
     redirect_to request_supplement_form_officials_petition_path(@petition)
   end
 
@@ -127,8 +119,71 @@ class Officials::PetitionsController < ApplicationController
     redirect_to officials_petition_path(@petition), notice: "Petycja została przekazana."
   end
 
+  def merge_form
+    @petitions = Petition.completed
+    @primary_petition = Petition.find(params[:primary_petition_id]) if params[:primary_petition_id]
+  end
+
+
+  def merge
+    if params[:primary_petition_id].blank?
+      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać petycję główną.'
+      return
+    end
+  
+    @primary_petition = Petition.find(params[:primary_petition_id])
+    petition_ids = params[:petition_ids] || []
+    @petitions_to_merge = Petition.where(id: petition_ids).where.not(id: @primary_petition.id)
+  
+    if @petitions_to_merge.empty?
+      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać co najmniej jedną petycję do połączenia.'
+      return
+    end
+  
+    Petition.transaction do
+      @petitions_to_merge.each do |petition|
+        petition.update!(previous_status: petition.status)
+        petition.update!(status: 'merged', merged_into: @primary_petition)
+      end
+    end
+  
+    redirect_to officials_petition_path(@primary_petition), notice: 'Petycje zostały pomyślnie połączone.'
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_back fallback_location: merge_form_officials_petitions_path, alert: "Wystąpił błąd podczas łączenia: #{e.message}"
+  end
+  
+
+  def unmerge
+    unless @petition.merged_petitions.any?
+      redirect_to officials_petition_path(@petition), alert: 'Ta petycja nie została połączona z innymi.'
+      return
+    end
+
+    Petition.transaction do
+
+      merged_petitions = @petition.merged_petitions
+
+      merged_petitions.each do |merged_petition|
+
+        merged_petition.update!(status: merged_petition.previous_status || "submitted", merged_into: nil)
+        merged_petition.update!(previous_status: nil)
+      end
+
+      @petition.merged_petitions.update_all(merged_into_id: nil)
+
+      redirect_to officials_petition_path(@petition), notice: 'Łączenie petycji zostało cofnięte.'
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to officials_petition_path(@petition), alert: "Wystąpił błąd podczas cofania łączenia: #{e.message}"
+  end
+
+
 
   private
+
+  def require_official
+    redirect_to authenticated_root, alert: 'Nie masz uprawnień do tej akcji.' unless current_user.is_a?(Official)
+  end
 
   def set_petition
     @petition = Petition.find(params[:id])
