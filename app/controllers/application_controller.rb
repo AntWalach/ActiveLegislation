@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
     protected
     
     def authenticate_official!
-      redirect_to authenticated_root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official)
+      redirect_to authenticated_root_path, alert: 'Brak dostępu' unless current_user.is_a?(Official) || current_user.is_a?(Admin)
     end
 
     private

@@ -5,17 +5,8 @@ class PetitionsController < ApplicationController
   
   # GET /petitions or /petitions.json
   def index
-    if current_user.is_a? Admin
-      # Administratorzy widzą wszystkie ukończone petycje
-      @search = Petition.completed.ransack(params[:q])
-      @petitions = @search.result(distinct: true).page(params[:page])
-    else
-      # Zwykli użytkownicy widzą petycje o statusie 'responded'
-      @search = Petition.where(status: :responded).ransack(params[:q])
-      @petitions = @search.result(distinct: true).page(params[:page])
-    end
-  
-    # Wszyscy użytkownicy widzą swoje własne petycje
+    @search = Petition.where(status: :responded).ransack(params[:q])
+    @petitions = @search.result(distinct: true).page(params[:page])
     @my_petitions = current_user.petitions.completed.page(params[:my_page])
   end
   
@@ -42,23 +33,6 @@ class PetitionsController < ApplicationController
   end
 
   # POST /petitions or /petitions.json
-  # def create
-  #   @petition = current_user.petitions.new(petition_params)
-  #   @petition.status = "draft"
-
-  #   respond_to do |format|
-  #     if @petition.save
-  #       format.html { redirect_to petition_url(@petition), notice: "Petycja została pomyślnie utworzona." }
-  #       format.json { render :show, status: :created, location: @petition }
-  #     else
-  #       Rails.logger.debug "Validation errors: #{@petition.errors.full_messages.join(', ')}"
-  #       format.html { render :new, status: :unprocessable_entity }
-  #       format.json { render json: @petition.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-
-
   def create
     @petition = Petition.new(petition_params)
     @petition.user = current_user if user_signed_in?

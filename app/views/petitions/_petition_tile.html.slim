@@ -1,0 +1,16 @@
+.petition-tile
+  .top-left-indicator
+    - if el.petition_type.present?
+      = el.petition_type.capitalize
+  = link_to petition_path(el.id) do
+    = image_tag(el.main_image.present? ? el.main_image : asset_url("sample_expert_img.png"), class: "main-image")
+  .title
+    = el.title
+  .personal-data
+    .subtitle
+      = el.creator_name
+    .desc
+      = truncate(el.description.body.to_plain_text, length: 120)
+
+  .bottom-expert-links
+    = link_to "Zobacz petycję", petition_path(el.id), class: "more-btn"

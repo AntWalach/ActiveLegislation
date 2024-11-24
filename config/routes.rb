@@ -102,6 +102,26 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resources :petitions do
+      member do
+        post :approve
+        post :reject
+        post :verify_signatures
+        post :respond
+        post :request_supplement
+        post :forward_for_response
+        get :request_supplement_form
+        post :add_comment
+        post :assign_to_me
+        post :transfer
+        post :unmerge
+      end
+      collection do
+        post :merge_petitions
+        get :merge_form
+        post :merge
+      end
+    end
     resources :users, only: [:new, :create, :edit, :update, :destroy]
   end
   get 'reports/annual_report', to: 'reports#annual_report', as: 'annual_report'

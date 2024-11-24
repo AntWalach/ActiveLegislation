@@ -19,10 +19,11 @@
       p.lead.mb-1
         strong Status: 
         span = @petition.status.humanize
-
-    - if @petition.main_image.attached?
-      .main-image.col-md-4.col-12.text-center
-        = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
+    .main-image.col-md-4.col-12.text-center
+      - if @petition.main_image.attached?
+          = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
+      - else 
+          = image_tag asset_url("sample_expert_img.png"), class: 'img-fluid rounded shadow-sm'
 
   .petition-content
     .card.mb-4

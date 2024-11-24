@@ -17,7 +17,7 @@ class Petition < ApplicationRecord
   before_save :set_deadline, if: :status_changed_to_submitted?
   before_validation :handle_same_address
   belongs_to :merged_into, class_name: 'Petition', optional: true
-  has_many :merged_petitions, class_name: 'Petition', foreign_key: 'merged_into_id', dependent: :nullify
+  has_many :merged_petitions, class_name: 'Petition', foreign_key: 'merged_into_id', dependent: :destroy
 
   scope :completed, -> { where(completed: true) }
 

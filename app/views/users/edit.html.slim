@@ -1,6 +1,6 @@
 div
   - if @user.is_a?(Admin)
-    = render partial: "admins/form", locals: { user: @user }
+    = render partial: "admin/form", locals: { user: @user }
   - elsif @user.is_a?(Official)
     = render partial: "officials/form", locals: { user: @user }
   - elsif @user.is_a?(StandardUser)
