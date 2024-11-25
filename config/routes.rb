@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'comments/create'
+  get 'comments/destroy'
+  get 'votes/create'
+  get 'votes/destroy'
 
   resources :departments
   get 'reports/annual_report'
@@ -18,10 +22,10 @@ Rails.application.routes.draw do
   end
 
   resources :petitions do
+    resources :votes, only: [:create, :destroy]
+    resources :comments, only: [:create, :destroy]
     resources :petition_steps
-    #post 'sign', to: 'signatures#petition_create'
     member do
-      # post :start_collecting_signatures
       post :submit
     end
   end
@@ -122,7 +126,12 @@ Rails.application.routes.draw do
         post :merge
       end
     end
-    resources :users, only: [:new, :create, :edit, :update, :destroy]
+    resources :users, only: [:new, :create, :edit, :update, :destroy] do
+      member do
+        patch :block
+        patch :unblock
+      end
+    end
   end
   get 'reports/annual_report', to: 'reports#annual_report', as: 'annual_report'
 end

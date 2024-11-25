@@ -80,9 +80,9 @@ class UsersController < ApplicationController
 
   def update
     authorize! :update_admin_fields, User if check_admin_params
-  
+    
     self_update = current_user == @user
-  
+    
     respond_to do |format|
       if user_params[:password].present?
         success = @user.update(user_params)
@@ -144,6 +144,7 @@ class UsersController < ApplicationController
 
 
 
+
   private
 
 
@@ -176,11 +177,11 @@ class UsersController < ApplicationController
   end
   
   private
-  
+
     def admin_params
       params.require(:admin).permit(
         :first_name, :last_name, :email, :address, :postal_code, :city, :country,
-        :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
+        :pesel, :phone_number, :date_of_birth, :password, :password_confirmation, :blocked,
         :type
       )
     end
@@ -189,14 +190,14 @@ class UsersController < ApplicationController
       params.require(:official).permit(
         :first_name, :last_name, :email, :address, :postal_code, :city, :country,
         :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
-        :type, :department, :office_location, :department_id, :official_role
+        :type, :department, :office_location, :department_id, :official_role, :blocked 
       )
     end
     
     def standard_user_params
       params.require(:standard_user).permit(
         :first_name, :last_name, :email, :province, :address, :postal_code, :city, :country,
-        :pesel, :phone_number, :date_of_birth, :password, :password_confirmation,
+        :pesel, :phone_number, :date_of_birth, :password, :password_confirmation, :blocked, 
         :type
       )
     end

@@ -8,6 +8,10 @@ class User < ApplicationRecord
   has_many :committee_members, dependent: :destroy
   has_many :bill_committees, through: :committee_members
   has_many :logs, dependent: :destroy
+  has_many :votes, dependent: :destroy
+  has_many :voted_petitions, through: :votes, source: :petition
+
+  has_many :comments, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -70,6 +74,30 @@ class User < ApplicationRecord
   def is?(role)
     roles.include?(role.to_s)
   end
-  
+
+
+  def blocked?
+    self.blocked
+  end
+
+  # Blokuje użytkownika
+  def block!
+    update(blocked: true)
+  end
+
+  # Odblokowuje użytkownika
+  def unblock!
+    update(blocked: false)
+  end
+
+  def active_for_authentication?
+    super && !blocked?
+  end
+
+  # Devise: Komunikat dla zablokowanych użytkowników
+  def inactive_message
+    !blocked? ? super : :blocked
+  end
+
 
 end

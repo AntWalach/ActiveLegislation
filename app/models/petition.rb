@@ -10,6 +10,11 @@ class Petition < ApplicationRecord
   has_one_attached :main_image
   has_many_attached :third_party_consents
   has_many :petition_views, dependent: :destroy
+  has_many :votes, dependent: :destroy
+  has_many :voters, through: :votes, source: :user
+  has_many :comments, dependent: :destroy
+
+
   has_rich_text :description
   has_rich_text :justification
   acts_as_taggable_on :tags

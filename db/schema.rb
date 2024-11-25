@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_24_114020) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_25_093925) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -81,6 +81,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_24_114020) do
     t.index ["category"], name: "index_bills_on_category"
     t.index ["status"], name: "index_bills_on_status"
     t.index ["user_id"], name: "index_bills_on_user_id"
+  end
+
+  create_table "comments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "petition_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["petition_id"], name: "index_comments_on_petition_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "committee_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -289,15 +299,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_24_114020) do
     t.string "official_role"
     t.bigint "department_id"
     t.string "province"
+    t.boolean "blocked", default: false
     t.index ["department_id"], name: "index_users_on_department_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "votes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "petition_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["petition_id"], name: "index_votes_on_petition_id"
+    t.index ["user_id", "petition_id"], name: "index_votes_on_user_id_and_petition_id", unique: true
+    t.index ["user_id"], name: "index_votes_on_user_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bill_committees", "bills"
   add_foreign_key "bills", "users"
+  add_foreign_key "comments", "petitions"
+  add_foreign_key "comments", "users"
   add_foreign_key "committee_members", "bill_committees"
   add_foreign_key "committee_members", "users"
   add_foreign_key "committee_signatures", "bill_committees"
@@ -320,4 +343,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_24_114020) do
   add_foreign_key "signatures", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "users", "departments"
+  add_foreign_key "votes", "petitions"
+  add_foreign_key "votes", "users"
 end

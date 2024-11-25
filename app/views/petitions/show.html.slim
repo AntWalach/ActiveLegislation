@@ -88,6 +88,38 @@
 
   hr
 
+h3 = "Głosy: #{@petition.votes.count}" 
+
+- if user_signed_in?
+  - if @petition.votes.exists?(user: current_user)
+    = button_to 'Cofnij głos', petition_vote_path(@petition, current_user.votes.find_by(petition: @petition)), method: :delete
+  else
+    = button_to 'Głosuj', petition_votes_path(@petition), method: :post
+- else
+  p Zaloguj się, aby zagłosować.
+
+h2 Komentarze
+
+- @comments = @petition.comments.order(created_at: :desc)
+- @comments.each do |comment|
+  .comment
+    p
+      strong= comment.user.first_name
+      |  napisał:
+    p= comment.content
+    p= comment.created_at.strftime('%Y-%m-%d %H:%M')
+    - if comment.user == current_user || current_user.admin?
+      = link_to 'Usuń', petition_comment_path(@petition, comment), method: :delete, data: { confirm: 'Jesteś pewien?' }
+
+- if user_signed_in?
+  = form_with(model: [@petition, Comment.new], local: true) do |f|
+    .form-group
+      = f.label :content, 'Dodaj komentarz:'
+      = f.text_area :content, class: 'form-control'
+    = f.submit 'Dodaj komentarz', class: 'btn btn-primary'
+- else
+  p Zaloguj się, aby dodać komentarz.
+
 
   - if current_user == @petition.user
     .petition-comments.mt-5

@@ -3,7 +3,11 @@ tr
         = el.first_name
     td  
         = el.email
-    td
+    td id="user-#{el.id}-block-btn"
+        - if el.blocked?
+            = link_to fa_icon("unlock", type: :solid), unblock_admin_user_path(el), method: :patch, class: "btn btn-sm btn-success", title: "Odblokuj użytkownika", data: { confirm: "Czy na pewno chcesz odblokować tego użytkownika?" }
+        - else
+            = link_to fa_icon("lock", type: :solid), block_admin_user_path(el), method: :patch, class: "btn btn-sm btn-danger", title: "Zablokuj użytkownika", data: { confirm: "Czy na pewno chcesz zablokować tego użytkownika?" }
     td 
         = link_to fa_icon("edit", type: :regular), edit_user_path(el), class: "light-text edit-user-btn" if can?(:edit, el)
     td 
