@@ -13,8 +13,9 @@ class Petition < ApplicationRecord
   has_many :votes, dependent: :destroy
   has_many :voters, through: :votes, source: :user
   has_many :comments, dependent: :destroy
-
-
+  has_many :shared_petition_departments, dependent: :destroy
+  has_many :shared_departments, through: :shared_petition_departments, source: :department
+  scope :shared_with_department, ->(department) { joins(:shared_petition_departments).where(shared_petition_departments: { department_id: department.id }) }
   has_rich_text :description
   has_rich_text :justification
   acts_as_taggable_on :tags
@@ -23,6 +24,10 @@ class Petition < ApplicationRecord
   before_validation :handle_same_address
   belongs_to :merged_into, class_name: 'Petition', optional: true
   has_many :merged_petitions, class_name: 'Petition', foreign_key: 'merged_into_id', dependent: :destroy
+
+  has_many :assigned_officials, dependent: :destroy
+  has_many :assigned_users, through: :assigned_officials, source: :user
+
 
   scope :completed, -> { where(completed: true) }
 
@@ -62,6 +67,10 @@ class Petition < ApplicationRecord
 
   def in_behalf_of_third_party?
     petition_type == 'third_party'
+  end
+
+  def can_be_assigned_to?(user)
+    assigned_official.nil? && shared_departments.include?(user.department)
   end
   
   # Statusy petycji

@@ -1,5 +1,8 @@
 class Official < User
     belongs_to :department, optional: true
+    has_many :assigned_officials, dependent: :destroy
+    has_many :petitions, through: :assigned_officials
+
     
     enum official_role: { 
       initial_verifier: 'initial_verifier', # Weryfikator Wstępny

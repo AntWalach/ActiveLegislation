@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_25_093925) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_27_224243) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -47,6 +47,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_25_093925) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "assigned_officials", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "petition_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["petition_id"], name: "index_assigned_officials_on_petition_id"
+    t.index ["user_id"], name: "index_assigned_officials_on_user_id"
   end
 
   create_table "bill_committees", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -222,6 +231,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_25_093925) do
     t.index ["user_id"], name: "index_petitions_on_user_id"
   end
 
+  create_table "shared_petition_departments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "petition_id"
+    t.bigint "department_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["department_id"], name: "index_shared_petition_departments_on_department_id"
+    t.index ["petition_id"], name: "index_shared_petition_departments_on_petition_id"
+  end
+
   create_table "signatures", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "petition_id"
@@ -317,6 +335,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_25_093925) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "assigned_officials", "petitions", on_delete: :cascade
+  add_foreign_key "assigned_officials", "users"
   add_foreign_key "bill_committees", "bills"
   add_foreign_key "bills", "users"
   add_foreign_key "comments", "petitions"
@@ -338,6 +358,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_25_093925) do
   add_foreign_key "petitions", "petitions", column: "merged_into_id"
   add_foreign_key "petitions", "users"
   add_foreign_key "petitions", "users", column: "assigned_official_id"
+  add_foreign_key "shared_petition_departments", "departments"
+  add_foreign_key "shared_petition_departments", "petitions"
   add_foreign_key "signatures", "bills"
   add_foreign_key "signatures", "petitions"
   add_foreign_key "signatures", "users"

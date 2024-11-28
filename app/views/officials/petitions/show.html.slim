@@ -25,11 +25,17 @@
         strong Status: 
         span = @petition.status
 
-      - if @petition.assigned_official.nil?
-        = link_to 'Przypisz do mnie', assign_to_me_officials_petition_path(@petition), method: :post, class: 'btn btn-success btn-sm'
-      
+      - unless @petition.assigned_users.any? { |user| user.department == current_user.department }
+        = link_to 'Przypisz do mnie', assign_to_me_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
 
-    - if @petition.main_image.attached?
+
+      .container
+        h3 Przypisani urzędnicy
+        ul
+          - @petition.assigned_users.each do |user|
+            li = "#{user.first_name} #{user.last_name} (#{user.department.name})"
+
+    - if @petition.main_image.attached? 
       .main-image.col-md-4.col-12.text-center
         = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
 
@@ -86,10 +92,19 @@
   hr
 hr
 
+h3 Udostępnij innym departamentom
+= form_with url: share_officials_petition_path(@petition), method: :post, class: 'form-inline' do |f|
+  div.form-group.mb-3
+    = f.label :department_ids, 'Wybierz departament', class: 'form-label'
+    = f.select :department_ids, options_from_collection_for_select(Department.all, :id, :name), {}, class: 'form-select'
+  div.form-group.mt-2
+    = f.submit 'Udostępnij', class: 'btn btn-primary'
+
+
 h3 Komentarze
 = render 'officials/petitions/comments/comments', comments: @comments
 
-- if @petition.assigned_official == current_user
+- if @petition.assigned_official == current_user || @petition.assigned_users.include?(current_user)
   - if can?(:add_comment, @petition)
     .floating-comment-form(data-controller="toggle-form")
       button.btn.btn-secondary(type="button" data-action="toggle-form#toggle") Narzędzia Urzędnika

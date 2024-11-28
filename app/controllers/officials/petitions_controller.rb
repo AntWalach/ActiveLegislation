@@ -1,13 +1,20 @@
 class Officials::PetitionsController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_official!
-  before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment transfer unmerge]
+  before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment transfer unmerge share]
   before_action :require_official
 
 
   def index
-    @petitions = Petition.completed.where(department: current_user.department).order(created_at: :desc).page(params[:page])
+    petitions_for_department = Petition.completed.where(department: current_user.department).where.not(status: "draft")
+    shared_petitions = Petition.shared_with_department(current_user.department)
+    
+    @petitions = Petition.from(
+      "(#{petitions_for_department.to_sql} UNION ALL #{shared_petitions.to_sql}) AS petitions"
+    ).order(created_at: :desc).page(params[:page])
   end
+  
+  
 
   def show
     @comments = @petition.official_comments.includes(:official).order(created_at: :asc)
@@ -16,10 +23,17 @@ class Officials::PetitionsController < ApplicationController
 
   def assign_to_me
     @petition = Petition.find(params[:id])
-    if @petition.update(assigned_official: current_user)
-      redirect_to officials_petitions_path, notice: 'Petycja została przypisana do Ciebie.'
+  
+    # Sprawdzenie, czy użytkownik może przypisać petycję do siebie
+    if @petition.shared_departments.include?(current_user.department) || @petition.assigned_official.nil?
+      if @petition.assigned_users.exists?(current_user.id)
+        redirect_to officials_petitions_path, alert: 'Jesteś już przypisany do tej petycji.'
+      else
+        AssignedOfficial.create!(petition: @petition, user: current_user)
+        redirect_to officials_petitions_path, notice: 'Petycja została przypisana do Ciebie.'
+      end
     else
-      redirect_to officials_petitions_path, alert: 'Nie udało się przypisać petycji.'
+      redirect_to officials_petitions_path, alert: 'Nie możesz przypisać tej petycji do siebie.'
     end
   end
 
@@ -115,9 +129,27 @@ class Officials::PetitionsController < ApplicationController
   end
 
   def transfer
-    @petition.update!(assigned_official_id: params[:petition][:assigned_official_id])
-    redirect_to officials_petition_path(@petition), notice: "Petycja została przekazana."
+    official = Official.find(params[:petition][:assigned_official_id])
+  
+    # Sprawdzenie, czy urzędnik jest już przypisany
+    if @petition.assigned_users.include?(official)
+      redirect_to officials_petition_path(@petition), alert: "Ten urzędnik jest już przypisany do petycji."
+    else
+      ActiveRecord::Base.transaction do
+        # Dodaj nowego urzędnika do petycji
+        AssignedOfficial.create!(petition: @petition, user: official)
+  
+        # Usuń siebie z przypisanych urzędników
+        AssignedOfficial.where(petition: @petition, user: current_user).destroy_all
+      end
+  
+      redirect_to officials_petition_path(@petition), notice: "Petycja została przypisana wybranemu urzędnikowi, a Ty zostałeś odpięty."
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to officials_petition_path(@petition), alert: "Wystąpił błąd podczas przekazywania petycji: #{e.message}"
   end
+  
+  
 
   def merge_form
     @petitions = Petition.completed
@@ -175,6 +207,20 @@ class Officials::PetitionsController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid => e
     redirect_to officials_petition_path(@petition), alert: "Wystąpił błąd podczas cofania łączenia: #{e.message}"
+  end
+
+  def share
+    departments = Department.where(id: params[:department_ids])
+    
+    ActiveRecord::Base.transaction do
+      departments.each do |department|
+        @petition.shared_departments << department unless @petition.shared_departments.include?(department)
+      end
+    end
+    
+    redirect_to officials_petition_path(@petition), notice: 'Petycja została udostępniona wybranym departamentom.'
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to officials_petition_path(@petition), alert: "Nie udało się udostępnić petycji: #{e.message}"
   end
 
 

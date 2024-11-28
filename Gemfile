@@ -96,10 +96,3 @@ gem 'recaptcha', require: 'recaptcha/rails'
 gem 'faker'
 gem 'acts-as-taggable-on'
 gem 'wicked'
-# group :production do
-#   gem 'sqlite3', '~> 1.4'
-# end
-
-# group :development, :test do
-#   gem 'mysql2', '~> 0.5.3'
-# end

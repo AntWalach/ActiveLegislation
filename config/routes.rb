@@ -84,6 +84,7 @@ Rails.application.routes.draw do
     end
 
     resources :petitions, only: [:index, :show] do
+      post :share, on: :member
       member do
         post :approve
         post :reject
