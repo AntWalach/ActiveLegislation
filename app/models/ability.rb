@@ -14,7 +14,7 @@ class Ability
           can :manage, Petition, assigned_official_id: user.id
         when StandardUser
           can [:dashboard, :show, :edit, :update, :edit_password, :update_password, :edit_phone_number, :update_phone_number, :logs ,:view_logs], User
-          can [:index, :show, :create, :new, :edit, :update, :destroy, :submit], Petition
+          can [:index, :my_petitions, :show, :create, :new, :edit, :update, :destroy, :submit], Petition
           can [:index, :show, :create, :new, :edit, :destroy, :initialize_committee_formation, :start_collecting_signatures], Bill
           can [:petition_create, :bill_create ], Signature
       end

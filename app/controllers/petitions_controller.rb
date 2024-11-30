@@ -5,9 +5,13 @@ class PetitionsController < ApplicationController
   
   # GET /petitions or /petitions.json
   def index
-    @search = Petition.where(status: :responded).ransack(params[:q])
+    @search = Petition.where.not(status: :draft).ransack(params[:q])
     @petitions = @search.result(distinct: true).page(params[:page])
     @my_petitions = current_user.petitions.completed.page(params[:my_page])
+  end
+
+  def my_petitions
+    @my_petitions = current_user.petitions.completed.page(params[:page])
   end
   
 
@@ -57,8 +61,10 @@ class PetitionsController < ApplicationController
 
 
   def edit
-    if @petition.user == current_user && (@petition.draft? || @petition.awaiting_supplement?)
+    if (@petition.user == current_user && (@petition.draft? || @petition.awaiting_supplement?)) 
       # Allow editing
+    elsif current_user.is_a? Admin
+
     else
       redirect_to @petition, alert: "Nie masz uprawnień do edycji tej petycji."
     end

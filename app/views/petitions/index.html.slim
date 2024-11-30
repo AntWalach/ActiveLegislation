@@ -1,21 +1,14 @@
 h1 Petycje publiczne
 
-= render 'petitions_list', petitions: @petitions
+/ = render 'petitions_list', petitions: @petitions
 
-= paginate @petitions
+/ = paginate @petitions
 
-h1 Moje petycje
-
-= render 'petitions_list', petitions: @my_petitions
-
-= paginate @my_petitions, param_name: :my_page
-
-= link_to 'Dodaj nową petycję', new_petition_path, class: "btn btn-primary"
 
 
 .with-smooth-transition style="margin-bottom:0;padding-bottom: 200px;"
   .container-xl
     .row
-      - @my_petitions.each do |specialist|
+      - @petitions.each do |specialist|
         .col-md-4.tile-col
           = render "petition_tile", el: specialist

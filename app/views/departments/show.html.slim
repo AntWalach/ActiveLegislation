@@ -10,11 +10,9 @@ div
 
 h2 Officials in this Department
 - if @officials.any?
-  ul
-    - @officials.each do |official|
-      li
-        = link_to official.first_name, user_path(official)
-        p = "Email: #{official.email}"
-        p = "Position: #{official.official_role}"
+  = render "index_table", list: @officials, custom_dir: "departments/department_officials/"
+
 - else
   p No officials assigned to this department.
+
+

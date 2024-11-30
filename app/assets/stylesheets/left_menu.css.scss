@@ -54,6 +54,8 @@
 
         .menu-text {
             transition: opacity 0.3s ease;
+            width: 150px;
+            white-space: nowrap;
         }
 
         &:hover, &.active {
@@ -70,6 +72,7 @@
 
 .collapsed .left-menu a.left-menu-link .menu-text {
     opacity: 0;  
+    white-space: nowrap;
 }
 
 .collapsed .navigation {

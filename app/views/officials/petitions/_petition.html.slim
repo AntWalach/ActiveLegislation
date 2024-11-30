@@ -1,0 +1,98 @@
+.container
+  .petition-header.row.align-items-center.mb-4
+    .title-section.col-md-8.col-12
+
+      - if @petition.merged?
+        p Ta petycja została połączona z inną petycją.
+        = link_to 'Przejdź do petycji głównej', petition_path(@petition.merged_into)
+      - if @petition.merged_petitions.any?
+        = link_to 'Cofnij łączenie petycji', unmerge_officials_petition_path(@petition), method: :post, data: { confirm: 'Czy na pewno chcesz cofnąć łączenie petycji?' }, class: 'btn btn-warning'
+      
+      
+      h1.display-4.mb-3 = @petition.title
+      
+      - if @petition.tag_list.any?
+        p.text-muted.mb-1.mr-3
+          strong Tagi: 
+          = @petition.tag_list.join(', ')
+      p.text-muted.mb-1.mr-3
+        | • Data utworzenia: 
+        strong = l(@petition.created_at, format: :long)
+      p.text-muted.mb-1.mr-3
+        | • Autor: 
+        strong = @petition.creator_name
+      p.lead.mb-1
+        strong Status: 
+        span = @petition.status
+
+      - unless @petition.assigned_users.any? { |user| user.department == current_user.department }
+        = link_to 'Przypisz do mnie', assign_to_me_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
+
+
+      .container
+        h3 Przypisani urzędnicy
+        ul
+          - @petition.assigned_users.each do |user|
+            li = "#{user.first_name} #{user.last_name} (#{user.department.name})"
+
+    - if @petition.main_image.attached? 
+      .main-image.col-md-4.col-12.text-center
+        = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
+
+  .petition-content
+    .card.mb-4
+      .card-header.bg-light
+        h3 Opis
+      .card-body
+        = @petition.description.body
+
+    .card.mb-4
+      .card-header.bg-light
+        h3 Uzasadnienie
+      .card-body
+        = @petition.justification.body
+        
+    - if @petition.external_links.present?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Linki zewnętrzne
+        .card-body
+          .list-group
+            - @petition.external_links.split("\n").each do |link|
+              a.list-group-item.list-group-item-action href=link target="_blank" rel="noopener noreferrer" = link
+
+    - if @petition.attachments.attached?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Załączniki
+        .card-body
+          .list-group
+            - @petition.attachments.each do |attachment|
+              a.list-group-item.list-group-item-action href=rails_blob_path(attachment, disposition: "attachment") = attachment.filename.to_s
+    - else
+      p.text-muted Brak załączników.
+
+    - if @petition.images.attached?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Załączone zdjęcia
+        .card-body
+          .row
+            - @petition.images.each do |image|
+              .col-md-4.mb-3
+                = image_tag image.variant(resize_to_limit: [800, 600]), class: 'img-fluid rounded shadow-sm'
+
+    - if @petition.public_comment.present?
+      .card.mb-4
+        .card-header.bg-light
+          h3 Komentarz publiczny
+        .card-body
+          = sanitize(@petition.public_comment.to_s, tags: %w(p strong em), attributes: %w(class))
+
+  hr
+hr
+
+
+
+h3 Komentarze
+= render 'officials/petitions/comments/comments', comments: @comments

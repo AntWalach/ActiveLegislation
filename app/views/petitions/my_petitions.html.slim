@@ -1,0 +1,7 @@
+h1 Moje petycje
+
+= link_to 'Dodaj nową petycję', new_petition_path, class: "btn btn-primary"
+
+= render 'index_table', list: @my_petitions
+
+/ = paginate @my_petitions, param_name: :my_page

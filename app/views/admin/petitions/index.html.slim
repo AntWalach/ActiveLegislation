@@ -1,12 +1,3 @@
 h1 Petycje publiczne
 
-= render 'petitions/petitions_list', petitions: @petitions
-
-= paginate @petitions
-
-.with-smooth-transition style="margin-bottom:0;padding-bottom: 200px;"
-  .container-xl
-    .row
-      - @petitions.each do |petition|
-        .col-md-4.tile-col
-          = render "petitions/petition_tile", el: petition
+= render 'index_table', list: @petitions

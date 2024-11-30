@@ -2,9 +2,9 @@
     td = link_to el.title, officials_petition_path(el)
     td = el.created_at.strftime("%d-%m-%Y")
     td = el.status
-    td = el.assigned_official&.first_name || 'Nieprzypisana'
+    td = el.assigned_users.exists?(current_user.id) ? current_user.first_name : 'Nieprzypisana'
     td
-      - if el.assigned_official.nil? || el.assigned_official == current_user
+      - if el.assigned_users.exists?(current_user.id)
         = link_to 'Przejdź', officials_petition_path(el), class: 'btn btn-primary btn-sm'
       - else
         = 'Brak dostępu'

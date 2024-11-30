@@ -21,12 +21,15 @@ Rails.application.routes.draw do
     post :initialize_committee_formation
   end
 
-  resources :petitions do
+  resources :petitions do  
     resources :votes, only: [:create, :destroy]
     resources :comments, only: [:create, :destroy]
     resources :petition_steps
     member do
       post :submit
+    end
+    collection do
+      get :my_petitions
     end
   end
 

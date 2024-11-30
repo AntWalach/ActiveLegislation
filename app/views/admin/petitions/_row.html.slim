@@ -1,0 +1,7 @@
+tr
+    td = el.title
+    td = el.status.humanize
+    td 
+        = link_to 'Pokaż', petition_path(el), class: "btn btn-info btn-sm"
+        - if el.user == current_user && el.draft?
+        = link_to 'Edytuj', edit_petition_path(el), class: "btn btn-warning btn-sm"

@@ -1,4 +1,4 @@
-.page-entries-info = page_entries_info(list)
-
-.pagination-cont
-  = paginate list
+- if list.total_pages > 1
+  .page-entries-info = page_entries_info(list)
+  .pagination-cont
+    = paginate list

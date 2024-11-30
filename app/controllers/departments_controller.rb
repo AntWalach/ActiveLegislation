@@ -19,7 +19,7 @@ class DepartmentsController < ApplicationController
 
   # GET /departments/1 or /departments/1.json
   def show
-    @officials = @department.officials
+    @officials = @department.officials.page(params[:page])
   end
 
   # GET /departments/new
