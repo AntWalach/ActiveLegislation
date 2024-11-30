@@ -1,0 +1,14 @@
+- similar_petitions.each do |entry|
+  - petition = entry[:petition]
+  - can_merge = petition.merged_into_id.nil? && petition.merged_petitions.empty?
+  tr
+    td
+      - if can_merge
+        = check_box_tag 'petition_ids[]', petition.id, false, id: "petition_ids_#{petition.id}"
+      - else
+        = check_box_tag 'petition_ids[]', petition.id, false, id: "petition_ids_#{petition.id}", disabled: true
+        span.badge.badge-warning Cannot merge
+    td = petition.title
+    td = petition.created_at.strftime('%Y-%m-%d')
+    td = petition.status.humanize
+    td = "#{entry[:similarity]}%"

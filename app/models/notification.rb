@@ -93,4 +93,58 @@ class Notification < ApplicationRecord
     # Implementacja wysyłki e-maila z potwierdzeniem
     #UserMailer.petition_acknowledgment(user, petition).deliver_later
   end
+
+
+  def self.notify_upcoming_deadline(user, petition, deadline)
+    Notification.create(
+      user: user,
+      petition: petition,
+      message: "Termin odpowiedzi na Twoją petycję '#{petition.title}' zbliża się: #{deadline.strftime('%d-%m-%Y')}."
+    )
+  end
+
+  # Powiadomienie o przekroczonym terminie
+  def self.notify_missed_deadline(user, petition, deadline)
+    Notification.create(
+      user: user,
+      petition: petition,
+      message: "Przekroczono termin odpowiedzi na Twoją petycję '#{petition.title}': #{deadline.strftime('%d-%m-%Y')}."
+    )
+  end
+
+  # Powiadomienie o rejestracji petycji
+  def self.notify_registration(user, petition)
+    Notification.create(
+      user: user,
+      petition: petition,
+      message: "Twoja petycja '#{petition.title}' została zarejestrowana w systemie."
+    )
+  end
+
+  # Powiadomienie o braku wymaganych dokumentów
+  def self.notify_missing_documents(user, petition, comments)
+    Notification.create(
+      user: user,
+      petition: petition,
+      message: "Twoja petycja '#{petition.title}' wymaga uzupełnienia dokumentów. Komentarz: #{comments}."
+    )
+  end
+
+  # Powiadomienie o historii zmian statusu
+  def self.notify_status_change(user, petition, previous_status, new_status)
+    Notification.create(
+      user: user,
+      petition: petition,
+      message: "Status Twojej petycji '#{petition.title}' zmienił się z '#{previous_status}' na '#{new_status}'."
+    )
+  end
+
+  # Powiadomienie dla urzędnika o nowej przypisanej petycji
+  def self.notify_new_assignment(official, petition)
+    Notification.create(
+      user: official,
+      petition: petition,
+      message: "Nowa petycja '#{petition.title}' została przypisana do Ciebie."
+    )
+  end
 end

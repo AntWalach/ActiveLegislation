@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
 
     def set_notifications
       if user_signed_in?
-        @notifications = current_user.notifications.unread
+        @notifications = current_user.notifications.unread.order(created_at: :desc)
       else
         @notifications = []
       end

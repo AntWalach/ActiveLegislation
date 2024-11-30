@@ -1,0 +1,8 @@
+// Update the similar petitions section
+document.querySelector('#similar-petitions').innerHTML = `<%= escape_javascript(render partial: 'similar_petitions', locals: { similar_petitions: @similar_petitions }) %>`;
+
+// Update the merged petitions section
+document.querySelector('#merged-petitions').innerHTML = `<%= escape_javascript(render partial: 'merged_petitions', locals: { merged_petitions: @merged_petitions }) %>`;
+
+// Update the primary petition title
+document.querySelector('#primary-petition-title').innerHTML = '<%= @primary_petition&.title || "" %>';

@@ -1,51 +1,43 @@
 h1 Łączenie petycji
 
-= form_with url: merge_officials_petitions_path, method: :post do |f|
+/ Formularz GET dla wyboru głównej petycji
+= form_with url: merge_form_officials_petitions_path, method: :get, local: true do |f|
   .form-group
     = label_tag :primary_petition_id, 'Wybierz petycję główną:'
-    = select_tag :primary_petition_id, options_from_collection_for_select(Petition.completed, :id, :title), prompt: 'Wybierz petycję główną', class: 'form-control'
+    = select_tag :primary_petition_id, 
+                 options_from_collection_for_select(Petition.completed, :id, :title, params[:primary_petition_id]), 
+                 prompt: 'Wybierz petycję główną', 
+                 class: 'form-control', 
+                 onchange: "this.form.submit();"
 
-  .form-group
-    = label_tag 'Wybierz petycje do połączenia:'
+/ Wybrana petycja główna
+- if @primary_petition
+  h3 Wybrana petycja główna:
+  p#primary-petition-title = @primary_petition.title
 
-    table.table.table-striped.table-hover
-      thead
-        tr
-          th 'Wybierz'
-          th 'Tytuł'
-          th 'Data utworzenia'
-          th 'Status'
-      tbody
-        - Petition.completed.each do |petition|
-          - next if petition.id.to_s == params[:primary_petition_id]
-          tr
-            td
-              = check_box_tag 'petition_ids[]', petition.id, false, id: "petition_ids_#{petition.id}"
-            td = petition.title
-            td = petition.created_at.strftime('%Y-%m-%d')
-            td = petition.status.humanize
+  / Już połączone petycje
+  - if @merged_petitions.any?
+    h3 'Już połączone petycje:'
+    #merged-petitions
+      = render partial: 'merged_petitions', locals: { merged_petitions: @merged_petitions }
+  - else
+    p.text-muted 'Brak już połączonych petycji.'
 
-  = f.submit 'Połącz petycje', class: 'btn btn-primary'
-javascript:
-  document.addEventListener('DOMContentLoaded', () => {
-    const primarySelect = document.querySelector('#primary_petition_id');
-    const checkboxes = document.querySelectorAll('.petition-checkbox');
+  / Tabela podobnych petycji
+  - if @similar_petitions.present?
+    h3 'Podobne petycje do połączenia:'
+    #similar-petitions
+      = render partial: 'similar_petitions', locals: { similar_petitions: @similar_petitions }
 
-    function updateCheckboxes() {
-      const selectedPrimaryId = primarySelect.value;
+    / Formularz POST do scalania petycji
+    = form_with url: merge_officials_petitions_path, method: :post do |f|
+      = hidden_field_tag :primary_petition_id, @primary_petition.id
 
-      checkboxes.forEach(checkbox => {
-        if (checkbox.dataset.petitionId === selectedPrimaryId) {
-          checkbox.checked = false;
-          checkbox.disabled = true;
-        } else {
-          checkbox.disabled = false;
-        }
-      });
-    }
+      #similar-petition-checkboxes
+        = render partial: 'similar_petitions_checkboxes', locals: { similar_petitions: @similar_petitions }
 
-    primarySelect.addEventListener('change', updateCheckboxes);
-
-    // Inicjalne ustawienie checkboxów
-    updateCheckboxes();
-  });
+      = f.submit 'Połącz wybrane petycje', class: 'btn btn-primary'
+  - else
+    p.text-muted 'Brak podobnych petycji do połączenia.'
+- else
+  p.text-muted 'Wybierz główną petycję, aby zobaczyć podobne.'

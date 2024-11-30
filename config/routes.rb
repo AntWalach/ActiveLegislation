@@ -105,6 +105,7 @@ Rails.application.routes.draw do
         post :merge_petitions
         get :merge_form
         post :merge
+        post :unmerge_selected
       end
     end
   end

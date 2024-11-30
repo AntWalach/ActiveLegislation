@@ -1,0 +1,22 @@
+- if similar_petitions.present?
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th 'Wybierz'
+        th 'Tytuł'
+        th 'Data utworzenia'
+        th 'Status'
+        th 'Podobieństwo (%)'
+    tbody
+      - similar_petitions.each do |entry|
+        - petition = entry[:petition]
+        - similarity = entry[:similarity]
+        tr
+          td
+            = check_box_tag 'petition_ids[]', petition.id, false, id: "petition_ids_#{petition.id}"
+          td = petition.title
+          td = petition.created_at.strftime('%Y-%m-%d')
+          td = petition.status.humanize
+          td = "#{similarity}%"
+- else
+  p.text-muted 'Brak podobnych petycji do połączenia.'

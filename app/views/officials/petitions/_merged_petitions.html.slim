@@ -1,0 +1,21 @@
+/ _merged_petitions.html.slim
+= form_with url: unmerge_selected_officials_petitions_path, method: :post do |f|
+  = hidden_field_tag :primary_petition_id, @primary_petition.id
+
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th 'Wybierz'
+        th 'Tytuł'
+        th 'Data utworzenia'
+        th 'Status'
+    tbody
+      - merged_petitions.each do |petition|
+        tr
+          td
+            = check_box_tag 'petition_ids[]', petition.id, false, id: "petition_ids_#{petition.id}"
+          td = petition.title
+          td = petition.created_at.strftime('%Y-%m-%d')
+          td = petition.status.humanize
+
+  = f.submit 'Odłącz wybrane petycje', class: 'btn btn-danger'

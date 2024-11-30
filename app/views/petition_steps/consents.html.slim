@@ -6,6 +6,7 @@
     .card-header
       h3 Zgody
     .card-body
+      = f.input :consent_to_publish, as: :boolean, label: "Zgoda na publikację danych osobowych"
       = f.input :gdpr_consent, as: :boolean, required: true,
                 label: "Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z [klauzulą informacyjną]"
       = f.input :privacy_policy, as: :boolean, required: true,

@@ -1,4 +1,5 @@
 class Officials::PetitionsController < ApplicationController
+  include TagSimilarity
   before_action :authenticate_user!
   before_action :authenticate_official!
   before_action :set_petition, only: %i[ show approve reject respond request_supplement add_comment transfer unmerge share]
@@ -14,8 +15,6 @@ class Officials::PetitionsController < ApplicationController
     ).order(created_at: :desc).page(params[:page])
   end
   
-  
-
   def show
     @comments = @petition.official_comments.includes(:official).order(created_at: :asc)
     @comment = OfficialComment.new
@@ -39,15 +38,12 @@ class Officials::PetitionsController < ApplicationController
 
 
   def approve
-    if current_user.official_role == 'petition_officer' && @petition.submitted?
-      if @petition.update(status: :under_review)
-        Notification.notify_approval(@petition.user, @petition)
-        redirect_to officials_petitions_path, notice: "Petycja została zatwierdzona do przeglądu."
-      else
-        redirect_to officials_petitions_path, alert: "Nie udało się zatwierdzić petycji."
-      end
+    if @petition.update(status: :under_review)
+      Notification.notify_approval(@petition.user, @petition)
+      Notification.notify_new_assignment(current_user, @petition)
+      redirect_to officials_petitions_path, notice: "Petycja została zatwierdzona."
     else
-      redirect_to officials_petitions_path, alert: "Brak uprawnień do zatwierdzenia."
+      redirect_to officials_petitions_path, alert: "Nie udało się zatwierdzić petycji."
     end
   end
 
@@ -152,30 +148,73 @@ class Officials::PetitionsController < ApplicationController
   
 
   def merge_form
-    @petitions = Petition.completed
-    @primary_petition = Petition.find(params[:primary_petition_id]) if params[:primary_petition_id]
+    if params[:primary_petition_id].present?
+      @primary_petition = Petition.find(params[:primary_petition_id])
+      primary_tags = @primary_petition.tag_list
+  
+      # Get IDs of primary petitions (those that have merged petitions)
+      primary_petition_ids = Petition.where.not(merged_into_id: nil).select(:merged_into_id).distinct.pluck(:merged_into_id)
+  
+      potential_petitions = Petition.completed
+                                    .where.not(id: @primary_petition.id)
+                                    .where(department_id: @primary_petition.department_id)
+                                    .where(merged_into_id: nil)
+                                    .where.not(id: primary_petition_ids)
+  
+      Rails.logger.debug "Potential Petitions before similarity check: #{potential_petitions.pluck(:id, :title).inspect}"
+  
+      @similar_petitions = potential_petitions.map do |petition|
+        petition_tags = petition.tag_list
+        similarity = tag_similarity(primary_tags, petition_tags)
+        { petition: petition, similarity: similarity }
+      end.select { |entry| entry[:similarity] > 20 }
+  
+      Rails.logger.debug "Similar Petitions after similarity check: #{@similar_petitions.map { |e| [e[:petition].id, e[:similarity]] }.inspect}"
+  
+      # Get already merged petitions
+      @merged_petitions = @primary_petition.merged_petitions
+  
+    else
+      @primary_petition = nil
+      @similar_petitions = []
+      @merged_petitions = []
+    end
+  
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
-
+  
+  
+  
+  
 
   def merge
     if params[:primary_petition_id].blank?
-      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać petycję główną.'
+      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać główną petycję.'
+      return
+    end
+  
+    petition_ids = params[:petition_ids] || []
+    if petition_ids.empty?
+      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać co najmniej jedną petycję do połączenia.'
       return
     end
   
     @primary_petition = Petition.find(params[:primary_petition_id])
-    petition_ids = params[:petition_ids] || []
-    @petitions_to_merge = Petition.where(id: petition_ids).where.not(id: @primary_petition.id)
+    @petitions_to_merge = Petition.where(id: petition_ids)
   
-    if @petitions_to_merge.empty?
-      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać co najmniej jedną petycję do połączenia.'
+    # Validate that petitions are eligible for merging
+    invalid_petitions = @petitions_to_merge.select { |p| p.merged_into_id.present? || p.merged_petitions.any? }
+    if invalid_petitions.any?
+      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Wybrane petycje nie mogą zostać połączone.'
       return
     end
   
     Petition.transaction do
       @petitions_to_merge.each do |petition|
-        petition.update!(previous_status: petition.status)
-        petition.update!(status: 'merged', merged_into: @primary_petition)
+        petition.update!(previous_status: petition.status, status: 'merged', merged_into: @primary_petition)
       end
     end
   
@@ -186,46 +225,75 @@ class Officials::PetitionsController < ApplicationController
   
 
   def unmerge
-    unless @petition.merged_petitions.any?
+    if @petition.merged_petitions.empty?
       redirect_to officials_petition_path(@petition), alert: 'Ta petycja nie została połączona z innymi.'
       return
     end
-
+  
     Petition.transaction do
-
-      merged_petitions = @petition.merged_petitions
-
-      merged_petitions.each do |merged_petition|
-
-        merged_petition.update!(status: merged_petition.previous_status || "submitted", merged_into: nil)
-        merged_petition.update!(previous_status: nil)
+      @petition.merged_petitions.each do |merged_petition|
+        merged_petition.update!(status: merged_petition.previous_status || "submitted", previous_status: nil, merged_into: nil)
       end
-
-      @petition.merged_petitions.update_all(merged_into_id: nil)
-
-      redirect_to officials_petition_path(@petition), notice: 'Łączenie petycji zostało cofnięte.'
     end
+  
+    redirect_to officials_petition_path(@petition), notice: 'Łączenie petycji zostało cofnięte.'
   rescue ActiveRecord::RecordInvalid => e
     redirect_to officials_petition_path(@petition), alert: "Wystąpił błąd podczas cofania łączenia: #{e.message}"
+  end
+
+
+  def unmerge_selected
+    if params[:primary_petition_id].blank?
+      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać główną petycję.'
+      return
+    end
+  
+    petition_ids = params[:petition_ids] || []
+    if petition_ids.empty?
+      redirect_back fallback_location: merge_form_officials_petitions_path, alert: 'Proszę wybrać co najmniej jedną petycję do odłączenia.'
+      return
+    end
+  
+    @primary_petition = Petition.find(params[:primary_petition_id])
+    @petitions_to_unmerge = @primary_petition.merged_petitions.where(id: petition_ids)
+  
+    Petition.transaction do
+      @petitions_to_unmerge.each do |petition|
+        petition.update!(status: petition.previous_status || 'submitted', previous_status: nil, merged_into: nil)
+      end
+    end
+  
+    redirect_to merge_form_officials_petitions_path(primary_petition_id: @primary_petition.id), notice: 'Wybrane petycje zostały pomyślnie odłączone.'
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_back fallback_location: merge_form_officials_petitions_path, alert: "Wystąpił błąd podczas odłączania: #{e.message}"
   end
 
   def share
     departments = Department.where(id: params[:department_ids])
     
     ActiveRecord::Base.transaction do
-      departments.each do |department|
-        @petition.shared_departments << department unless @petition.shared_departments.include?(department)
+
+      petitions_to_share = [@petition] + @petition.merged_petitions
+  
+      petitions_to_share.each do |petition|
+        departments.each do |department|
+          petition.shared_departments << department unless petition.shared_departments.include?(department)
+        end
       end
     end
     
-    redirect_to officials_petition_path(@petition), notice: 'Petycja została udostępniona wybranym departamentom.'
+    redirect_to officials_petition_path(@petition), notice: 'Petycja i powiązane petycje zostały udostępnione wybranym departamentom.'
   rescue ActiveRecord::RecordInvalid => e
     redirect_to officials_petition_path(@petition), alert: "Nie udało się udostępnić petycji: #{e.message}"
   end
 
 
-
   private
+
+  def tag_frequency(tag)
+    # Liczba wystąpień danego tagu w całej bazie petycji
+    Petition.tag_counts.find { |t| t.name == tag }&.count || 0
+  end
 
   def require_official
     redirect_to authenticated_root, alert: 'Nie masz uprawnień do tej akcji.' unless current_user.is_a?(Official)

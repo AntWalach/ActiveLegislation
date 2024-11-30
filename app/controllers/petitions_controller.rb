@@ -114,6 +114,7 @@ class PetitionsController < ApplicationController
 
   def petition_params
     params.require(:petition).permit(
+      :identifier,
       :title, :description, :justification, :tag_list, :external_links,
       :attachments, :main_image, :images, :public_comment,
       :creator_name, :email,
@@ -127,8 +128,10 @@ class PetitionsController < ApplicationController
       :petition_type, :third_party_name,
       :third_party_street, :third_party_city, :third_party_zip_code,
       :recipient, :department_id,
+      :submission_date, :response_deadline, 
+      :business_name, :business_email, :representative_name,
       # Zgody
-      :gdpr_consent, :privacy_policy, third_party_consents: []
+      :consent_to_publish, :gdpr_consent, :privacy_policy, third_party_consents: []
     )
   end
 end

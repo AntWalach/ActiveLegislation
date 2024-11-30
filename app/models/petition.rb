@@ -15,21 +15,25 @@ class Petition < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :shared_petition_departments, dependent: :destroy
   has_many :shared_departments, through: :shared_petition_departments, source: :department
-  scope :shared_with_department, ->(department) { joins(:shared_petition_departments).where(shared_petition_departments: { department_id: department.id }) }
+  belongs_to :merged_into, class_name: 'Petition', optional: true
+  has_many :merged_petitions, class_name: 'Petition', foreign_key: 'merged_into_id', dependent: :destroy
+  has_many :assigned_officials, dependent: :destroy
+  has_many :assigned_users, through: :assigned_officials, source: :user
   has_rich_text :description
   has_rich_text :justification
   acts_as_taggable_on :tags
   acts_as_ordered_taggable_on :tags
+
+
   before_save :set_deadline, if: :status_changed_to_submitted?
   before_validation :handle_same_address
-  belongs_to :merged_into, class_name: 'Petition', optional: true
-  has_many :merged_petitions, class_name: 'Petition', foreign_key: 'merged_into_id', dependent: :destroy
+  before_create :generate_unique_identifier
 
-  has_many :assigned_officials, dependent: :destroy
-  has_many :assigned_users, through: :assigned_officials, source: :user
-
+  before_create :set_initial_dates
+  after_update :notify_status_change, if: :saved_change_to_status?
 
   scope :completed, -> { where(completed: true) }
+  scope :shared_with_department, ->(department) { joins(:shared_petition_departments).where(shared_petition_departments: { department_id: department.id }) }
 
   with_options if: :basic_information_step? do |petition|
     petition.validates :petition_type, presence: true
@@ -58,16 +62,50 @@ class Petition < ApplicationRecord
     petition.validates :gdpr_consent, acceptance: true
     petition.validates :privacy_policy, acceptance: true
   end
+
+  validates :third_party_name, presence: true, if: :third_party_petition?
+  validates :business_name, :business_email, presence: true, if: :business_individual_petition?
+  validates :representative_name, presence: true, if: :group_petition?
  
 
+
+  def set_initial_dates
+    self.submission_date ||= Time.current
+    self.response_deadline ||= submission_date + 30.days # Przykładowy termin odpowiedzi
+  end
+
+  def notify_status_change
+    Notification.notify_status_change(
+      user,
+      self,
+      saved_change_to_status[0], # Poprzedni status
+      saved_change_to_status[1]  # Nowy status
+    )
+  end
+
+  def check_deadlines
+    if Time.current > response_deadline
+      Notification.notify_missed_deadline(user, self, response_deadline)
+    elsif Time.current > response_deadline - 3.days
+      Notification.notify_upcoming_deadline(user, self, response_deadline)
+    end
+  end
   def third_party_petition?
     petition_type == 'third_party'
   end
   
 
-  def in_behalf_of_third_party?
-    petition_type == 'third_party'
+  def business_individual_petition?
+    petition_type == 'business_individual'
   end
+
+  def group_petition?
+    petition_type == 'group_petition'
+  end
+
+  # def in_behalf_of_third_party?
+  #   petition_type == 'third_party'
+  # end
 
   def can_be_assigned_to?(user)
     assigned_official.nil? && shared_departments.include?(user.department)
@@ -91,6 +129,10 @@ class Petition < ApplicationRecord
     group_petition: 2,      # Grupa osób
     third_party: 3          # Organizacja lub pełnomocnik
   }
+
+  def merged?
+    grouped_petition_id.present? || merged_into_id.present?
+  end
 
 
   def editable_by?(user)
@@ -123,6 +165,11 @@ class Petition < ApplicationRecord
   end
 
   private
+
+    def generate_unique_identifier
+      # Przykładowy format: PET-2024-XXXX
+      self.identifier = "PET-#{Time.current.year}-#{SecureRandom.hex(4).upcase}"
+    end
 
 
     def handle_same_address
