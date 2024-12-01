@@ -92,7 +92,7 @@ gem 'materialize-sass'
 gem 'material_icons' 
 gem 'country_select'
 
-gem 'recaptcha', require: 'recaptcha/rails'
+gem 'recaptcha'
 gem 'faker'
 gem 'acts-as-taggable-on'
 gem 'wicked'

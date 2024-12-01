@@ -127,12 +127,11 @@ class Officials::PetitionsController < ApplicationController
   def transfer
     official = Official.find(params[:petition][:assigned_official_id])
   
-    # Sprawdzenie, czy urzędnik jest już przypisany
     if @petition.assigned_users.include?(official)
       redirect_to officials_petition_path(@petition), alert: "Ten urzędnik jest już przypisany do petycji."
     else
       ActiveRecord::Base.transaction do
-        # Dodaj nowego urzędnika do petycji
+
         AssignedOfficial.create!(petition: @petition, user: official)
   
         # Usuń siebie z przypisanych urzędników
@@ -185,8 +184,6 @@ class Officials::PetitionsController < ApplicationController
       format.js
     end
   end
-  
-  
   
   
 

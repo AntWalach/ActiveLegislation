@@ -100,7 +100,7 @@ h3 = "Głosy: #{@petition.votes.count}"
 
 h2 Komentarze
 
-- @comments = @petition.comments.order(created_at: :desc)
+
 - @comments.each do |comment|
   .comment
     p

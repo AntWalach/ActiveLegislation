@@ -1,14 +1,9 @@
 h1 Łączenie petycji
 
-/ Formularz GET dla wyboru głównej petycji
 = form_with url: merge_form_officials_petitions_path, method: :get, local: true do |f|
   .form-group
     = label_tag :primary_petition_id, 'Wybierz petycję główną:'
-    = select_tag :primary_petition_id, 
-                 options_from_collection_for_select(Petition.completed, :id, :title, params[:primary_petition_id]), 
-                 prompt: 'Wybierz petycję główną', 
-                 class: 'form-control', 
-                 onchange: "this.form.submit();"
+    = select_tag :primary_petition_id, options_from_collection_for_select(Petition.completed, :id, :title, params[:primary_petition_id]), prompt: 'Wybierz petycję główną', class: 'form-control', onchange: "this.form.submit();", data: { controller: "choosen" } 
 
 / Wybrana petycja główna
 - if @primary_petition

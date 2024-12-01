@@ -1,4 +1,3 @@
-/ _merged_petitions.html.slim
 = form_with url: unmerge_selected_officials_petitions_path, method: :post do |f|
   = hidden_field_tag :primary_petition_id, @primary_petition.id
 

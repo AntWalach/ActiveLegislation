@@ -8,7 +8,7 @@
         br
         = simple_form_for @petition, url: transfer_officials_petition_path(@petition), method: :post, html: { local: true } do |f|
           .form-group
-            = f.input :assigned_official_id, as: :select, collection: Official.where(department: current_user.department).map { |o| [o.first_name, o.id] }, prompt: "Wybierz urzędnika", input_html: { class: 'form-control' }
+            = f.input :assigned_official_id, as: :select, collection: Official.where(department: current_user.department).map { |o| [o.first_name, o.id] }, prompt: "Wybierz urzędnika", input_html: { class: 'form-control', data: {controller: "choosen"} }
           .form-group
             = f.button :submit, "Przekaż", class: 'btn btn-primary btn-block'
         hr
@@ -16,7 +16,7 @@
         = form_with url: share_officials_petition_path(@petition), method: :post, class: 'form-inline' do |f|
             div.form-group.mb-3
                 = f.label :department_ids, 'Wybierz departament', class: 'form-label'
-                = f.select :department_ids, options_from_collection_for_select(Department.all, :id, :name), {}, class: 'form-select'
+                = f.select :department_ids, options_from_collection_for_select(Department.all, :id, :name), {}, class: 'form-select', data: {controller: "choosen"} 
             div.form-group.mt-2
                 = f.submit 'Udostępnij', class: 'btn btn-primary'
 

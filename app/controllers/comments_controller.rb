@@ -17,7 +17,7 @@ class CommentsController < ApplicationController
   def destroy
     @comment = @petition.comments.find(params[:id])
 
-    if @comment.user == current_user || current_user.is_a? Admin
+    if @comment.user == current_user || current_user.is_a?(Admin)
       @comment.destroy
       redirect_to @petition, notice: 'Komentarz został usunięty.'
     else

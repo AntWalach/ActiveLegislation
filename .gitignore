@@ -55,7 +55,7 @@ tags/*
 tags
 
 .byebug_history
-
+.env
 .environment
 
 
