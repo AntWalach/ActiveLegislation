@@ -1,5 +1,6 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
+
 import "controllers"
 
 import "jquery"
@@ -9,7 +10,8 @@ import 'chosen-jquery'
 import 'flatpickr'
 import "trix"
 import "@rails/actiontext"
-
+import "apexcharts"
+window.ApexCharts = globalThis.ApexCharts
 
 document.addEventListener('DOMContentLoaded', function() {
     const increaseFontButton = document.getElementById('increase-font');

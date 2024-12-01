@@ -164,6 +164,25 @@ class Petition < ApplicationRecord
     update(status: previous_status)
   end
 
+  def self.submitted_between(start_date, end_date)
+    where(created_at: start_date..end_date)
+  end
+
+  # Podział petycji według statusów
+  def self.count_by_status
+    group(:status).count
+  end
+
+  # Podział petycji według tagów (tematów)
+  def self.count_by_tag
+    joins(:tags).group('tags.name').count
+  end
+
+  # Liczba petycji przypisanych do departamentów
+  def self.count_by_department
+    joins(:department).group('departments.name').count
+  end
+
   private
 
     def generate_unique_identifier

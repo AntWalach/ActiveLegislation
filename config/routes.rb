@@ -111,6 +111,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    get 'reports', to: 'reports#index'
     resources :petitions do
       member do
         post :approve

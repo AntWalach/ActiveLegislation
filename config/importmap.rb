@@ -17,3 +17,4 @@ pin "flatpickr", to: "flatpickr.js"
 pin "chosen-jquery", to: "chosen-jquery.js"
 pin "trix"
 pin "@rails/actiontext", to: "actiontext.esm.js"
+pin "apexcharts" # @4.1.0

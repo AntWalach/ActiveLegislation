@@ -1,0 +1,91 @@
+h1 Raporty i Statystyki
+
+= form_with url: admin_reports_path, method: :get, local: true, class: "row g-3 mb-4" do |f|
+  .col-md-3
+    = f.label :from_date, "Od daty:", class: "form-label"
+    = f.date_field :from_date, value: params[:from_date], class: "form-control"
+  .col-md-3
+    = f.label :to_date, "Do daty:", class: "form-label"
+    = f.date_field :to_date, value: params[:to_date], class: "form-control"
+  .col-md-3
+    = f.label :status, "Status:", class: "form-label"
+    = f.select :status, options_for_select(Petition.statuses.keys.map { |status| [status.humanize, status] }, params[:status]), include_blank: "Wszystkie", class: "form-select"
+  .col-md-3.align-self-end
+    = f.submit "Filtruj", class: "btn btn-primary"
+
+.nav.nav-tabs
+  li.nav-item
+    a.nav-link.active href="#general" data-bs-toggle="tab" Generalne
+  li.nav-item
+    a.nav-link href="#charts" data-bs-toggle="tab" Wykresy
+  li.nav-item
+    a.nav-link href="#tables" data-bs-toggle="tab" Tabele
+
+.tab-content.mt-4
+  .tab-pane.fade.show.active#general
+    h2 Statystyki ogólne
+    p Łączna liczba petycji: #{@total_petitions}
+    p Petycje złożone w ostatnim miesiącu: #{@petitions_in_last_month}
+    p Petycje wymagające akcji: #{@petitions_requiring_action}
+    p Średni czas odpowiedzi na petycję: #{@average_response_time.round(2)} dni
+
+  .tab-pane.fade#charts
+    .row
+      .col-md-6
+        .card.mb-4
+          .card-header
+            h3 Wykres petycji według statusów
+          .card-body
+            = pie_chart @petitions_status_values, pie_chart_options(@petitions_status_labels, 'petitions_by_status_chart')
+      .col-md-6
+        .card.mb-4
+          .card-header
+            h3 Wykres petycji według tagów
+          .card-body
+            = bar_chart @petitions_by_tag, bar_chart_options('petitions_by_tag_chart')
+      .col-md-12
+        .card.mb-4
+          .card-header
+            h3 Wykres petycji w czasie
+          .card-body
+            = line_chart @formatted_petitions_by_month, line_chart_options('petitions_over_time_chart')
+      .col-md-6
+        .card.mb-4
+          .card-header
+            h3 Wykres petycji według departamentów
+          .card-body
+            = bar_chart @petitions_by_department, bar_chart_options('petitions_by_department_chart')
+      .col-md-6
+        .card.mb-4
+          .card-header
+            h3 Wykres petycji według typu
+          .card-body
+            = pie_chart @petition_type_values, pie_chart_options(@petition_type_labels, 'petitions_by_type_chart')
+
+  .tab-pane.fade#tables
+    h2 Tabele
+    h3 Najpopularniejsze tagi
+    table.table.table-striped
+      thead
+        tr
+          th Tag
+          th Liczba użyć
+      tbody
+        - @top_tags.each do |tag|
+          tr
+            td= tag.name
+            td= tag.taggings_count
+    h3 Petycje z największą liczbą wyświetleń
+    table.table.table-striped
+      thead
+        tr
+          th Tytuł
+          th Wyświetlenia
+      tbody
+        - @top_petitions_by_views.each do |petition|
+          tr
+            td= link_to petition.title, petition_path(petition)
+            td= petition.views
+
+= link_to "Eksportuj do CSV", admin_reports_path(format: :csv), class: "btn btn-secondary mt-4"
+

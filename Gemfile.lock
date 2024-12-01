@@ -85,6 +85,7 @@ GEM
       zeitwerk (>= 2.4, < 3.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    apexcharts (0.2.0)
     autoprefixer-rails (10.4.19.0)
       execjs (~> 2)
     base64 (0.2.0)
@@ -108,6 +109,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    chartkick (5.1.2)
     childprocess (5.1.0)
       logger (~> 1.5)
     chosen-rails (1.10.0)
@@ -154,6 +156,8 @@ GEM
       railties (>= 4.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    groupdate (6.5.1)
+      activesupport (>= 7)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     image_processing (1.13.0)
@@ -225,6 +229,7 @@ GEM
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    ostruct (0.6.1)
     popper_js (2.11.8)
     psych (5.1.2)
       stringio
@@ -352,6 +357,9 @@ GEM
     websocket-extensions (0.1.5)
     wicked (2.0.0)
       railties (>= 3.0.7)
+    wicked_pdf (2.8.2)
+      activesupport
+      ostruct
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.6.18)
@@ -362,11 +370,13 @@ PLATFORMS
 DEPENDENCIES
   active_storage_validations (~> 1.0, >= 1.0.3)
   acts-as-taggable-on
+  apexcharts
   bootsnap
   bootstrap (~> 5.3, >= 5.3.2)
   browser
   cancancan (~> 3.5)
   capybara
+  chartkick
   chosen-rails (~> 1.10)
   country_select
   debug
@@ -376,6 +386,7 @@ DEPENDENCIES
   faker
   flatpickr (~> 4.6, >= 4.6.11.0)
   font_awesome5_rails (~> 1.5)
+  groupdate
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
@@ -401,6 +412,7 @@ DEPENDENCIES
   tzinfo-data
   web-console
   wicked
+  wicked_pdf
 
 RUBY VERSION
    ruby 3.1.2p20
