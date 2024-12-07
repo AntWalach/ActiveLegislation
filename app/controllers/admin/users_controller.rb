@@ -5,6 +5,18 @@ class Admin::UsersController < ApplicationController
     def index
     end
 
+    def unverified
+      @search_url = departments_path
+    
+      @search = User.where(verified: false).ransack(params[:q])
+      @list = @unverified_users = @search.result(distinct: true).page(params[:page])
+      
+      respond_to do |f|
+        f.html
+        f.js { render "application/index" }
+      end
+    end
+
     def show
     end    
 
@@ -73,7 +85,27 @@ class Admin::UsersController < ApplicationController
           redirect_to users_path, alert: 'Nie udało się odblokować użytkownika.'
         end
       end
-    
+
+
+    def verify
+      user = User.find(params[:id])
+      if user.update(verified: true)
+        flash[:notice] = "Użytkownik został zweryfikowany."
+      else
+        flash[:alert] = "Nie udało się zweryfikować użytkownika."
+      end
+      redirect_to unverified_admin_users_path
+    end
+  
+    def reject
+      user = User.find(params[:id])
+      if user.destroy # Możesz zmienić na `update(verified: false)` jeśli nie chcesz usuwać użytkownika
+        flash[:notice] = "Użytkownik został odrzucony."
+      else
+        flash[:alert] = "Nie udało się odrzucić użytkownika."
+      end
+      redirect_to unverified_admin_users_path
+    end
     
     
 

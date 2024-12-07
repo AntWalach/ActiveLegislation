@@ -2,11 +2,12 @@ ul
     = render "left_menu_link", icon: "home", text: "Dashboard", url: authenticated_root_path, active:["dashboard"].include?(params[:action])
     = render "left_menu_link", icon: "file-signature", text: Petition.model_name.human(count: 2), url: admin_petitions_path, active: params[:controller] == "petitions"
     /= render "left_menu_link", icon: "scroll", text: Bill.model_name.human(count: 2), url: bills_path, active: params[:controller] == "bills"
+    = render "left_menu_link", icon: "check", text: "Verification", url: unverified_admin_users_path, active: false
     = render "left_menu_link", icon: "user", text: User.model_name.human(count: 2), url: users_path, active: params[:action] == "index" && params[:controller] == "users"
     = render "left_menu_link", icon: "user-edit", text: Official.model_name.human(count: 2), url: index_officials_users_path, active: params[:action] == "index_officials" && params[:controller] == "users"
     = render "left_menu_link", icon: "user-shield", text: Admin.model_name.human(count: 2), url: index_admins_users_path, active: params[:action] == "index_admins" && params[:controller] == "users"  
     = render "left_menu_link", icon: "building", text: Department.model_name.human(count: 2), url: departments_path, active:  params[:controller] == "departments"
-    = render "left_menu_link", icon: "chart-bar", text: "Statistics", url: admin_reports_path, active:  params[:controller] == "departments"
+    = render "left_menu_link", icon: "chart-bar", text: "Statistics", url: admin_reports_path, active:  params[:controller] == "reports"
 
 ul
     = render "left_menu_link", icon: "sign-out-alt", text: "Logout", url: logout_path, active: false, use_turbo: "turbo"

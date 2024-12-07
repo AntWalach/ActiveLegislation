@@ -6,7 +6,10 @@ Rails.application.routes.draw do
 
   resources :departments
   get 'reports/annual_report'
-  
+  resources :documents, only: [] do
+    post :generate_verification_document, on: :collection
+  end
+
   resources :notifications do
     collection do
       post :mark_as_read
@@ -130,14 +133,21 @@ Rails.application.routes.draw do
         post :merge_petitions
         get :merge_form
         post :merge
+
       end
     end
     resources :users, only: [:new, :create, :edit, :update, :destroy] do
+      collection do
+        get :unverified
+      end
       member do
         patch :block
         patch :unblock
+        post :verify
+        post :reject
       end
     end
   end
   get 'reports/annual_report', to: 'reports#annual_report', as: 'annual_report'
+  post 'save_temp_data', to: 'users/registrations#save_temp_data'
 end

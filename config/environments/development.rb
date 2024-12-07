@@ -79,4 +79,5 @@ Rails.application.configure do
   LetterOpener.configure do |config|
     config.location = File.join(Dir.home, 'tmp', 'letter_opener')
   end
+  Rails.application.routes.default_url_options[:host] = "localhost:3000"
 end

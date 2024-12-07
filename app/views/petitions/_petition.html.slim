@@ -108,7 +108,7 @@ h2 Komentarze
       |  napisał:
     p= comment.content
     p= comment.created_at.strftime('%Y-%m-%d %H:%M')
-    - if comment.user == current_user || current_user.admin?
+    - if comment.user == current_user || current_user.is_a?(Admin)
       = link_to 'Usuń', petition_comment_path(@petition, comment), method: :delete, data: { confirm: 'Jesteś pewien?' }
 
 - if user_signed_in?

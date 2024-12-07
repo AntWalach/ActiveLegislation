@@ -32,6 +32,23 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
+
+  # def save_temp_data
+  #   registration_data = sign_up_params
+  #   Rails.logger.debug "Dane zapisane w sesji: #{registration_data.inspect}"
+  
+  #   if registration_data.values.any?(&:blank?)
+  #     Rails.logger.debug "Nie wszystkie pola zostały wypełnione: #{registration_data.inspect}"
+  #     render json: { error: "Wszystkie pola muszą być wypełnione." }, status: :unprocessable_entity
+  #     return
+  #   end
+  
+  #   session[:registration_data] = registration_data
+  #   render json: { message: "Dane zapisane pomyślnie. Możesz teraz wygenerować dokument." }, status: :ok
+  # end
+  
+  
+
   # GET /resource/edit
   # def edit
   #   super
@@ -83,7 +100,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params.require(:user).permit(
         :first_name, :last_name, :phone_number, :email, :province, :address, :postal_code, :city, :pesel,
         :password, :password_confirmation,
-        :terms_of_service, :consent_data_processing, :information_acknowledgment
+        :terms_of_service, :consent_data_processing, :information_acknowledgment, :verification_document
       )
     rescue ActionController::ParameterMissing
       {}

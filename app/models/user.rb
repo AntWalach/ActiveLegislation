@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :assigned_officials, dependent: :destroy
   has_many :assigned_petitions, through: :assigned_officials, source: :petition
+
+  has_one_attached :verification_document
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -24,6 +26,8 @@ class User < ApplicationRecord
   validates :terms_of_service, acceptance: { message: "Musisz zaakceptować regulamin, aby się zarejestrować." }
   validates :consent_data_processing, acceptance: { message: "Musisz wyrazić zgodę na przetwarzanie danych osobowych." }
   validates :information_acknowledgment, acceptance: { message: "Musisz zapoznać się z treścią powyższych informacji." }
+  validate :verification_document_format, on: :create
+  validate :verification_document_presence, on: :create
 
   after_create :auto_set_role
 
@@ -99,6 +103,20 @@ class User < ApplicationRecord
   # Devise: Komunikat dla zablokowanych użytkowników
   def inactive_message
     !blocked? ? super : :blocked
+  end
+
+  private
+
+  def verification_document_presence
+    errors.add(:verification_document, "jest wymagany") unless verification_document.attached?
+  end
+
+  def verification_document_format
+    return unless verification_document.attached?
+
+    unless verification_document.content_type.in?(%w(application/pdf))
+      errors.add(:verification_document, "Musi być w formacie PDF")
+    end
   end
 
 
