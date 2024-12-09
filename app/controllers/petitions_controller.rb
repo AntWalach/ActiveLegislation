@@ -40,7 +40,7 @@ class PetitionsController < ApplicationController
   def create
     @petition = Petition.new(petition_params)
     @petition.user = current_user if user_signed_in?
-    @petition.status = "draft"
+    @petition.status = :draft
     if @petition.save
       redirect_to petition_petition_steps_path(@petition)
     else
@@ -76,7 +76,7 @@ class PetitionsController < ApplicationController
     respond_to do |format|
       if @petition.update(petition_params)
         if @petition.awaiting_supplement?
-          @petition.update(status: :submitted)
+          @petition.update(status: 1)
 
         end
         format.html { redirect_to petition_url(@petition), notice: "Petycja została zaktualizowana." }

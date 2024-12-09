@@ -159,7 +159,7 @@ class Admin::PetitionsController < ApplicationController
         merged_petitions = @petition.merged_petitions
   
         merged_petitions.each do |merged_petition|
-          merged_petition.update!(status: merged_petition.previous_status || "submitted", merged_into: nil)
+          merged_petition.update!(status: merged_petition.previous_status || :submitted, merged_into: nil)
           merged_petition.update!(previous_status: nil)
         end
   

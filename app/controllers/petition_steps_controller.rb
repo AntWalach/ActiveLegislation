@@ -24,7 +24,7 @@ class PetitionStepsController < ApplicationController
 
   def finish
     @petition.completed = true
-    @petition.status = 'draft'
+    @petition.status = :draft
 
     if @petition.save
       redirect_to @petition, notice: 'Petycja została pomyślnie złożona.'

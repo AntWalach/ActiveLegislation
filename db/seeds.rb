@@ -163,7 +163,7 @@ petition_env = Petition.new(
   address: 'ul. Zielona 10, 00-001 Warszawa',
   gdpr_consent: true,
   privacy_policy: true,
-  status: 'draft', # Poprawiono literówkę
+  status: :draft, 
   tag_list: 'środowisko, powietrze, zdrowie, ekologia',
   user: user1, # Przypisanie użytkownika
   completed: true
@@ -206,9 +206,9 @@ petition_edu = Petition.new(
   address: 'ul. Szkolna 15, 00-002 Kraków',
   gdpr_consent: true,
   privacy_policy: true,
-  status: 'draft',
+  status: :draft,
   tag_list: 'edukacja, infrastruktura, dzieci, szkoła',
-  user: user2, # Przypisanie użytkownika
+  user: user2,
   completed: true
 )
 
@@ -249,9 +249,9 @@ petition_trans = Petition.new(
   address: 'ul. Pomocna 8, 00-003 Poznań',
   gdpr_consent: true,
   privacy_policy: true,
-  status: 'draft',
+  status: :draft,
   tag_list: 'transport, niepełnosprawni, komunikacja miejska, dostępność',
-  user: user3, # Przypisanie użytkownika
+  user: user3,
   completed: true  
   )
 

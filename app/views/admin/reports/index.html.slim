@@ -36,6 +36,7 @@ h1 Raporty i Statystyki
           .card-header
             h3 Wykres petycji według statusów
           .card-body
+          
             = pie_chart @petitions_status_values, pie_chart_options(@petitions_status_labels, 'petitions_by_status_chart')
       .col-md-6
         .card.mb-4

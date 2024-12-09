@@ -8,8 +8,8 @@ class Admin::ReportsController < ApplicationController
     status = params[:status]
 
     # Filtruj petycje na podstawie parametrów
-    @petitions = Petition.where(created_at: from_date.beginning_of_day..to_date.end_of_day)
-    @petitions = @petitions.where(status: status) if status.present?
+    @petitions = Petition.completed.where(created_at: from_date.beginning_of_day..to_date.end_of_day)
+
 
     # Statystyki ogólne
     @total_petitions = @petitions.count
@@ -21,8 +21,8 @@ class Admin::ReportsController < ApplicationController
                                        .average('DATEDIFF(response_deadline, submission_date)') || 0
 
     # Grupowanie według statusu
-    @petitions_by_status = @petitions.group(:status).count
-    @petitions_status_labels = @petitions_by_status.keys.map { |status| Petition.statuses.key(status) || "Nieznany status" }
+    @petitions_by_status = @petitions.group('petitions.status').count
+    @petitions_status_labels = @petitions_by_status.keys.map { |status| Petition.statuses.keys.include?(status) ? status : "Nieznany status" }
     @petitions_status_values = @petitions_by_status.values
 
     # Grupowanie według tagów
@@ -42,7 +42,7 @@ class Admin::ReportsController < ApplicationController
 
     # Grupowanie według typu petycji
     @petitions_by_type = @petitions.group(:petition_type).count
-    @petition_type_labels = @petitions_by_type.keys.map { |type| Petition.petition_types.key(type) || "Nieznany" }
+    @petition_type_labels = @petitions_by_type.keys.map { |type| Petition.petition_types.keys.include?(type) ? type : "Nieznany" }
     @petition_type_values = @petitions_by_type.values
 
     # Najpopularniejsze tagi w filtrowanych petycjach

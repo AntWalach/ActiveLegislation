@@ -7,7 +7,7 @@ class Officials::PetitionsController < ApplicationController
 
 
   def index
-    petitions_for_department = Petition.completed.where(department: current_user.department).where.not(status: "draft")
+    petitions_for_department = Petition.completed.where(department: current_user.department).where.not(status: :draft)
     shared_petitions = Petition.shared_with_department(current_user.department)
     
     @petitions = Petition.from(
@@ -229,7 +229,7 @@ class Officials::PetitionsController < ApplicationController
   
     Petition.transaction do
       @petition.merged_petitions.each do |merged_petition|
-        merged_petition.update!(status: merged_petition.previous_status || "submitted", previous_status: nil, merged_into: nil)
+        merged_petition.update!(status: merged_petition.previous_status || 1, previous_status: nil, merged_into: nil)
       end
     end
   
@@ -256,7 +256,7 @@ class Officials::PetitionsController < ApplicationController
   
     Petition.transaction do
       @petitions_to_unmerge.each do |petition|
-        petition.update!(status: petition.previous_status || 'submitted', previous_status: nil, merged_into: nil)
+        petition.update!(status: petition.previous_status || 1, previous_status: nil, merged_into: nil)
       end
     end
   
