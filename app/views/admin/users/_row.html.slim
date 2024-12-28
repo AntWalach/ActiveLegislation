@@ -7,7 +7,7 @@ tr
             - pdf_url = rails_blob_url(el.verification_document, host: "localhost:3000", disposition: "inline")
             = button_tag "Zobacz dokument", type: :button, class: "btn btn-secondary", data: { action: "click->modal#open" }, "data-user-id" => el.id , "data-pdf-url" => rails_blob_url(el.verification_document, disposition: "inline")
         - else
-        span Brak dokumentu
+            span Brak dokumentu
     td
         = button_to "Zweryfikuj", verify_admin_user_path(el), method: :post, class: "btn btn-success"
         = button_to "Odrzuć", reject_admin_user_path(el), method: :post, class: "btn btn-danger"

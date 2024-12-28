@@ -6,9 +6,11 @@ class Petition < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many_attached :attachments
   has_many :official_comments, dependent: :destroy
+ 
   has_many_attached :images
   has_one_attached :main_image
   has_many_attached :third_party_consents
+
   has_many :petition_views, dependent: :destroy
   has_many :votes, dependent: :destroy
   has_many :voters, through: :votes, source: :user

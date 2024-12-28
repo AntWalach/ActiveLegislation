@@ -5,25 +5,14 @@
     /= image_tag(asset_url("legislatio_logo2_transparent4.png"))
   .login-right
     .login-container
-      h2 Log in
+      h2 Logowanie
       = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
         .form-inputs
-          = f.input :email, required: false, autofocus: true, input_html: { autocomplete: "email" }
-          = f.input :password, required: false, input_html: { autocomplete: "current-password" }
+          = f.input :email, required: false, autofocus: true, input_html: { autocomplete: "email" }, label: t("devise.labels.email")
+          = f.input :password, required: false, input_html: { autocomplete: "current-password" }, label: t("devise.labels.password")
 
         .form-actions
-          = f.button :submit, "Log in", class: "login-button"
+          = f.button :submit, "Zaloguj się", class: "login-button"
 
-      .social-login
-        p or log in with
-        .social-icons
-          / a href="#" 
-          /   img src="facebook-icon.png" alt="Facebook"
-          / a href="#" 
-          /   img src="google-icon.png" alt="Google"
-          / a href="#" 
-          /   img src="twitter-icon.png" alt="Twitter"
-          / a href="#" 
-          /   img src="apple-icon.png" alt="Apple"
-
+      br
       = render "devise/shared/links"

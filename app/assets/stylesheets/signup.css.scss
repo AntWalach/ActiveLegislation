@@ -52,21 +52,45 @@
   color: #333333;
 }
 
+
 .signup-button {
-  width: 100%;
-  background-color: #0056b3;
-  color: white;
-  padding: 12px 15px;
+
+  width: 48% !important;
+  padding: 10px;
+  margin: 10px 0;
   border: none;
   border-radius: 5px;
   font-size: 16px;
-  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.signup-button:hover {
-  background-color: #003f82;
+.signup-button.clear-button {
+  background-color: #f8f9fa; /* Jasny szary */
+  color: #212529; /* Ciemny szary */
+  border: 1px solid #ced4da;
 }
+
+.signup-button.clear-button:hover {
+  background-color: #e2e6ea; /* Trochę ciemniejszy szary */
+  color: #000; /* Ciemniejszy tekst */
+}
+
+.signup-button.next-button {
+  background-color: #007bff; /* Niebieski */
+  color: #fff; /* Biały tekst */
+  border: 1px solid #007bff;
+}
+
+.signup-button.next-button:hover {
+  background-color: #0056b3; /* Ciemniejszy niebieski */
+  border-color: #004085;
+}
+
+.signup-button.register-button {
+
+}
+
 
 .form-group {
   display: flex;
@@ -168,52 +192,51 @@
   }
 }
 
-
 .help-container {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  margin-top: 16px;
-  font-family: Arial, sans-serif;
+  background-color: #ffffff; /* Białe tło */
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0; /* Subtelna ramka */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Delikatny cień */
 }
 
 .help-container h3 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 12px;
+  font-size: 24px; /* Większy nagłówek */
+  text-align: center;
+  color: #343a40; /* Ciemniejszy kolor tekstu */
+  margin-bottom: 15px;
 }
 
 .help-container hr {
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 12px 0;
+  border-top: 1px solid #e0e0e0;
 }
 
 .help-container p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #555;
+  color: #6c757d; /* Stonowany szary kolor */
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-.help-container ol {
-  padding-left: 20px;
-  margin-top: 12px;
+.step {
+  display: flex;
+  align-items: center; /* Wyrównanie ikon z tekstem */
+  margin-bottom: 15px;
 }
 
-.help-container ol li {
-  margin-bottom: 8px;
-  font-size: 1rem;
-  line-height: 1.4;
+.step i {
+  font-size: 20px; /* Większe ikony */
+  margin-right: 10px;
 }
 
-.help-container ol li a {
-  color: #007bff;
-  text-decoration: none;
+.help-container .btn-secondary {
+  font-size: 14px;
+  padding: 5px 10px;
 }
 
-.help-container ol li a:hover {
-  text-decoration: underline;
+.help-container p:last-of-type {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20px;
 }
 
 .btn-secondary {
@@ -257,5 +280,19 @@
   margin-bottom: 15px;
   line-height: 1.5;
 }
+.step {
+  display: flex;
+  align-items: flex-start; /* Wyrównanie do góry */
+  margin-bottom: 15px;
+}
 
+.step i {
+  margin-right: 10px;
+  font-size: 20px;
+  flex-shrink: 0; /* Zapobiega zmniejszaniu się ikony */
+}
+
+.step div {
+  line-height: 1.5; /* Lepsza czytelność tekstu */
+}
 

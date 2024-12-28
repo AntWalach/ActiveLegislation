@@ -62,6 +62,9 @@ group :development do
 
   gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
   gem 'letter_opener', '~> 1.8', '>= 1.8.1'
+  gem 'rails-erd'
+  gem "rails-mermaid_erd"
+  gem 'railroady'
 end
 
 group :test do

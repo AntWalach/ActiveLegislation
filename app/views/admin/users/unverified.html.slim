@@ -1,34 +1,6 @@
 h1 Niezweryfikowani użytkownicy
 div data-controller="modal"
   = render "index_table", list: @unverified_users
-/   - if @unverified_users.any?
-/     table
-/       thead
-/         tr
-/           th Imię
-/           th Nazwisko
-/           th E-mail
-/           th Dokument
-/           th Akcje
-/       tbody
-/         - @unverified_users.each do |user|
-/           tr
-/             td = user.first_name
-/             td = user.last_name
-/             td = mail_to user.email
-/             td
-/               - if user.verification_document.attached?
-/                 - pdf_url = rails_blob_url(user.verification_document, host: "localhost:3000", disposition: "inline")
-/                 = button_tag "Zobacz dokument", type: :button, class: "btn btn-secondary", data: { action: "click->modal#open" }, "data-user-id" => user.id , "data-pdf-url" => rails_blob_url(user.verification_document, disposition: "inline")
-/               - else
-/                 span Brak dokumentu
-/             td
-/               = button_to "Zweryfikuj", verify_admin_user_path(user), method: :post, class: "btn btn-success"
-/               = button_to "Odrzuć", reject_admin_user_path(user), method: :post, class: "btn btn-danger"
-/   - else
-/     p Brak użytkowników do weryfikacji
-
-
   div.modal.fade#pdfModal tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true"
     div.modal-dialog.modal-lg
       div.modal-content

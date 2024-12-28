@@ -112,6 +112,7 @@ GEM
     chartkick (5.1.2)
     childprocess (5.1.0)
       logger (~> 1.5)
+    choice (0.2.0)
     chosen-rails (1.10.0)
       coffee-rails (>= 3.2)
       railties (>= 3.0)
@@ -251,6 +252,7 @@ GEM
     rackup (2.1.0)
       rack (>= 3)
       webrick (~> 1.8)
+    railroady (1.6.0)
     rails (7.1.4.1)
       actioncable (= 7.1.4.1)
       actionmailbox (= 7.1.4.1)
@@ -269,9 +271,16 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
+    rails-erd (1.7.2)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
+    rails-mermaid_erd (0.5.1)
+      rails (>= 5.2)
     railties (7.1.4.1)
       actionpack (= 7.1.4.1)
       activesupport (= 7.1.4.1)
@@ -299,6 +308,8 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.3.8)
+    ruby-graphviz (1.2.5)
+      rexml
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
@@ -407,7 +418,10 @@ DEPENDENCIES
   mysql2
   prawn
   puma (>= 5.0)
+  railroady
   rails (~> 7.1.3, >= 7.1.3.4)
+  rails-erd
+  rails-mermaid_erd
   ransack (~> 4.0)
   recaptcha
   redis (>= 4.0.1)
