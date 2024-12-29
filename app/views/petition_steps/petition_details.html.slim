@@ -1,21 +1,50 @@
-/ app/views/petition_steps/petition_details.html.slim
-= simple_form_for @petition, url: wizard_path do |f|
+= simple_form_for @petition, url: wizard_path, html: { class: 'custom-form', multipart: true  } do |f|
   = f.error_notification
 
-  .card
-    .card-header
-      h3 Szczegóły petycji
-    .card-body
-      = f.input :title, required: true, label: 'Tytuł'
-      = f.input :description, as: :rich_text_area, required: true, label: 'Opis'
-      = f.input :justification, as: :rich_text_area, required: true, label: 'Uzasadnienie'
-      = f.input :tag_list, label: 'Tagi', hint: 'Wpisz tagi oddzielone przecinkami'
-      = f.input :external_links, as: :text, label: 'Linki zewnętrzne (jeden na linię)'
-      = f.input :attachments, as: :file, label: 'Załącznik', input_html: { multiple: true }
-      = f.input :main_image, as: :file, label: 'Główne zdjęcie', input_html: { accept: 'image/*' }
-      = f.input :images, as: :file, label: 'Dodaj zdjęcia', input_html: { multiple: true, accept: 'image/*' }
-      = f.input :public_comment, as: :text, label: 'Komentarz publiczny'
 
   .form-actions
-    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
-    = f.submit "Dalej", class: 'btn btn-primary'
+    = link_to 'Wstecz', previous_wizard_path, class: 'custom-btn-secondary'
+    = f.submit "Dalej", class: 'custom-btn'
+  br
+  .progress-bar-container
+    .progress-bar-inner(style="width: calc(300% / 5);")
+
+  .progress-info
+    p Krok 3 z 5: Szczegóły petycji
+
+  .custom-card
+    .custom-card-header
+      h3 Szczegóły petycji
+      p.text-muted Wypełnij szczegóły dotyczące petycji, takie jak jej tytuł, opis, uzasadnienie oraz inne dodatkowe informacje.
+
+    .custom-card-body
+      .custom-form-group
+        = f.input :title, required: true, label: 'Tytuł', hint: 'Wprowadź krótki i zwięzły tytuł petycji.', input_html: { class: 'custom-input' }
+
+      .custom-form-group
+        = f.input :description, as: :rich_text_area, required: true, label: 'Opis', hint: 'Wprowadź szczegółowy opis celu petycji.'
+
+      .custom-form-group
+        = f.input :justification, as: :rich_text_area, required: true, label: 'Uzasadnienie', hint: 'Podaj uzasadnienie, dlaczego ta petycja jest ważna.'
+
+      .custom-form-group
+        = f.input :tag_list, label: 'Tagi', hint: 'Wpisz tagi oddzielone przecinkami (np. ekologia, zdrowie).', input_html: { class: 'custom-input' }
+
+      .custom-form-group
+        = f.input :external_links, as: :text, label: 'Linki zewnętrzne (jeden na linię)', hint: 'Podaj linki do dodatkowych informacji, np. https://example.com.', input_html: { class: 'custom-textarea' }
+
+      .custom-form-group
+        = f.input :attachments, as: :file, label: 'Załącznik', hint: 'Możesz dodać dokumenty w formacie PDF lub DOC.', input_html: { class: 'custom-file', multiple: true }
+
+      .custom-form-group
+        = f.input :main_image, as: :file, label: 'Główne zdjęcie', hint: 'Dodaj zdjęcie główne w formacie JPG lub PNG.', input_html: { class: 'custom-file', accept: 'image/*' }
+
+      .custom-form-group
+        = f.input :images, as: :file, label: 'Dodaj zdjęcia', hint: 'Możesz dodać kilka zdjęć w formacie JPG lub PNG.', input_html: { class: 'custom-file', multiple: true, accept: 'image/*' }
+
+      .custom-form-group
+        = f.input :public_comment, as: :text, label: 'Komentarz publiczny', hint: 'Wprowadź dodatkowe informacje lub komentarz publiczny.', input_html: { class: 'custom-textarea' }
+
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'custom-btn-secondary'
+    = f.submit "Dalej", class: 'custom-btn'

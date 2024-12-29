@@ -1,6 +1,6 @@
 ul
   = render "left_menu_link", icon: "home", text: "Dashboard", url: authenticated_root_path, active: ["dashboard"].include?(params[:action])
-  = render "left_menu_link", icon: "file-signature", text: Petition.model_name.human(count: 2), url: petitions_path, active: params[:controller] == "petitions" && params[:action] == "index"
+  = render "left_menu_link", icon: "folder-open", text: Petition.model_name.human(count: 2), url: petitions_path, active: params[:controller] == "petitions" && params[:action] == "index"
   = render "left_menu_link", icon: "file-signature", text: "My petitions", url: my_petitions_petitions_path, active: params[:action] == "my_petitions" && params[:controller] == "petitions"  
 
 ul

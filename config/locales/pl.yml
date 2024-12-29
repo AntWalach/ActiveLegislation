@@ -1,0 +1,55 @@
+pl:
+  activerecord:
+    models:
+      department: "Instytucja"
+    attributes:
+      petition:
+      
+        status:
+          draft: "Szkic"
+          submitted: "Złożona"
+          under_review: "W trakcie analizy"
+          awaiting_supplement: "Oczekuje na uzupełnienie"
+          responded: "Odpowiedziana"
+          rejected: "Odrzucona"
+          merged: "Scalona"
+        petition_type:
+          private_individual: "Osoba prywatna"
+          business_individual: "Osoba fizyczna prowadząca działalność"
+          group_petition: "Grupa osób"
+          third_party: "Organizacja lub pełnomocnik"
+      department:
+        name: "Nazwa instytucji"
+        description: "Opis instytucji"
+  time:
+    formats:
+      long: "%d %B %Y, %H:%M"
+  date:
+    month_names:
+      - ~ # dla pustej wartości (np. index 0, który jest pomijany)
+      - Styczeń
+      - Luty
+      - Marzec
+      - Kwiecień
+      - Maj
+      - Czerwiec
+      - Lipiec
+      - Sierpień
+      - Wrzesień
+      - Październik
+      - Listopad
+      - Grudzień
+    abbr_month_names:
+      - ~
+      - Sty
+      - Lut
+      - Mar
+      - Kwi
+      - Maj
+      - Cze
+      - Lip
+      - Sie
+      - Wrz
+      - Paź
+      - Lis
+      - Gru

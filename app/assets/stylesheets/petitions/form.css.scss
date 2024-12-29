@@ -119,3 +119,214 @@
   .third-party-fields {
     display: none;
   }
+
+
+  .custom-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    margin: 20px auto;
+    max-width: 800px;
+  }
+  
+  .custom-card-header {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .custom-card-header h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  
+  .custom-card-body {
+    padding: 20px;
+  }
+  
+  .custom-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .custom-form-group label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .custom-input,
+  .custom-select {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .custom-input:focus,
+  .custom-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0px 0px 8px rgba(37, 99, 235, 0.5);
+    outline: none;
+  }
+  
+  .custom-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+  }
+  
+  .custom-btn:active {
+    background-color: #1e40af;
+    transform: translateY(1px);
+  }
+  
+  .custom-btn-secondary {
+    background-color: #6c757d;
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .custom-btn-secondary:hover {
+    background-color: #5a6268;
+    transform: scale(1.02);
+  }
+  
+  .custom-btn-secondary:active {
+    background-color: #4e555b;
+    transform: scale(0.98);
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .form-actions.single-button {
+    justify-content: flex-end; /* Wyrównanie do prawej strony */
+  }
+  
+  .form-actions:first-of-type {
+    margin-top: 10px;
+  }
+  
+
+  @media (max-width: 768px) {
+    .custom-card {
+      padding: 15px;
+      margin: 10px;
+    }
+  
+    .custom-btn,
+    .custom-btn-secondary {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+  
+    .form-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .summary-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .summary-text {
+    margin-top: 5px;
+    color: #4a5568;
+  }
+  
+  .images-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .image-thumbnail img {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-preview img {
+    display: block;
+    margin: 10px 0;
+    border-radius: 8px;
+  }
+
+  .progress-bar {
+    width: 100%;
+    background: #f1f1f1;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .progress-bar-container {
+    width: 100%;
+    height: 25px;
+    border: 2px solid #007bff; /* Dodanie obramowania w kolorze niebieskim */
+    border-radius: 12px; /* Zaokrąglone rogi */
+    background-color: #f8f9fa; /* Tło dla kontenera */
+    overflow: hidden; /* Aby nie wystawały wewnętrzne elementy */
+  }
+  
+  .progress-bar-inner {
+    height: 100%;
+    background-color: #007bff; /* Kolor wypełnienia */
+    width: 0%; /* Wartość dynamicznie zmieniana */
+    transition: width 0.5s ease; /* Animacja zwiększania szerokości */
+  }
+
+  .custom-file {
+    border: 1px dashed #007bff;
+    padding: 10px;
+    border-radius: 5px;
+    background: #f9f9f9;
+  }
+  .custom-file:hover {
+    background: #e9f5ff;
+  }
+
+

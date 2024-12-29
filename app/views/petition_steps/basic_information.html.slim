@@ -1,22 +1,41 @@
-= simple_form_for @petition, url: wizard_path do |f|
+= simple_form_for @petition, url: wizard_path, html: { class: 'custom-form', multipart: true } do |f|
   = f.error_notification
 
-  .card
-    .card-header
+  .form-actions.single-button
+    = f.submit "Dalej", class: 'custom-btn'
+  br
+  .progress-bar-container
+    .progress-bar-inner(style="width: calc(100% / 5);")
+
+  .progress-info
+    p Krok 1 z 5: Informacje podstawowe
+
+  .custom-card
+    .custom-card-header
       h3 Informacje podstawowe
-    .card-body
-      = f.input :petition_type,
-                collection: Petition.petition_types.keys.map { |type| [t("petition_types.#{type}"), type] },
-                prompt: 'Wybierz rodzaj petycji',
-                required: true,
-                label: 'Rodzaj petycji'
+      p.text-muted W tym kroku wprowadź podstawowe informacje dotyczące petycji, takie jak jej rodzaj oraz adresat.
 
-      = f.input :recipient, required: true, label: 'Adresat petycji'
+    .custom-card-body
+      .custom-form-group
+        = f.input :petition_type,
+                  collection: Petition.petition_types.keys.map { |type| [I18n.t("activerecord.attributes.petition.petition_type.#{type}", default: type.humanize), type] },
+                  prompt: 'Wybierz rodzaj petycji',
+                  required: true,
+                  label: 'Rodzaj petycji',
+                  hint: 'Wybierz rodzaj petycji, który najlepiej opisuje charakter Twojego wniosku.',
+                  input_html: { class: 'custom-select' }
 
-      = f.input :department_id,
-                collection: Department.all.map { |d| [d.name, d.id] },
-                prompt: 'Wybierz Departament',
-                label: 'Departament', input_html: { data: { controller: "choosen" } }
+      .custom-form-group
+        = f.input :recipient, required: true, label: 'Adresat petycji', hint: 'Podaj osobę, instytucję lub organ, do którego skierowana jest petycja.', input_html: { class: 'custom-input' }
 
-  .form-actions
-    = f.submit "Dalej", class: 'btn btn-primary'
+      .custom-form-group
+        = f.input :department_id,
+                  collection: Department.all.map { |d| [d.name, d.id] },
+                  prompt: 'Wybierz instytucję',
+                  label: 'Instytucja',
+                  hint: 'Wybierz instytucję z listy, jeżeli dotyczy.',
+                  input_html: { class: 'custom-select' }
+
+  .form-actions.single-button
+    = f.submit "Dalej", class: 'custom-btn'
+

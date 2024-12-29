@@ -65,9 +65,10 @@ class Petition < ApplicationRecord
     petition.validates :privacy_policy, acceptance: true
   end
 
-  validates :third_party_name, presence: true, if: :third_party_petition?
-  validates :business_name, :business_email, presence: true, if: :business_individual_petition?
-  validates :representative_name, presence: true, if: :group_petition?
+  
+  #validates :third_party_name, presence: true, if: :third_party_petition?
+  #validates :business_name, :business_email, presence: true, if: :business_individual_petition?
+  #validates :representative_name, presence: true, if: :group_petition?
  
 
 

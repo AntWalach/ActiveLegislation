@@ -74,10 +74,9 @@ class PetitionsController < ApplicationController
   # PATCH/PUT /petitions/1 or /petitions/1.json
   def update
     respond_to do |format|
-      if @petition.update(petition_params)
+      if update_petition_with_attachments
         if @petition.awaiting_supplement?
-          @petition.update(status: 1)
-
+          @petition.update(status: :submitted)
         end
         format.html { redirect_to petition_url(@petition), notice: "Petycja została zaktualizowana." }
         format.json { render :show, status: :ok, location: @petition }
@@ -107,6 +106,37 @@ class PetitionsController < ApplicationController
 
   private
 
+  def update_petition_with_attachments
+    ActiveRecord::Base.transaction do
+      Rails.logger.debug "Dodawanie załączników..."
+      if petition_params[:attachments].present?
+        @petition.attachments.attach(petition_params[:attachments])
+      end
+  
+      Rails.logger.debug "Dodawanie zdjęć..."
+      if petition_params[:images].present?
+        @petition.images.attach(petition_params[:images])
+      end
+  
+      Rails.logger.debug "Dodawanie głównego zdjęcia..."
+      if petition_params[:main_image].present?
+        @petition.main_image.attach(petition_params[:main_image])
+      end
+  
+      Rails.logger.debug "Dodawanie zgód osób trzecich..."
+      if petition_params[:third_party_consents].present?
+        @petition.third_party_consents.attach(petition_params[:third_party_consents])
+      end
+  
+      Rails.logger.debug "Aktualizacja pozostałych pól..."
+      unless @petition.update!(petition_params.except(:attachments, :images, :main_image, :third_party_consents))
+        raise ActiveRecord::Rollback, "Nie udało się zaktualizować petycji"
+      end
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "Błąd podczas aktualizacji: #{e.message}"
+    false
+  end
 
   def set_petition
     @petition = Petition.find(params[:id])

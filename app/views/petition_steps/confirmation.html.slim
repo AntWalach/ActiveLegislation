@@ -1,21 +1,91 @@
-/ app/views/petition_steps/confirmation.html.slim
-= simple_form_for @petition, url: finish_wizard_path, method: :post do |f|
-  .card
-    .card-header
-      h3 Podsumowanie petycji
-    .card-body
-      / Wyświetl podsumowanie wszystkich wprowadzonych danych
-      p
-        strong 'Rodzaj petycji: '
-        = t("petition_types.#{@petition.petition_type}")
-      p
-        strong 'Adresat petycji: '
-        = @petition.recipient
-      p
-        strong 'Tytuł petycji: '
-        = @petition.title
-      / Dodaj pozostałe pola według potrzeb
+= simple_form_for @petition, url: finish_wizard_path, method: :post, html: { class: 'custom-form', multipart: true } do |f|
+  .form-actions.d-flex.justify-content-between.mb-4
+    = link_to "Wstecz", previous_wizard_path, class: "custom-btn-secondary"
+    = f.submit "Złóż petycję", class: "custom-btn custom-btn-primary"
 
-  .form-actions
-    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
-    = f.submit "Złóż petycję", class: 'btn btn-primary'
+  .confirmation-message.alert-success.text-center
+    p Wszystkie dane zostały poprawnie zebrane. Możesz teraz złożyć swoją petycję.
+
+  .progress-bar-container.mt-4.mb-3
+    .progress-bar-inner(style="width: 100%;")
+
+  .progress-info.text-center.text-muted
+    p Krok 5 z 5: Podsumowanie petycji
+
+  .custom-card.mt-4.p-4.shadow-sm.border-rounded
+    .custom-card-header.bg-light.py-3.text-center
+      h3 Podsumowanie petycji
+      p.text-muted Proszę upewnij się, że wszystkie dane są poprawne, zanim złożysz petycję.
+
+    .custom-card-body
+      .row
+        .col-md-6
+          .summary-item.mb-4
+            strong.text-primary Rodzaj petycji:
+            span.text-dark.font-weight-bold = t("petition_types.#{@petition.petition_type}")
+          .summary-item.mb-4
+            strong.text-primary Adresat petycji:
+            span.text-dark.font-weight-bold = @petition.recipient
+          .summary-item.mb-4
+            strong.text-primary Tytuł petycji:
+            span.text-dark.font-weight-bold = @petition.title
+          .summary-item.mb-4
+            strong.text-primary Tagi:
+            - if @petition.tag_list.present?
+              span.text-dark.font-weight-bold = @petition.tag_list.join(", ")
+            - else
+              span.text-muted Brak
+          .summary-item.mb-4
+            strong.text-primary Linki zewnętrzne:
+            - if @petition.external_links.present?
+              ul
+                - @petition.external_links.split("\n").each do |link|
+                  li
+                    = link_to link, link, target: "_blank", rel: "noopener noreferrer", class: "text-decoration-none"
+            - else
+              span.text-muted Brak
+
+        .col-md-6
+          .summary-item.mb-4
+            strong.text-primary Opis petycji:
+            .summary-text.scrollable-box.border.border-light.bg-light.p-3
+              = @petition.description
+          .summary-item.mb-4
+            strong.text-primary Uzasadnienie:
+            .summary-text.scrollable-box.border.border-light.bg-light.p-3
+              = @petition.justification
+          .summary-item.mb-4
+            strong.text-primary Załączniki:
+            - if @petition.attachments.attached?
+              ul
+                - @petition.attachments.each do |attachment|
+                  li
+                    = link_to attachment.filename.to_s, rails_blob_path(attachment, disposition: "attachment"), target: "_blank", class: "text-decoration-none"
+                    span.text-muted.ml-2 ="#{number_to_human_size(attachment.byte_size)}"
+            - else
+              span.text-muted Brak
+          .summary-item.mb-4
+            strong.text-primary Główne zdjęcie:
+            - if @petition.main_image.attached?
+              .image-preview.mt-3.text-center = image_tag rails_blob_url(@petition.main_image), alt: "Główne zdjęcie", style: "max-width: 200px; border: 1px solid #ccc; border-radius: 8px;"
+            - else
+              span.text-muted Brak
+          .summary-item.mb-4
+            strong.text-primary Zdjęcia:
+            - if @petition.images.attached?
+              .images-grid.mt-3
+                - @petition.images.each do |image|
+                  .image-thumbnail = image_tag rails_blob_url(image), alt: "Zdjęcie", style: "max-width: 150px; margin: 5px; display: inline-block; border: 1px solid #ccc; border-radius: 5px;"
+            - else
+              span.text-muted Brak
+          .summary-item.mb-4
+            strong.text-primary Komentarz publiczny:
+            - if @petition.public_comment.present?
+              .summary-text.scrollable-box.border.border-light.bg-light.p-3
+                = @petition.public_comment
+            - else
+              span.text-muted Brak
+
+  .form-actions.d-flex.justify-content-between.mt-4
+    = link_to "Wstecz", previous_wizard_path, class: "custom-btn-secondary"
+    = f.submit "Złóż petycję", class: "custom-btn custom-btn-primary"

@@ -1,34 +1,67 @@
-/ app/views/petition_steps/petitioner_details.html.slim
-= simple_form_for @petition, url: wizard_path, html: { data: { controller: 'address' } } do |f|
+= simple_form_for @petition, url: wizard_path, html: { class: 'custom-form', data: { controller: 'address' }, multipart: true } do |f|
   = f.error_notification
+  
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'custom-btn-secondary'
+    = f.submit "Dalej", class: 'custom-btn'
+  
+  br
+  .progress-bar-container
+    .progress-bar-inner(style="width: calc(200% / 5);")
 
-  .card
-    .card-header
+  .progress-info
+    p Krok 2 z 5: Dane wnioskodawcy
+
+  .custom-card
+    .custom-card-header
       h3 Dane wnioskodawcy
-    .card-body
-      = f.input :creator_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu'
+      p.text-muted Wypełnij informacje o wnioskodawcy, w tym adres zamieszkania i korespondencji. Pola oznaczone gwiazdką (*) są wymagane.
 
-      = f.input :email, required: true, label: 'Adres e-mail', as: :email,
-                input_html: { value: (user_signed_in? ? current_user.email : ''), readonly: user_signed_in? }
+    .custom-card-body
+      .custom-form-group
+        = f.input :creator_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu',
+                  hint: 'Podaj pełne imię i nazwisko lub nazwę organizacji.',
+                  input_html: { class: 'custom-input' }
+
+      .custom-form-group
+        = f.input :email, required: true, label: 'Adres e-mail', as: :email,
+                  hint: 'Podaj adres e-mail, na który otrzymasz potwierdzenie.',
+                  input_html: { class: 'custom-input', value: (user_signed_in? ? current_user.email : '') }
 
       .address-fields
-        h4 'Miejsce zamieszkania lub siedziby'
-        = f.input :residence_street, required: true, label: 'Ulica i numer',
-                  input_html: { data: { address_target: 'residenceStreet', action: 'address#updateAddress' } }
-        = f.input :residence_city, required: true, label: 'Miasto',
-                  input_html: { data: { address_target: 'residenceCity', action: 'address#updateAddress' } }
-        = f.input :residence_zip_code, required: true, label: 'Kod pocztowy',
-                  input_html: { data: { address_target: 'residenceZipCode', action: 'address#updateAddress' } }
+        h4 Miejsce zameldowania/zamieszkania
+        .custom-form-group
+          = f.input :residence_street, required: true, label: 'Ulica i numer',
+                    hint: 'Podaj pełny adres ulicy i numer domu/mieszkania.',
+                    input_html: { class: 'custom-input', data: { address_target: 'residenceStreet', action: 'address#updateAddress' } }
+        .custom-form-group
+          = f.input :residence_city, required: true, label: 'Miasto',
+                    hint: 'Podaj nazwę miejscowości.',
+                    input_html: { class: 'custom-input', data: { address_target: 'residenceCity', action: 'address#updateAddress' } }
+        .custom-form-group
+          = f.input :residence_zip_code, required: true, label: 'Kod pocztowy',
+                    hint: 'Wprowadź kod w formacie 00-000.',
+                    input_html: { class: 'custom-input', pattern: '\\d{2}-\\d{3}', data: { address_target: 'residenceZipCode', action: 'address#updateAddress' } }
 
-      = f.input :same_address, as: :boolean, label: 'Adres do korespondencji jest taki sam jak miejsce zamieszkania/siedziby',
-                input_html: { data: { action: 'address#toggle', address_target: 'sameAddressCheckbox' } }
+      .custom-form-group
+        = f.input :same_address, as: :boolean, label: 'Adres do korespondencji jest taki sam jak miejsce zameldowania/zamieszkania',
+                  input_html: { class: 'custom-checkbox', data: { action: 'address#toggle', address_target: 'sameAddressCheckbox' } }
 
       .address-fields(data-address-target="correspondenceFields")
-        h4 'Adres do korespondencji'
-        = f.input :address_street, required: true, label: 'Ulica i numer', input_html: { data: { address_target: 'addressStreet' } }
-        = f.input :address_city, required: true, label: 'Miasto', input_html: { data: { address_target: 'addressCity' } }
-        = f.input :address_zip_code, required: true, label: 'Kod pocztowy', input_html: { data: { address_target: 'addressZipCode' } }
+        h4 Adres do korespondencji
+        .custom-form-group
+          = f.input :address_street, required: true, label: 'Ulica i numer',
+                    hint: 'Podaj adres korespondencyjny, jeśli różni się od miejsca zameldowania.',
+                    input_html: { class: 'custom-input', data: { address_target: 'addressStreet' } }
+        .custom-form-group
+          = f.input :address_city, required: true, label: 'Miasto',
+                    hint: 'Podaj miasto adresu korespondencyjnego.',
+                    input_html: { class: 'custom-input', data: { address_target: 'addressCity' } }
+        .custom-form-group
+          = f.input :address_zip_code, required: true, label: 'Kod pocztowy',
+                    hint: 'Wprowadź kod w formacie 00-000.',
+                    input_html: { class: 'custom-input', data: { address_target: 'addressZipCode' } }
 
   .form-actions
-    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
-    = f.submit "Dalej", class: 'btn btn-primary'
+    = link_to 'Wstecz', previous_wizard_path, class: 'custom-btn-secondary'
+    = f.submit "Dalej", class: 'custom-btn'

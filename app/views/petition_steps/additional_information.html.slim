@@ -1,22 +1,55 @@
-/ app/views/petition_steps/additional_information.html.slim
-= simple_form_for @petition, url: wizard_path do |f|
+= simple_form_for @petition, url: wizard_path, html: { class: 'custom-form', multipart: true } do |f|
   = f.error_notification
 
+  .form-actions
+    = link_to 'Wstecz', previous_wizard_path, class: 'custom-btn-secondary'
+    = f.submit "Dalej", class: 'custom-btn'
+  br
+  .progress-bar-container
+    .progress-bar-inner(style="width: calc(200% / 5);")
+
+  .progress-info
+    p Krok 2 z 5: Informacje dodatkowe dla petycji w imieniu osoby trzeciej
+
   - if @petition.petition_type == 'third_party'
-    .card
-      .card-header
+    .custom-card
+      .custom-card-header
         h3 Informacje dodatkowe dla petycji w imieniu osoby trzeciej
-      .card-body
-        = f.input :third_party_name, required: true, label: 'Imię i nazwisko lub nazwa podmiotu osoby trzeciej'
+        p.text-muted Proszę wypełnić dane dotyczące osoby lub podmiotu, w imieniu którego składana jest petycja.
+
+      .custom-card-body
+        .custom-form-group
+          = f.input :third_party_name, required: true, 
+                    label: 'Imię i nazwisko lub nazwa podmiotu osoby trzeciej', 
+                    hint: 'Wpisz pełną nazwę osoby lub organizacji.',
+                    input_html: { class: 'custom-input' }
 
         .address-fields
-          h4 'Adres osoby trzeciej'
-          = f.input :third_party_street, required: true, label: 'Ulica i numer'
-          = f.input :third_party_city, required: true, label: 'Miasto'
-          = f.input :third_party_zip_code, required: true, label: 'Kod pocztowy'
+          h4 Adres osoby trzeciej
+          p.text-muted Proszę podać pełne dane adresowe osoby trzeciej.
 
-        = f.input :third_party_consents, as: :file, required: true, label: 'Zgoda osoby trzeciej'
+          .address-container
+            .custom-form-group
+              = f.input :third_party_street, required: true, 
+                        label: 'Ulica i numer', 
+                        input_html: { class: 'custom-input' }
+
+            .custom-form-group
+              = f.input :third_party_city, required: true, 
+                        label: 'Miasto', 
+                        input_html: { class: 'custom-input' }
+
+            .custom-form-group
+              = f.input :third_party_zip_code, required: true, 
+                        label: 'Kod pocztowy', 
+                        input_html: { class: 'custom-input' }
+
+        .custom-form-group
+          = f.input :third_party_consents, as: :file, required: true, 
+                    label: 'Zgoda osoby trzeciej', 
+                    hint: 'Prześlij podpisaną zgodę osoby trzeciej w formacie PDF lub skan.',
+                    input_html: { class: 'custom-file' }
 
   .form-actions
-    = link_to 'Wstecz', previous_wizard_path, class: 'btn btn-secondary'
-    = f.submit "Dalej", class: 'btn btn-primary'
+    = link_to 'Wstecz', previous_wizard_path, class: 'custom-btn-secondary'
+    = f.submit "Dalej", class: 'custom-btn'
