@@ -12,7 +12,7 @@ pl:
           awaiting_supplement: "Oczekuje na uzupełnienie"
           responded: "Odpowiedziana"
           rejected: "Odrzucona"
-          merged: "Scalona"
+          merged: "Połączona"
         petition_type:
           private_individual: "Osoba prywatna"
           business_individual: "Osoba fizyczna prowadząca działalność"
@@ -23,6 +23,7 @@ pl:
         description: "Opis instytucji"
   time:
     formats:
+      short: "%d-%m-%Y"
       long: "%d %B %Y, %H:%M"
   date:
     month_names:
@@ -53,3 +54,16 @@ pl:
       - Paź
       - Lis
       - Gru
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries: " %{count} niezweryfikowanych użytkowników"
+      more_pages:
+        display_entries: "Wyświetlanie użytkowników od %{first} do %{last} z %{total}"
+  views:
+    pagination:
+      first: "Pierwsza"
+      last: "Ostatnia"
+      previous: "Poprzednia"
+      next: "Następna"
+      truncate: "..."

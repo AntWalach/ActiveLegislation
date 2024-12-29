@@ -1,7 +1,8 @@
 .petition-tile
   .top-left-indicator
     - if el.petition_type.present?
-      = el.petition_type.capitalize
+      = I18n.t("activerecord.attributes.petition.petition_type.#{el.petition_type}", default: el.petition_type.capitalize)
+
   = link_to petition_path(el.id) do
     = image_tag(el.main_image.present? ? el.main_image : asset_url("sample_expert_img.png"), class: "main-image")
   .title

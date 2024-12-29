@@ -1,6 +1,8 @@
 h1 Niezweryfikowani użytkownicy
+br
 div data-controller="modal"
   = render "index_table", list: @unverified_users
+
   div.modal.fade#pdfModal tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true"
     div.modal-dialog.modal-lg
       div.modal-content

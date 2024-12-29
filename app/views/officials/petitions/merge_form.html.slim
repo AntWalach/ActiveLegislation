@@ -1,38 +1,73 @@
-h1 Łączenie petycji
 
-= form_with url: merge_form_officials_petitions_path, method: :get, local: true do |f|
-  .form-group
-    = label_tag :primary_petition_id, 'Wybierz petycję główną:'
-    = select_tag :primary_petition_id, options_from_collection_for_select(Petition.completed, :id, :title, params[:primary_petition_id]), prompt: 'Wybierz petycję główną', class: 'form-control', onchange: "this.form.submit();", data: { controller: "choosen" } 
+h1.display-4.mb-4.text-center Łączenie petycji
 
-/ Wybrana petycja główna
-- if @primary_petition
-  h3 Wybrana petycja główna:
-  p#primary-petition-title = @primary_petition.title
 
-  / Już połączone petycje
-  - if @merged_petitions.any?
-    h3 'Już połączone petycje:'
-    #merged-petitions
-      = render partial: 'merged_petitions', locals: { merged_petitions: @merged_petitions }
-  - else
-    p.text-muted 'Brak już połączonych petycji.'
+.row.mb-4
+  .card.section-card
+    .card-header.header-primary.text-center
+      h3.mb-0 Wybierz petycję główną
+    .card-body
+      = form_with url: merge_form_officials_petitions_path, method: :get, local: true do |f|
+        .form-group
+          = label_tag :primary_petition_id, "Wybierz petycję główną:", class: 'label-bold'
+          = select_tag :primary_petition_id, options_from_collection_for_select(Petition.completed, :id, :title, params[:primary_petition_id]), prompt: "Wybierz petycję główną",class: 'form-control',onchange: "this.form.submit();"
 
-  / Tabela podobnych petycji
-  - if @similar_petitions.present?
-    h3 'Podobne petycje do połączenia:'
-    #similar-petitions
-      = render partial: 'similar_petitions', locals: { similar_petitions: @similar_petitions }
+.row.mb-4
+  .col
 
-    / Formularz POST do scalania petycji
-    = form_with url: merge_officials_petitions_path, method: :post do |f|
-      = hidden_field_tag :primary_petition_id, @primary_petition.id
+    - if @primary_petition
+      .row.mb-4
+        .col-md-12
+          .card.section-card
+            .card-header.header-secondary.text-center
+              h3.mb-0 Już połączone petycje
+            .card-body
+              - if @merged_petitions.any?
+                #merged-petitions
+                  = render partial: "merged_petitions", locals: { merged_petitions: @merged_petitions }
+              - else
+                p.text-muted Brak już połączonych petycji.
+  .col
 
-      #similar-petition-checkboxes
-        = render partial: 'similar_petitions_checkboxes', locals: { similar_petitions: @similar_petitions }
+    - if @primary_petition
+      .row
+        .col-md-12
+          .card.section-card
+            .card-header.header-info.text-center
+              h3.mb-0 Podobne petycje do połączenia
+            .card-body
+              - if @similar_petitions.present?
+                = form_with url: merge_officials_petitions_path, method: :post do |f|
+                  = hidden_field_tag :primary_petition_id, @primary_petition.id
+                  .table-responsive
+                    table.table.table-striped.table-hover.text-center
+                      thead
+                        tr
+                          th Wybierz
+                          th Tytuł
+                          th Instytucja
+                          th Miasto
+                          th Data utworzenia
+                          th Status
+                          th Podobieństwo (%)
+                      tbody
+                        - @similar_petitions.each do |petition_hash|
+                          - petition = petition_hash[:petition]
+                          tr
+                            td
+                              = check_box_tag "petition_ids[]", petition.id
+                            td = petition.title
+                            td = petition.department.name
+                            td = petition.residence_city  
+                            td = l(petition.created_at, format: :short)
+                            td = t("activerecord.attributes.petition.status.#{petition.status}")
+    
+                            td 
+                              .progress
+                                .progress-bar{ role="progressbar", style="width: #{petition_hash[:similarity]}%" }
+                              = "#{petition_hash[:similarity]}%"
 
-      = f.submit 'Połącz wybrane petycje', class: 'btn btn-primary'
-  - else
-    p.text-muted 'Brak podobnych petycji do połączenia.'
-- else
-  p.text-muted 'Wybierz główną petycję, aby zobaczyć podobne.'
+                  .mt-3.text-right
+                    = f.submit "Połącz wybrane petycje", class: 'btn btn-primary'
+              - else
+                p.text-muted Brak podobnych petycji do połączenia.

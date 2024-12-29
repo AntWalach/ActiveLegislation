@@ -1,0 +1,84 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.header-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.header-light {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.header-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.header-info {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+.table {
+  th {
+    font-weight: bold;
+    background-color: #f8f9fa;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #e9ecef;
+  }
+}
+
+.progress {
+  height: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #e9ecef;
+}
+
+.progress-bar {
+
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.btn {
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger:hover {
+  background-color: #b02a37;
+}

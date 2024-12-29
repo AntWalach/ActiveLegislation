@@ -10,4 +10,5 @@ tr
             span Brak dokumentu
     td
         = button_to "Zweryfikuj", verify_admin_user_path(el), method: :post, class: "btn btn-success"
+    td
         = button_to "Odrzuć", reject_admin_user_path(el), method: :post, class: "btn btn-danger"

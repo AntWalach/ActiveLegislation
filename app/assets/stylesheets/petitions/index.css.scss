@@ -93,3 +93,70 @@
 .more-btn:hover {
     background: #388e3c;
 }
+
+.container-public-petitions {
+    .filter-section {
+      .filter-card {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 0.5rem;
+        background-color: #f8f9fa;
+  
+        .filter-header {
+          font-weight: bold;
+          font-size: 1rem;
+          margin-bottom: 0.5rem;
+        }
+  
+        .filter-body {
+          .filter-field {
+            margin-bottom: 0;
+  
+            .filter-label {
+              font-size: 0.8rem;
+              margin-bottom: 0.2rem;
+            }
+  
+            .filter-input {
+              width: 100%;
+              padding: 0.3rem 0.5rem;
+              font-size: 0.8rem;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            }
+          }
+  
+          .filter-btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
+  
+            &:hover {
+              background-color: #0056b3;
+            }
+          }
+  
+          .filter-btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
+  
+            &:hover {
+              background-color: #5a6268;
+            }
+          }
+        }
+      }
+    }
+  
+    .tile-col {
+      padding: 0.5rem;
+    }
+  }
+  

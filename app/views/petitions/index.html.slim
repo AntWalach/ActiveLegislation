@@ -1,14 +1,60 @@
-h1 Petycje publiczne
+h1.display-4.mb-3 Petycje publiczne
 
-/ = render 'petitions_list', petitions: @petitions
+.container-public-petitions
+  / -- Sekcja filtrów --
+  .filter-section
+    .filter-card
+      .filter-header
+      .filter-body
+        = form_with url: petitions_path, method: :get, local: true, class: 'filter-form' do |f|
+          .row.g-2.align-items-center
+            .col-md-2
+              .filter-field
+                = label_tag :category, 'Kategoria:', class: 'filter-label'
+                = select_tag :category, options_for_select(['Wszystkie', 'Edukacja', 'Środowisko', 'Infrastruktura'], params[:category]), class: 'filter-input'
+            .col-md-2
+              .filter-field
+                = label_tag :status, 'Status:', class: 'filter-label'
+                = select_tag :status, options_for_select(['Wszystkie', 'Draft', 'Oczekująca', 'Zatwierdzona'], params[:status]), class: 'filter-input'
+            .col-md-2
+              .filter-field
+                = label_tag :petition_type, 'Typ:', class: 'filter-label'
+                = select_tag :petition_type, options_for_select(['Wszystkie', 'Publiczna', 'Prywatna'], params[:petition_type]), class: 'filter-input'
+            .col-md-2
+              .filter-field
+                = label_tag :city, 'Miasto:', class: 'filter-label'
+                = select_tag :city, options_for_select(['Wszystkie', 'Warszawa', 'Kraków', 'Gdańsk'], params[:city]), class: 'filter-input'
+            .col-md-2
+              .filter-field
+                = label_tag :department_id, 'Instytucja:', class: 'filter-label'
+                = select_tag :department_id, options_from_collection_for_select(Department.all, :id, :name, params[:department_id]), prompt: 'Wszystkie', class: 'filter-input'
+            .col-md-2
+              .filter-field
+                = label_tag :sort, 'Sortuj:', class: 'filter-label'
+                = select_tag :sort, options_for_select([['Domyślnie', 'default'],
+                    ['Głosy (↓)', 'votes_desc'],
+                    ['Głosy (↑)', 'votes_asc'],
+                    ['Wyświetlenia (↓)', 'views_desc'],
+                    ['Wyświetlenia (↑)', 'views_asc']], params[:sort]), class: 'filter-input'
 
-/ = paginate @petitions
+          .row.g-2.mt-2.align-items-center
+            .col-md-3
+              .filter-field
+                = label_tag :keyword, 'Słowo kluczowe:', class: 'filter-label'
+                = text_field_tag :keyword, params[:keyword], class: 'filter-input', placeholder: 'Tytuł lub opis...'
+            .col-md-2
+              .filter-field
+                = label_tag :start_date, 'Od:', class: 'filter-label'
+                = date_field_tag :start_date, params[:start_date], class: 'filter-input'
+            .col-md-2
+              .filter-field
+                = label_tag :end_date, 'Do:', class: 'filter-label'
+                = date_field_tag :end_date, params[:end_date], class: 'filter-input'
+            .col-md-2.text-end style="margin-top: 30px;"
+              = f.submit 'Filtruj', class: 'filter-btn-primary'
+              
 
-
-
-.with-smooth-transition style="margin-bottom:0;padding-bottom: 200px;"
-  .container-xl
-    .row
-      - @petitions.each do |specialist|
-        .col-md-4.tile-col
-          = render "petition_tile", el: specialist
+  .row.mt-3
+    - @petitions.each do |specialist|
+      .col-md-4.tile-col
+        = render "petition_tile", el: specialist
