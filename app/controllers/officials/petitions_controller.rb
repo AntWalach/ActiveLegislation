@@ -18,6 +18,17 @@ class Officials::PetitionsController < ApplicationController
   def show
     @comments = @petition.official_comments.includes(:official).order(created_at: :asc)
     @comment = OfficialComment.new
+    @official_comments = @petition.official_comments.includes(:official)
+    qr_code = RQRCode::QRCode.new(request.original_url)
+
+      # Generowanie SVG (lub PNG, jeśli chcesz)
+    @qr_code_svg = qr_code.as_svg(
+        offset: 0,
+        color: "000",
+        shape_rendering: "crispEdges",
+        module_size: 6,
+        standalone: true
+    )
   end
 
   def assign_to_me

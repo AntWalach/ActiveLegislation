@@ -1,14 +1,9 @@
 .container
   .petition-header.row.align-items-center.mb-4
     .title-section.col-md-8.col-12
-
       - if @petition.merged?
         p Ta petycja została połączona z inną petycją.
         = link_to 'Przejdź do petycji głównej', petition_path(@petition.merged_into)
-      - if @petition.merged_petitions.any?
-        = link_to 'Cofnij łączenie petycji', unmerge_officials_petition_path(@petition), method: :post, data: { confirm: 'Czy na pewno chcesz cofnąć łączenie petycji?' }, class: 'btn btn-warning'
-      
-      
       h1.display-4.mb-3 = @petition.title
       
       - if @petition.tag_list.any?
@@ -23,76 +18,200 @@
         strong = @petition.creator_name
       p.lead.mb-1
         strong Status: 
-        span = @petition.status
+        span = I18n.t("activerecord.attributes.petition.status.#{@petition.status}")
 
-      - unless @petition.assigned_users.any? { |user| user.department == current_user.department }
-        = link_to 'Przypisz do mnie', assign_to_me_officials_petition_path(@petition), method: :post, class: 'btn btn-success'
+    .main-image.col-md-4.col-12.text-center
+      - if @petition.main_image.attached?
+          = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
+      - else 
+          = image_tag asset_url("sample_expert_img.png"), class: 'img-fluid rounded shadow-sm'
+  
+  
+  div.mb-4.div-actions data-controller="drawer"
+    #official-comments-drawer(data-drawer-target="drawer")
+      .drawer-header
+        h3 Komentarze od urzędników
+        button.close-btn(data-action="click->drawer#toggle") &times;
+      .drawer-body
+        - @official_comments.each do |comment|
+          .official-comment
+            p.comment-header
+              strong = comment.official.first_name
+              |  napisał:
+              span.comment-date= comment.created_at.strftime('%Y-%m-%d %H:%M')
+            p.comment-content= comment.content
+
+    .row.mt-5
+      .col-md-6
+        .petition-actions.show-card
+          .show-card-header.akcje
+            h3 
+              i.fa.fa-cogs.me-2 style="font-size: 1.3rem;"
+              | Akcje petycji
+          .show-card-body
+            - if user_signed_in?
+              .btn-group.flex-wrap
+                button#toggle-official-comments.btn.btn-drawer( data-action="click->drawer#toggle")
+                  = "Komentarze od urzędników"
+                - if @petition.user == current_user && (@petition.draft? || @petition.awaiting_supplement?)
+                  = link_to 'Edytuj petycję', edit_petition_path(@petition), class: 'btn btn-edit'
+                - if @petition.user == current_user && @petition.draft?
+                  = link_to 'Zgłoś petycję do weryfikacji', submit_petition_path(@petition), method: :post, class: 'btn btn-submit', data: { confirm: 'Czy na pewno chcesz zgłosić tę petycję do weryfikacji? Po zgłoszeniu nie będzie można jej edytować.' }
+              div.d-flex style="justify-content: center;"
+                button.btn.btn-share data-bs-toggle="modal" data-bs-target="#shareModal" Udostępnij
+          
+
+          #shareModal.modal.fade tabindex="-1" aria-hidden="true"
+            .modal-dialog.modal-dialog-centered
+              .modal-content
+                .modal-header
+                  h5.modal-title Udostępnij petycję
+                  button.btn-close data-bs-dismiss="modal" aria-label="Zamknij"
+                .modal-body
+                  p Wybierz sposób, w jaki chcesz udostępnić petycję:
+                  .share-options
+                    .show-card-body
+                      .row
+                        .col-6.text-center
+                          button.btn.btn-link.copy-link data-action="click->share#copyLink"
+                            i.fas.fa-link.fa-2x
+                            br
+                            | Skopiuj link
+                        .col-6.text-center
+                          a.btn.btn-social-media target="_blank" href="https://facebook.com/share"
+                            i.fab.fa-facebook-f.fa-2x.text-primary
+                            br
+                            | Facebook
+                        .col-6.text-center
+                          a.btn.btn-social-media target="_blank" href="https://twitter.com/share"
+                            i.fab.fa-twitter.fa-2x.text-info
+                            br
+                            | Twitter
+                        .col-6.text-center
+                          a.btn.btn-social-media target="_blank" href="mailto:?subject=Petycja&body=Zobacz tę petycję!"
+                            i.fa.fa-envelope.fa-2x.text-secondary
+                            br
+                            | Wyślij e-mail
+                        .col-12.text-center
+                          p.mt-4 Kod QR:
+                          == raw @qr_code_svg
 
 
-      .container
-        h3 Przypisani urzędnicy
-        ul
-          - @petition.assigned_users.each do |user|
-            li = "#{user.first_name} #{user.last_name} (#{user.department.name})"
 
-    - if @petition.main_image.attached? 
-      .main-image.col-md-4.col-12.text-center
-        = image_tag @petition.main_image.variant(resize_to_limit: [400, 300]), class: 'img-fluid rounded shadow-sm'
 
-  .petition-content
-    .card.mb-4
-      .card-header.bg-light
-        h3 Opis
-      .card-body
-        = @petition.description.body
-
-    .card.mb-4
-      .card-header.bg-light
-        h3 Uzasadnienie
-      .card-body
-        = @petition.justification.body
-        
-    - if @petition.external_links.present?
-      .card.mb-4
-        .card-header.bg-light
-          h3 Linki zewnętrzne
-        .card-body
-          .list-group
-            - @petition.external_links.split("\n").each do |link|
-              a.list-group-item.list-group-item-action href=link target="_blank" rel="noopener noreferrer" = link
-
-    - if @petition.attachments.attached?
-      .card.mb-4
-        .card-header.bg-light
-          h3 Załączniki
-        .card-body
-          .list-group
-            - @petition.attachments.each do |attachment|
-              a.list-group-item.list-group-item-action href=rails_blob_path(attachment, disposition: "attachment") = attachment.filename.to_s
-    - else
-      p.text-muted Brak załączników.
-
-    - if @petition.images.attached?
-      .card.mb-4
-        .card-header.bg-light
-          h3 Załączone zdjęcia
-        .card-body
-          .row
-            - @petition.images.each do |image|
-              .col-md-4.mb-3
-                = image_tag image.variant(resize_to_limit: [800, 600]), class: 'img-fluid rounded shadow-sm'
-
-    - if @petition.public_comment.present?
-      .card.mb-4
-        .card-header.bg-light
-          h3 Komentarz publiczny
-        .card-body
-          = sanitize(@petition.public_comment.to_s, tags: %w(p strong em), attributes: %w(class))
-
-  hr
-hr
+      .col-md-6
+        .petition-votes.show-card
+          .show-card-header.glosy
+            h3 
+              i.fa.fa-thumbs-up.me-2 style="font-size: 1.3rem;"
+              | Głosy
+          .show-card-body.text-center
+            h1.display-4.mt-3 = @petition.votes.count
+            p.text-muted Liczba głosów
+            
 
 
 
-h3 Komentarze
-= render 'officials/petitions/comments/comments', comments: @comments
+  .
+    .row
+      .col-md-6
+        .show-card
+          .show-card-header.opis
+            h3 
+              i.fa.fa-info-circle.me-2 style="font-size: 1.3rem;"
+              | Opis
+          .show-card-body
+            p = @petition.description.body
+      .col-md-6
+        .show-card
+          .show-card-header.uzasadnienie
+            h3 
+              i.fa.fa-bullhorn.me-2 style="font-size: 1.3rem;"
+              | Uzasadnienie
+          .show-card-body
+            p = @petition.justification.body
+
+
+
+
+    / -- SEKCJA ZAŁĄCZNIKI I LINKI ZEWNĘTRZNE --
+    .row
+      .col-md-6
+        .show-card
+          .show-card-header.zalaczniki
+            h3 
+              i.fa.fa-paperclip.me-2 style="font-size: 1.3rem;"
+              | Załączniki
+          .show-card-body
+            - if @petition.attachments.attached?
+              ul.attachment-list
+                - @petition.attachments.each do |attachment|
+                  li.attachment-item
+                    a{href=rails_blob_path(attachment, disposition: "attachment")}
+                      i.fa.fa-file-alt.me-2
+                      = attachment.filename.to_s
+            - else
+              p.text-muted Brak załączników.
+      .col-md-6
+        .show-card
+          .show-card-header.linki
+            h3 
+              i.fa.fa-link.me-2 style="font-size: 1.3rem;"
+              | Linki zewnętrzne
+          .show-card-body
+            - if @petition.external_links.present?
+              ul.link-list
+                - @petition.external_links.split("\n").each do |link|
+                  li.link-item
+                    - @petition.external_links.split("\n").each do |link|
+                      a.list-group-item.list-group-item-action href=link target="_blank" rel="noopener noreferrer" = link
+
+            - else
+              p.text-muted Brak linków zewnętrznych.
+
+    / -- SEKCJA ZDJĘĆ --
+    .row
+      .col-12
+        .show-card
+          .show-card-header.zdjecia
+            h3 
+              i.fa.fa-images.me-2 style="font-size: 1.3rem;"
+              | Załączone zdjęcia
+          .show-card-body
+            - if @petition.images.attached?
+              .image-gallery
+                - @petition.images.each do |image|
+                  .image-item
+                    = image_tag(image.variant(resize_to_limit: [800, 600]), class: 'show-image')
+            - else
+              p.text-muted Brak zdjęć.
+
+    / -- SEKCJA KOMENTARZY --
+    .row
+      .col-12
+        .show-card
+          .show-card-header.komentarze
+            h3 
+              i.fa.fa-comments.me-2 style="font-size: 1.3rem;"
+              | Komentarze
+          .show-card-body
+            - @comments.each do |comment|
+              .comment
+                p.comment-header
+                  strong = comment.official.first_name
+                  = " napisał:"
+                  span.comment-date= comment.created_at.strftime('%Y-%m-%d %H:%M')
+                p.comment-content= comment.content
+
+            - if user_signed_in?
+              .comment-form
+                = form_with(model: [@petition, Comment.new], local: true) do |f|
+                  .form-group
+                    = f.label :content, 'Dodaj komentarz:'
+                    = f.text_area :content, class: 'form-control', rows: 3
+                  .mt-2
+                    = f.submit 'Dodaj komentarz', class: 'btn btn-primary'
+            - else
+              p.text-muted
+                = link_to 'Zaloguj się', new_user_session_path
+                | , aby dodać komentarz.

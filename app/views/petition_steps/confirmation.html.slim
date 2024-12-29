@@ -22,7 +22,7 @@
         .col-md-6
           .summary-item.mb-4
             strong.text-primary Rodzaj petycji:
-            span.text-dark.font-weight-bold = t("petition_types.#{@petition.petition_type}")
+            span.text-dark.font-weight-bold = t("activerecord.attributes.petition.petition_type.#{@petition.petition_type}")
           .summary-item.mb-4
             strong.text-primary Adresat petycji:
             span.text-dark.font-weight-bold = @petition.recipient

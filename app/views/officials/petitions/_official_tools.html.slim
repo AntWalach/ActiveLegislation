@@ -8,7 +8,8 @@
         br
         = simple_form_for @petition, url: transfer_officials_petition_path(@petition), method: :post, html: { local: true } do |f|
           .form-group
-            = f.input :assigned_official_id, as: :select, collection: Official.where(department: current_user.department).map { |o| [o.first_name, o.id] }, prompt: "Wybierz urzędnika", input_html: { class: 'form-control', data: {controller: "choosen"} }
+            = f.label :assigned_official_id, 'Przekaż do urzędnika', class: 'form-label'
+            = f.input :assigned_official_id, as: :select, collection: Official.where(department: current_user.department).map { |o| [o.first_name, o.id] }, prompt: "Wybierz urzędnika", input_html: { class: 'form-control', data: {controller: "choosen"} }, label: false
           .form-group
             = f.button :submit, "Przekaż", class: 'btn btn-primary btn-block'
         hr
