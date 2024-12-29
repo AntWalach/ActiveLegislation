@@ -19,9 +19,21 @@ class PetitionsController < ApplicationController
   def show
     @petition.increment!(:views)
     @comments = @petition.comments.order(created_at: :desc)
+    @official_comments = @petition.official_comments.includes(:official)
     unless PetitionView.exists?(petition: @petition, ip_address: request.remote_ip)
       PetitionView.create!(petition: @petition, user: current_user, ip_address: request.remote_ip)
     end
+    qr_code = RQRCode::QRCode.new(request.original_url)
+
+      # Generowanie SVG (lub PNG, jeśli chcesz)
+    @qr_code_svg = qr_code.as_svg(
+        offset: 0,
+        color: "000",
+        shape_rendering: "crispEdges",
+        module_size: 6,
+        standalone: true
+    )
+
   end
 
   # GET /petitions/new
