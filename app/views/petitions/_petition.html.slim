@@ -36,7 +36,7 @@
         - @official_comments.each do |comment|
           .official-comment
             p.comment-header
-              strong = comment.official.name
+              strong = comment.official.first_name
               |  napisał:
               span.comment-date= comment.created_at.strftime('%Y-%m-%d %H:%M')
             p.comment-content= comment.content
